@@ -10,6 +10,7 @@
     "appointments": "นัดหมาย",
     "courses": "คอร์ส",
     "inventory": "คลังสินค้า",
+    "branches": "สาขา",
     "reports": "รายงาน"
   },
   "common": {
@@ -138,7 +139,41 @@
     "activeMembers": "สมาชิก",
     "lowStockAlerts": "สต็อกต่ำ",
     "commissionByDoctor": "ค่ามือแพทย์",
-    "noCommission": "ยังไม่มีค่ามือในเดือนนี้"
+    "noCommission": "ยังไม่มีค่ามือในเดือนนี้",
+    "breakdown": "แบ่งตาม",
+    "noBreakdown": "ไม่มีข้อมูล",
+    "partialFailures": "บางส่วนโหลดไม่สำเร็จ",
+    "dimension": {
+      "label": "แบ่งตาม",
+      "doctor": "แพทย์",
+      "service": "บริการ",
+      "branch": "สาขา"
+    }
+  },
+  "branch": {
+    "title": "สาขา",
+    "noBranches": "ยังไม่มีสาขา",
+    "topDoctor": "แพทย์ทำเงินสูงสุด",
+    "lowStockCount": "สต็อกต่ำ {{count}} รายการ",
+    "combined": "รวมทุกสาขา"
+  },
+  "ai": {
+    "preview": "Preview",
+    "previewTooltip": "ผลลัพธ์จำลอง — ระบบ AI จริงเปิดใช้งานในเฟส backend",
+    "output": "ผลลัพธ์ AI",
+    "copy": "คัดลอก",
+    "copied": "คัดลอกแล้ว",
+    "visitSummary": {
+      "title": "สรุปการรักษา (AI)",
+      "cta": "สร้างสรุปการรักษา",
+      "noVisitsYet": "ยังไม่มีประวัติการรักษา"
+    },
+    "recall": {
+      "cta": "ร่างข้อความติดตามผล"
+    },
+    "slot": {
+      "cta": "แนะนำเวลาว่าง"
+    }
   },
   "commission": {
     "status": {

@@ -15,6 +15,7 @@ import {
 import { PatientSearch } from '@/features/patient';
 import { useActiveCoursesForPatient, useDecrementCourse } from '@/features/course';
 import { PaymentDialog } from '@/features/receipt';
+import { AiButton, AiOutputCard, useRecallMessage } from '@/features/ai';
 import { useCtx } from '@/features/_shared/use-ctx';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
@@ -38,6 +39,8 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
   const [error, setError] = useState<string | null>(null);
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [lastReceipt, setLastReceipt] = useState<Receipt | null>(null);
+  const [recallText, setRecallText] = useState<string | null>(null);
+  const recallMessage = useRecallMessage();
 
   const createWalkIn = useCreateWalkIn();
   const updateWalkIn = useUpdateWalkIn();
@@ -55,6 +58,7 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
     setError(null);
     setPaymentOpen(false);
     setLastReceipt(null);
+    setRecallText(null);
   }
 
   function handleClose(nextOpen: boolean) {
@@ -212,10 +216,35 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
                   {t('payment.takePayment')}
                 </Button>
               ) : null}
+              <AiButton
+                loading={recallMessage.isPending}
+                onClick={() =>
+                  recallMessage.mutate(
+                    {
+                      patientId: patient.id,
+                      patientName: patient.fullName,
+                      serviceName: selectedCourse?.serviceName ?? 'follow-up',
+                      weeksSinceLastVisit: 4,
+                      remainingSessions: selectedCourse
+                        ? selectedCourse.sessionsTotal - selectedCourse.sessionsUsed
+                        : 0,
+                      locale: t('common.switchLanguage') === 'English' ? 'th' : 'en',
+                    },
+                    { onSuccess: (data) => setRecallText(data.text) },
+                  )
+                }
+              >
+                {t('ai.recall.cta')}
+              </AiButton>
               <Button variant="outline" onClick={() => handleClose(false)}>
                 {t('common.save')}
               </Button>
             </div>
+            {recallText ? (
+              <div className="mt-3 w-full max-w-md text-left">
+                <AiOutputCard text={recallText} />
+              </div>
+            ) : null}
           </div>
         ) : null}
       </SheetContent>

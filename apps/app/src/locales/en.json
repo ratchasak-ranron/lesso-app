@@ -10,6 +10,7 @@
     "appointments": "Appointments",
     "courses": "Courses",
     "inventory": "Inventory",
+    "branches": "Branches",
     "reports": "Reports"
   },
   "common": {
@@ -138,7 +139,41 @@
     "activeMembers": "active members",
     "lowStockAlerts": "Low-stock alerts",
     "commissionByDoctor": "Commission by doctor",
-    "noCommission": "No commission this month"
+    "noCommission": "No commission this month",
+    "breakdown": "Breakdown",
+    "noBreakdown": "No data",
+    "partialFailures": "Some sources failed to load",
+    "dimension": {
+      "label": "Group by",
+      "doctor": "Doctor",
+      "service": "Service",
+      "branch": "Branch"
+    }
+  },
+  "branch": {
+    "title": "Branches",
+    "noBranches": "No branches yet",
+    "topDoctor": "Top doctor",
+    "lowStockCount": "{{count}} low-stock item(s)",
+    "combined": "Combined"
+  },
+  "ai": {
+    "preview": "Preview",
+    "previewTooltip": "Mock output — real AI ships in the backend phase",
+    "output": "AI output",
+    "copy": "Copy",
+    "copied": "Copied",
+    "visitSummary": {
+      "title": "Visit summary (AI)",
+      "cta": "Generate visit summary",
+      "noVisitsYet": "No completed visits yet"
+    },
+    "recall": {
+      "cta": "Draft recall message"
+    },
+    "slot": {
+      "cta": "Suggest slots"
+    }
   },
   "commission": {
     "status": {

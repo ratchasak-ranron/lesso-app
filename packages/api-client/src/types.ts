@@ -174,6 +174,99 @@ export interface InventoryResource {
   ): Promise<{ item: InventoryItem; movement: InventoryMovement }>;
 }
 
+export interface BranchSummary {
+  branchId: Id;
+  branchName: string;
+  city?: string;
+  revenue: number;
+  visitCount: number;
+  topDoctorId: Id | null;
+  topDoctorAmount: number;
+  lowStockCount: number;
+}
+
+export interface BranchesSummaryQuery {
+  from?: string;
+  to?: string;
+}
+
+export interface BranchesResource {
+  summary(ctx: RequestContext, query?: BranchesSummaryQuery): Promise<BranchSummary[]>;
+}
+
+export type ReportDimension = 'doctor' | 'service' | 'branch';
+
+export interface DimensionBucket {
+  key: string;
+  label: string;
+  visitCount: number;
+  revenue: number;
+}
+
+export interface ReportsByDimensionQuery {
+  dimension: ReportDimension;
+  branchId?: Id;
+  from?: string;
+  to?: string;
+}
+
+export interface ReportsResource {
+  byDimension(ctx: RequestContext, query: ReportsByDimensionQuery): Promise<DimensionBucket[]>;
+}
+
+export type AiLocale = 'th' | 'en';
+
+export interface VisitSummaryRequest {
+  patientId: Id;
+  serviceName: string;
+  sessionN: number;
+  locale: AiLocale;
+}
+
+export interface RecallMessageRequest {
+  patientId: Id;
+  patientName: string;
+  serviceName: string;
+  weeksSinceLastVisit: number;
+  remainingSessions: number;
+  locale: AiLocale;
+}
+
+export interface SlotSuggestionRequest {
+  patientId: Id;
+  doctorId?: Id;
+  serviceName: string;
+  preferDays?: ReadonlyArray<number>;
+  locale: AiLocale;
+}
+
+export interface SuggestedSlot {
+  startAt: string;
+  endAt: string;
+  rationale: string;
+}
+
+export interface PhotoTagRequest {
+  patientId: Id;
+  photoId: string;
+}
+
+export interface PhotoTagResult {
+  tags: string[];
+  category: 'before' | 'after' | 'progress' | 'other';
+  confidence: number;
+}
+
+export interface AiResource {
+  visitSummary(ctx: RequestContext, input: VisitSummaryRequest): Promise<{ text: string }>;
+  recallMessage(ctx: RequestContext, input: RecallMessageRequest): Promise<{ text: string }>;
+  suggestSlots(
+    ctx: RequestContext,
+    input: SlotSuggestionRequest,
+  ): Promise<{ slots: SuggestedSlot[] }>;
+  tagPhoto(ctx: RequestContext, input: PhotoTagRequest): Promise<PhotoTagResult>;
+}
+
 export interface ApiClient {
   health: HealthResource;
   patients: PatientResource;
@@ -184,6 +277,9 @@ export interface ApiClient {
   commissions: CommissionResource;
   loyalty: LoyaltyResource;
   inventory: InventoryResource;
+  branches: BranchesResource;
+  reports: ReportsResource;
+  ai: AiResource;
 }
 
 export type ApiAdapter = 'mock' | 'supabase';

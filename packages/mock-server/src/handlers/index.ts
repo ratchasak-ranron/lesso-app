@@ -7,6 +7,9 @@ import { receiptHandlers } from './receipts';
 import { commissionHandlers } from './commissions';
 import { loyaltyHandlers } from './loyalty';
 import { inventoryHandlers } from './inventory';
+import { branchHandlers } from './branches';
+import { reportHandlers } from './reports';
+import { aiHandlers } from './ai';
 
 export const handlers = [
   ...healthHandlers,
@@ -18,4 +21,7 @@ export const handlers = [
   ...commissionHandlers,
   ...loyaltyHandlers,
   ...inventoryHandlers,
+  ...branchHandlers,
+  ...reportHandlers,
+  ...aiHandlers,
 ];

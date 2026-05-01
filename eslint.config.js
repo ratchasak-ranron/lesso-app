@@ -59,4 +59,12 @@ export default tseslint.config(
       'security/detect-object-injection': 'off',
     },
   },
+  {
+    // AI stubs index template arrays via deterministic hashIndex output bound
+    // by `% modulo` — never external input.
+    files: ['packages/mock-server/src/ai/**/*'],
+    rules: {
+      'security/detect-object-injection': 'off',
+    },
+  },
 );

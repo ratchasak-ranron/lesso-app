@@ -44,15 +44,25 @@ import type {
   ApiClient,
   ApiClientOptions,
   AppointmentListQuery,
+  BranchSummary,
+  BranchesSummaryQuery,
   CommissionListQuery,
   CommissionSummaryQuery,
   CourseDecrementInput,
   CourseListQuery,
+  DimensionBucket,
   InventoryItemListQuery,
   LoyaltyRedeemInput,
   PatientListQuery,
+  PhotoTagRequest,
+  PhotoTagResult,
   ReceiptListQuery,
+  RecallMessageRequest,
+  ReportsByDimensionQuery,
   RequestContext,
+  SlotSuggestionRequest,
+  SuggestedSlot,
+  VisitSummaryRequest,
   WalkInListQuery,
 } from '../types';
 
@@ -555,6 +565,127 @@ export function createMockApiClient(opts: ApiClientOptions = {}): ApiClient {
         });
         const body = await fetchValidated(
           `${baseUrl}/inventory/movements`,
+          Schema,
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
+      },
+    },
+
+    branches: {
+      async summary(
+        ctx: RequestContext,
+        query: BranchesSummaryQuery = {},
+      ): Promise<BranchSummary[]> {
+        const qs = buildQuery({ from: query.from, to: query.to });
+        const Schema = z.object({
+          data: z.array(
+            z.object({
+              branchId: z.string(),
+              branchName: z.string(),
+              city: z.string().optional(),
+              revenue: z.number().nonnegative(),
+              visitCount: z.number().int().nonnegative(),
+              topDoctorId: z.string().nullable(),
+              topDoctorAmount: z.number().nonnegative(),
+              lowStockCount: z.number().int().nonnegative(),
+            }),
+          ),
+        });
+        const body = await fetchValidated(`${baseUrl}/branches/summary${qs}`, Schema, {}, ctx);
+        return body.data;
+      },
+    },
+
+    reports: {
+      async byDimension(
+        ctx: RequestContext,
+        query: ReportsByDimensionQuery,
+      ): Promise<DimensionBucket[]> {
+        const qs = buildQuery({
+          dimension: query.dimension,
+          branchId: query.branchId,
+          from: query.from,
+          to: query.to,
+        });
+        const Schema = z.object({
+          data: z.array(
+            z.object({
+              key: z.string(),
+              label: z.string(),
+              visitCount: z.number().int().nonnegative(),
+              revenue: z.number().nonnegative(),
+            }),
+          ),
+        });
+        const body = await fetchValidated(
+          `${baseUrl}/reports/by-dimension${qs}`,
+          Schema,
+          {},
+          ctx,
+        );
+        return body.data;
+      },
+    },
+
+    ai: {
+      async visitSummary(ctx: RequestContext, input: VisitSummaryRequest): Promise<{ text: string }> {
+        const Schema = z.object({ data: z.object({ text: z.string() }) });
+        const body = await fetchValidated(
+          `${baseUrl}/ai/visit-summary`,
+          Schema,
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
+      },
+      async recallMessage(
+        ctx: RequestContext,
+        input: RecallMessageRequest,
+      ): Promise<{ text: string }> {
+        const Schema = z.object({ data: z.object({ text: z.string() }) });
+        const body = await fetchValidated(
+          `${baseUrl}/ai/recall-message`,
+          Schema,
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
+      },
+      async suggestSlots(
+        ctx: RequestContext,
+        input: SlotSuggestionRequest,
+      ): Promise<{ slots: SuggestedSlot[] }> {
+        const Schema = z.object({
+          data: z.object({
+            slots: z.array(
+              z.object({
+                startAt: z.string(),
+                endAt: z.string(),
+                rationale: z.string(),
+              }),
+            ),
+          }),
+        });
+        const body = await fetchValidated(
+          `${baseUrl}/ai/suggest-slots`,
+          Schema,
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
+      },
+      async tagPhoto(ctx: RequestContext, input: PhotoTagRequest): Promise<PhotoTagResult> {
+        const Schema = z.object({
+          data: z.object({
+            tags: z.array(z.string()),
+            category: z.enum(['before', 'after', 'progress', 'other']),
+            confidence: z.number().min(0).max(1),
+          }),
+        });
+        const body = await fetchValidated(
+          `${baseUrl}/ai/tag-photo`,
           Schema,
           { method: 'POST', body: JSON.stringify(input) },
           ctx,

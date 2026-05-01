@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PatientCard, usePatient } from '@/features/patient';
 import { ActiveCoursesList } from '@/features/course';
+import { VisitSummarySection } from '@/features/ai';
 
 interface PatientDetailPageProps {
   patientId: string;
@@ -38,6 +39,7 @@ export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
         <div className="space-y-4">
           <PatientCard patient={data} />
           <ActiveCoursesList patientId={data.id} />
+          <VisitSummarySection patient={data} />
         </div>
       ) : null}
     </div>

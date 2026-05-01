@@ -686,7 +686,7 @@ Two work tracks, one monorepo: **A = `apps/app` (backoffice)**, **B = `apps/web`
 | A1 | Foundation | pnpm workspace, Turborepo, `apps/app` scaffold, `packages/ui-tokens`, mock infra, dev toolbar | complete | with B1 | - | [plan](../plans/completed/a1-foundation.plan.md) · [report](../reports/a1-foundation-report.md) |
 | A2 | Core Flows | Patient + Appointment + Course + Walk-in check-in | complete | - | A1 | [plan](../plans/completed/a2-core-flows.plan.md) · [report](../reports/a2-core-flows-report.md) |
 | A3 | Supporting Modules | Billing, commission, points, inventory | complete | with A4 | A2 | [plan](../plans/completed/a3-supporting-modules.plan.md) · [report](../reports/a3-supporting-modules-report.md) |
-| A4 | Multi-Branch + AI | Branch switcher, dashboard, AI stubs (visit summary, recall drafter) | pending | with A3 | A2 | - |
+| A4 | Multi-Branch + AI | Branch switcher, dashboard, AI stubs (visit summary, recall drafter) | complete | with A3 | A2 | [plan](../plans/completed/a4-multi-branch-ai.plan.md) · [report](../reports/a4-multi-branch-ai-report.md) |
 | A5 | Compliance + Polish | PDPA UI (consent + audit), i18n th/en, tablet polish | pending | - | A3, A4 | - |
 | A6 | Pilot Prep | Demo data, Vercel project A → `app.lesso.clinic`, pilot onboarding doc | pending | - | A5 | - |
 | A7 | Backend Stand-Up | Supabase project, schema, RLS, swap ApiClient adapter | pending | - | A6 | - |
