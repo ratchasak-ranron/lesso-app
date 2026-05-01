@@ -1,0 +1,37 @@
+{
+  "app": {
+    "name": "Lesso",
+    "tagline": "Less cost. More care."
+  },
+  "nav": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "features": "Features",
+    "about": "About",
+    "switchTo": "Switch to {{lang}}",
+    "primary": "Primary navigation"
+  },
+  "home": {
+    "heroHeading": "Hello, Lesso",
+    "heroSubheading": "Less cost. More care.",
+    "pilotComingSoonCta": "Pilot — coming soon"
+  },
+  "footer": {
+    "copyright": "© {{year}} Lesso. All rights reserved."
+  },
+  "meta": {
+    "home": {
+      "title": "Lesso",
+      "description": "Aesthetic clinic backoffice that lowers cost and raises care."
+    },
+    "notFound": {
+      "title": "404 — not found",
+      "description": "We couldn't find that page."
+    }
+  },
+  "notFound": {
+    "heading": "404",
+    "body": "We couldn't find that page.",
+    "backHome": "Back to home"
+  }
+}

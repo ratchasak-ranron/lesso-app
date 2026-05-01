@@ -1,0 +1,42 @@
+# Promote to .github/workflows/ once the GH token used to push has the
+# `workflow` scope (see PRD Phase B4). Until then we keep the file outside
+# `workflows/` so pushes are not rejected.
+name: Lighthouse — apps/web
+
+on:
+  pull_request:
+    paths:
+      - 'apps/web/**'
+      - 'packages/ui-tokens/**'
+      - 'pnpm-lock.yaml'
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build apps/web
+        run: pnpm --filter @lesso/web build
+
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            http://localhost:4173/en
+            http://localhost:4173/th
+          configPath: ./apps/web/.lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true

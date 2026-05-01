@@ -696,7 +696,7 @@ Two work tracks, one monorepo: **A = `apps/app` (backoffice)**, **B = `apps/web`
 
 | # | Phase | Description | Status | Parallel | Depends | PRP Plan |
 |---|-------|-------------|--------|----------|---------|----------|
-| B1 | Marketing Foundation | `apps/web` scaffold (Vite + `vite-react-ssg`), shadcn, `react-i18next`, MDX, Helmet SEO, sitemap, Vercel project B | in-progress | with A1 | - | [b1-marketing-foundation.plan.md](../plans/b1-marketing-foundation.plan.md) |
+| B1 | Marketing Foundation | `apps/web` scaffold (Vite + `vite-react-ssg`), shadcn, `react-i18next`, MDX, Helmet SEO, sitemap, Vercel project B | complete | with A1 | - | [plan](../plans/completed/b1-marketing-foundation.plan.md) · [report](../reports/b1-marketing-foundation-report.md) |
 | B2 | Core Pages | Home, Pricing, Features, About — th/en, JSON-LD, build-time OG images | pending | with A2/A3 | B1 | - |
 | B3 | Waitlist + Legal | Pilot signup form (`/api/waitlist` → Resend + Notion), Privacy, Terms, Plausible | pending | with A3/A4 | B2 | - |
 | B4 | Polish + Launch | Lighthouse CI gates (≥95), blog scaffold (0–3 posts), `lesso.clinic` go-live | pending | - | B3, A6 | - |

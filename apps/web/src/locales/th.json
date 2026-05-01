@@ -1,0 +1,37 @@
+{
+  "app": {
+    "name": "Lesso",
+    "tagline": "ลดต้นทุน เพิ่มคุณภาพการดูแล"
+  },
+  "nav": {
+    "home": "หน้าแรก",
+    "pricing": "ราคา",
+    "features": "ฟีเจอร์",
+    "about": "เกี่ยวกับ",
+    "switchTo": "เปลี่ยนเป็น {{lang}}",
+    "primary": "เมนูหลัก"
+  },
+  "home": {
+    "heroHeading": "สวัสดี Lesso",
+    "heroSubheading": "ลดต้นทุน เพิ่มคุณภาพการดูแล",
+    "pilotComingSoonCta": "Pilot — เปิดเร็ว ๆ นี้"
+  },
+  "footer": {
+    "copyright": "© {{year}} Lesso สงวนลิขสิทธิ์"
+  },
+  "meta": {
+    "home": {
+      "title": "Lesso",
+      "description": "ระบบหลังบ้านคลินิกความงามที่ลดต้นทุน เพิ่มคุณภาพการดูแล"
+    },
+    "notFound": {
+      "title": "404 — ไม่พบหน้า",
+      "description": "ไม่พบหน้าที่คุณต้องการ"
+    }
+  },
+  "notFound": {
+    "heading": "404",
+    "body": "ไม่พบหน้าที่คุณต้องการ",
+    "backHome": "กลับหน้าแรก"
+  }
+}
