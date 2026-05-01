@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, type SelectOption } from '@/components/ui/select';
+import { FormError } from '@/components/ui/form-feedback';
 import { formatCurrency } from '@/lib/format';
 import { useCtx } from '@/features/_shared/use-ctx';
 import { useCreateReceipt } from '../hooks/use-receipts';
@@ -215,7 +216,7 @@ export function PaymentDialog({
             </div>
           </div>
 
-          {error ? <p className="text-sm text-destructive">{error}</p> : null}
+          <FormError>{error}</FormError>
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>

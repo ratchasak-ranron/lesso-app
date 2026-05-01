@@ -10,6 +10,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { PatientList, PatientForm, useCreatePatient } from '@/features/patient';
+import { PageHeader } from '@/components/page-header';
+import { TenantGate } from '@/components/tenant-gate';
 
 export function PatientsPage() {
   const { t } = useTranslation();
@@ -22,27 +24,29 @@ export function PatientsPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="font-heading text-3xl font-semibold tracking-tight">{t('patient.title')}</h2>
-      <PatientList onSelect={handleSelect} onAddNew={() => setCreateOpen(true)} />
+    <TenantGate>
+      <div className="space-y-4">
+        <PageHeader title={t('patient.title')} />
+        <PatientList onSelect={handleSelect} onAddNew={() => setCreateOpen(true)} />
 
-      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t('patient.newPatient')}</DialogTitle>
-            <DialogDescription>{t('patient.fullName')}</DialogDescription>
-          </DialogHeader>
-          <PatientForm
-            isSubmitting={createPatient.isPending}
-            onCancel={() => setCreateOpen(false)}
-            onSubmit={(input) => {
-              createPatient.mutate(input, {
-                onSuccess: () => setCreateOpen(false),
-              });
-            }}
-          />
-        </DialogContent>
-      </Dialog>
-    </div>
+        <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t('patient.newPatient')}</DialogTitle>
+              <DialogDescription>{t('patient.fullName')}</DialogDescription>
+            </DialogHeader>
+            <PatientForm
+              isSubmitting={createPatient.isPending}
+              onCancel={() => setCreateOpen(false)}
+              onSubmit={(input) => {
+                createPatient.mutate(input, {
+                  onSuccess: () => setCreateOpen(false),
+                });
+              }}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
+    </TenantGate>
   );
 }

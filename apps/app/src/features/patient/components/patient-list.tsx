@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { Users, Plus } from 'lucide-react';
 import type { Patient } from '@lesso/domain';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
+import { SelectableCard } from '@/components/ui/selectable-card';
 import { displayPhone } from '@/lib/format';
 import { useDebounce } from '@/lib/use-debounce';
 import { usePatients } from '../hooks/use-patients';
@@ -68,28 +69,26 @@ export function PatientList({ onSelect, onAddNew }: PatientListProps) {
 
       {data && data.length > 0 ? (
         <ul className="grid gap-2 md:grid-cols-2 xl:grid-cols-3" role="list">
-          {data.map((p) => (
-            <li key={p.id}>
-              <button
-                type="button"
-                onClick={() => onSelect(p)}
-                className="w-full cursor-pointer text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
-              >
-                <Card>
+          {data.map((p) => {
+            const phone = displayPhone(p.phoneDigits);
+            const ariaLabel = `${p.fullName}, ${phone}, ${t(`patient.consent.${p.consentStatus}`)}`;
+            return (
+              <li key={p.id}>
+                <SelectableCard ariaLabel={ariaLabel} onClick={() => onSelect(p)}>
                   <CardContent className="flex items-center justify-between p-4">
-                    <div>
-                      <div className="font-medium">{p.fullName}</div>
-                      <div className="text-sm text-muted-foreground tabular-nums">
-                        {displayPhone(p.phoneDigits)}
+                    <div className="min-w-0">
+                      <div className="truncate font-medium">{p.fullName}</div>
+                      <div className="truncate text-sm text-muted-foreground tabular-nums">
+                        {phone}
                         {p.lineId ? ` · ${p.lineId}` : ''}
                       </div>
                     </div>
                     <ConsentBadge status={p.consentStatus} t={t} />
                   </CardContent>
-                </Card>
-              </button>
-            </li>
-          ))}
+                </SelectableCard>
+              </li>
+            );
+          })}
         </ul>
       ) : null}
     </div>

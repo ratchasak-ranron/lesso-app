@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { FormError } from '@/components/ui/form-feedback';
 import { useApplyMovement } from '../hooks/use-inventory';
 
 interface MovementFormProps {
@@ -90,7 +91,7 @@ export function MovementForm({ item, onDone, onCancel }: MovementFormProps) {
         <Label htmlFor="reason">{t('inventory.reason')}</Label>
         <Textarea id="reason" value={reason} onChange={(e) => setReason(e.target.value)} />
       </div>
-      {error ? <p className="text-sm text-destructive">{error}</p> : null}
+      <FormError>{error}</FormError>
       <div className="flex justify-end gap-2">
         <Button type="button" variant="outline" onClick={onCancel}>
           {t('common.cancel')}

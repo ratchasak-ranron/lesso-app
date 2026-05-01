@@ -12,7 +12,8 @@
     "inventory": "คลังสินค้า",
     "branches": "สาขา",
     "reports": "รายงาน",
-    "audit": "Audit Log"
+    "audit": "Audit Log",
+    "menu": "เปิดเมนู"
   },
   "common": {
     "loading": "กำลังโหลด...",
@@ -27,7 +28,17 @@
     "actions": "การกระทำ",
     "noTenant": "เลือกคลินิกใน Dev Toolbar",
     "switchLanguage": "English",
-    "skipToMain": "ข้ามไปยังเนื้อหาหลัก"
+    "skipToMain": "ข้ามไปยังเนื้อหาหลัก",
+    "close": "ปิด"
+  },
+  "topbar": {
+    "switchTo": "เปลี่ยนเป็น {{lang}}"
+  },
+  "dateNav": {
+    "previous": "วันก่อนหน้า",
+    "next": "วันถัดไป",
+    "selectDate": "เลือกวันที่",
+    "today": "วันนี้"
   },
   "home": {
     "greeting": "สวัสดี Lesso",
@@ -35,7 +46,18 @@
     "todaysAppointments": "นัดวันนี้",
     "walkInQueue": "คิว Walk-in",
     "noAppointmentsToday": "ไม่มีนัดวันนี้",
-    "noWalkInsToday": "ไม่มี Walk-in วันนี้"
+    "noWalkInsToday": "ไม่มี Walk-in วันนี้",
+    "kpi": {
+      "sectionLabel": "ตัวชี้วัดวันนี้",
+      "queue": "คิวคงเหลือ",
+      "queueHint": "รอ + กำลังบริการ",
+      "booked": "นัดวันนี้",
+      "bookedHint": "นัดทั้งหมด",
+      "done": "Walk-in เสร็จแล้ว",
+      "doneHint": "เสร็จวันนี้",
+      "alerts": "สต็อกใกล้หมด",
+      "alertsHint": "รายการต่ำกว่าขั้นต่ำ"
+    }
   },
   "patient": {
     "title": "คนไข้",
@@ -108,7 +130,8 @@
     "exhausted": "ใช้ครบแล้ว",
     "noCourses": "ยังไม่มีคอร์ส",
     "activeCourses": "คอร์สที่ใช้งาน",
-    "courseBalance": "ยอดคงเหลือคอร์ส"
+    "courseBalance": "ยอดคงเหลือคอร์ส",
+    "progressLabel": "ความคืบหน้า {{service}}"
   },
   "walkIn": {
     "title": "Walk-in",
@@ -229,6 +252,12 @@
     "title": "Audit Log",
     "description": "บันทึกการเปลี่ยนแปลงข้อมูลทั้งหมด สำหรับการตรวจสอบและความสอดคล้องตาม PDPA",
     "empty": "ยังไม่มีบันทึก",
+    "col": {
+      "when": "เวลา",
+      "action": "การกระทำ",
+      "actor": "ผู้ดำเนินการ",
+      "resource": "อ้างอิง"
+    },
     "filter": {
       "action": "การกระทำ",
       "from": "ตั้งแต่",

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CheckCircle2, Wallet } from 'lucide-react';
+import { Check, CheckCircle2, Wallet } from 'lucide-react';
 import { sessionsRemaining, type Course, type Patient, type Receipt, type WalkIn } from '@lesso/domain';
 import { apiClient } from '@/lib/api';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
+import { FormError } from '@/components/ui/form-feedback';
 import { PatientSearch } from '@/features/patient';
 import { useActiveCoursesForPatient, useDecrementCourse } from '@/features/course';
 import { PaymentDialog } from '@/features/receipt';
@@ -155,7 +156,7 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
           </SheetDescription>
         </SheetHeader>
 
-        {error ? <p className="text-sm text-destructive">{error}</p> : null}
+        <FormError>{error}</FormError>
 
         {step === 'select_patient' ? (
           <PatientSearch onSelect={handlePatientSelect} autoFocus />
@@ -304,18 +305,22 @@ function ActiveCoursesPicker({
             type="button"
             onClick={() => onSelect(isSelected ? null : c)}
             disabled={remaining === 0}
+            aria-pressed={isSelected}
             className={cn(
-              'w-full cursor-pointer rounded-md border p-3 text-left transition-colors',
+              'flex w-full cursor-pointer items-center justify-between gap-3 rounded-md border p-3 text-left transition-colors min-h-[44px]',
               isSelected ? 'border-primary bg-primary/5' : 'border-border hover:bg-muted/40',
               remaining === 0 ? 'cursor-not-allowed opacity-50' : '',
             )}
           >
-            <div className="flex items-center justify-between">
-              <span className="font-medium">{c.serviceName}</span>
-              <span className="text-sm tabular-nums text-muted-foreground">
-                {t('course.sessionsRemaining', { count: remaining })}
-              </span>
+            <div className="flex min-w-0 items-center gap-2">
+              {isSelected ? (
+                <Check className="size-4 shrink-0 text-primary" aria-hidden="true" />
+              ) : null}
+              <span className="truncate font-medium">{c.serviceName}</span>
             </div>
+            <span className="shrink-0 text-sm tabular-nums text-muted-foreground">
+              {t('course.sessionsRemaining', { count: remaining })}
+            </span>
           </button>
         );
       })}

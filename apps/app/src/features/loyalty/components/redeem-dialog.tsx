@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { FormError } from '@/components/ui/form-feedback';
 import { formatCurrency, formatNumber } from '@/lib/format';
 import { useRedeemPoints } from '../hooks/use-loyalty';
 
@@ -96,6 +97,7 @@ export function RedeemDialog({ open, onOpenChange, patient, availableBalance }: 
               min={1}
               max={availableBalance}
               value={points}
+              aria-describedby="redeem-balance-hint redeem-points-error"
               onChange={(e) => {
                 const v = Number(e.target.value);
                 setPoints(Number.isFinite(v) ? Math.trunc(v) : 0);
@@ -121,11 +123,7 @@ export function RedeemDialog({ open, onOpenChange, patient, availableBalance }: 
             <span className="font-medium tabular-nums">{formatCurrency(points, locale)}</span>
           </div>
 
-          {error ? (
-            <p className="text-sm text-destructive" role="alert" aria-live="polite">
-              {error}
-            </p>
-          ) : null}
+          <FormError id="redeem-points-error">{error}</FormError>
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>

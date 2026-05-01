@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { FormError } from '@/components/ui/form-feedback';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { useCaptureConsent } from '../hooks/use-consent';
@@ -110,10 +111,11 @@ export function ConsentDialog({ open, onOpenChange, patient }: ConsentDialogProp
                 >
                   <input
                     type="checkbox"
-                    className="mt-0.5 size-4 rounded border-input accent-primary"
+                    className="mt-0.5 size-5 rounded border-input accent-primary"
                     checked={scopes.has(scope)}
                     onChange={() => toggle(scope)}
                     disabled={required}
+                    aria-required={required}
                     aria-describedby={`consent-scope-${scope}-desc`}
                   />
                   <span className="space-y-0.5">
@@ -152,7 +154,7 @@ export function ConsentDialog({ open, onOpenChange, patient }: ConsentDialogProp
             />
           </div>
 
-          {error ? <p className="text-sm text-destructive">{error}</p> : null}
+          <FormError>{error}</FormError>
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { Id } from '@lesso/domain';
 import { Skeleton } from '@/components/ui/skeleton';
+import { FormError } from '@/components/ui/form-feedback';
 import { useActiveCoursesForPatient } from '../hooks/use-courses';
 import { CourseBalanceCard } from './course-balance-card';
 
@@ -21,7 +22,7 @@ export function ActiveCoursesList({ patientId }: ActiveCoursesListProps) {
     );
   }
   if (isError || !data) {
-    return <p className="text-sm text-destructive">{t('common.error')}</p>;
+    return <FormError>{t('common.error')}</FormError>;
   }
   if (data.length === 0) {
     return <p className="text-sm text-muted-foreground">{t('course.noCourses')}</p>;

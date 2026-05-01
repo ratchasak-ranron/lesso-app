@@ -46,18 +46,19 @@ export function DevToolbar() {
   const userOptions = toOptions(users, t('devToolbar.none'));
 
   return (
-    <div
+    <aside
+      aria-label={t('devToolbar.title')}
       className={cn(
         'fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card text-card-foreground shadow-lg',
         'transition-transform',
-        collapsed ? 'translate-y-[calc(100%-2.5rem)]' : 'translate-y-0',
+        collapsed ? 'translate-y-[calc(100%-2.75rem)]' : 'translate-y-0',
       )}
       data-testid="dev-toolbar"
     >
       <button
         type="button"
         onClick={() => setCollapsed((c) => !c)}
-        className="flex h-10 w-full items-center justify-between gap-2 px-4 text-sm font-medium hover:bg-muted"
+        className="flex h-11 w-full items-center justify-between gap-2 px-4 text-sm font-medium hover:bg-muted"
         aria-expanded={!collapsed}
         aria-controls="dev-toolbar-body"
       >
@@ -121,6 +122,6 @@ export function DevToolbar() {
           </Button>
         </div>
       </div>
-    </div>
+    </aside>
   );
 }

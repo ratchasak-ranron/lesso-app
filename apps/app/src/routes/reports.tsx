@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Activity, AlertTriangle, Stethoscope, Users } from 'lucide-react';
+import { Activity, AlertTriangle, Coins, Stethoscope, Users } from 'lucide-react';
 import type { ReportDimension } from '@lesso/api-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { KpiTile } from '@/components/ui/kpi-tile';
+import { FormError, FormStatus } from '@/components/ui/form-feedback';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import {
   monthRangeToDates,
@@ -14,10 +16,11 @@ import {
 } from '@/features/report';
 import { formatCurrency, formatNumber } from '@/lib/format';
 import { monthsForLocale } from '@/lib/locale-months';
+import { PageHeader } from '@/components/page-header';
+import { TenantGate } from '@/components/tenant-gate';
 
 export function ReportsPage() {
   const { t, i18n } = useTranslation();
-  const tenantId = useDevToolbar((s) => s.tenantId);
   const branchId = useDevToolbar((s) => s.branchId);
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -41,29 +44,28 @@ export function ReportsPage() {
     [year],
   );
 
-  if (!tenantId) {
-    return <p className="text-muted-foreground">{t('common.noTenant')}</p>;
-  }
-
   return (
+    <TenantGate>
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <h2 className="font-heading text-3xl font-semibold tracking-tight">{t('report.title')}</h2>
-        <div className="flex items-center gap-2">
-          <Select
-            options={monthOptions}
-            value={String(month)}
-            onValueChange={(v) => setMonth(Number(v))}
-            aria-label={t('report.month')}
-          />
-          <Select
-            options={yearOptions}
-            value={String(year)}
-            onValueChange={(v) => setYear(Number(v))}
-            aria-label={t('report.year')}
-          />
-        </div>
-      </div>
+      <PageHeader
+        title={t('report.title')}
+        actions={
+          <div className="flex items-center gap-2">
+            <Select
+              options={monthOptions}
+              value={String(month)}
+              onValueChange={(v) => setMonth(Number(v))}
+              aria-label={t('report.month')}
+            />
+            <Select
+              options={yearOptions}
+              value={String(year)}
+              onValueChange={(v) => setYear(Number(v))}
+              aria-label={t('report.year')}
+            />
+          </div>
+        }
+      />
 
       {report.isLoading ? (
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
@@ -75,74 +77,37 @@ export function ReportsPage() {
       ) : null}
 
       {report.isError ? (
-        <p className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
-          {t('common.error')}: {report.error.message}
-        </p>
+        <FormError className="rounded-md border border-destructive/40 bg-destructive/5 p-3">
+          {`${t('common.error')}: ${report.error.message}`}
+        </FormError>
       ) : null}
 
       {report.data ? (
         <>
           <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Activity className="size-4" aria-hidden="true" />
-                  {t('report.revenue')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="font-heading text-3xl font-semibold tabular-nums">
-                  {formatCurrency(report.data.totalRevenue, locale)}
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {report.data.visitCount} {t('report.receipts')}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Users className="size-4" aria-hidden="true" />
-                  {t('report.visits')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="font-heading text-3xl font-semibold tabular-nums">
-                  {formatNumber(report.data.visitCount, locale)}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">
-                  {t('report.loyaltyOutstanding')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="font-heading text-3xl font-semibold tabular-nums">
-                  {formatNumber(report.data.loyaltyTotalOutstanding, locale)}
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {report.data.loyaltyAccountCount} {t('report.activeMembers')}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <AlertTriangle className="size-4 text-warning" aria-hidden="true" />
-                  {t('report.lowStockAlerts')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="font-heading text-3xl font-semibold tabular-nums">
-                  {report.data.lowStockItems.length}
-                </div>
-              </CardContent>
-            </Card>
+            <KpiTile
+              label={t('report.revenue')}
+              value={formatCurrency(report.data.totalRevenue, locale)}
+              icon={Activity}
+              description={`${report.data.visitCount} ${t('report.receipts')}`}
+            />
+            <KpiTile
+              label={t('report.visits')}
+              value={formatNumber(report.data.visitCount, locale)}
+              icon={Users}
+            />
+            <KpiTile
+              label={t('report.loyaltyOutstanding')}
+              value={formatNumber(report.data.loyaltyTotalOutstanding, locale)}
+              icon={Coins}
+              description={`${report.data.loyaltyAccountCount} ${t('report.activeMembers')}`}
+            />
+            <KpiTile
+              label={t('report.lowStockAlerts')}
+              value={report.data.lowStockItems.length}
+              icon={AlertTriangle}
+              status={report.data.lowStockItems.length > 0 ? 'warning' : 'default'}
+            />
           </div>
 
           <Card>
@@ -239,9 +204,7 @@ export function ReportsPage() {
               {dimensionReport.isLoading ? (
                 <Skeleton className="h-24" />
               ) : null}
-              {dimensionReport.isError ? (
-                <p className="text-sm text-destructive">{t('common.error')}</p>
-              ) : null}
+              {dimensionReport.isError ? <FormError>{t('common.error')}</FormError> : null}
               {dimensionReport.data && dimensionReport.data.length === 0 ? (
                 <p className="text-sm text-muted-foreground">{t('report.noBreakdown')}</p>
               ) : null}
@@ -266,12 +229,13 @@ export function ReportsPage() {
           </Card>
 
           {report.data.partialFailures.length > 0 ? (
-            <p className="text-xs text-muted-foreground">
-              {t('report.partialFailures')}: {report.data.partialFailures.join('; ')}
-            </p>
+            <FormStatus className="text-xs">
+              {`${t('report.partialFailures')}: ${report.data.partialFailures.join('; ')}`}
+            </FormStatus>
           ) : null}
         </>
       ) : null}
     </div>
+    </TenantGate>
   );
 }

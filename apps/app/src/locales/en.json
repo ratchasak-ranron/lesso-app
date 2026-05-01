@@ -12,7 +12,8 @@
     "inventory": "Inventory",
     "branches": "Branches",
     "reports": "Reports",
-    "audit": "Audit Log"
+    "audit": "Audit Log",
+    "menu": "Open menu"
   },
   "common": {
     "loading": "Loading...",
@@ -27,7 +28,17 @@
     "actions": "Actions",
     "noTenant": "Pick a tenant in the Dev Toolbar",
     "switchLanguage": "ภาษาไทย",
-    "skipToMain": "Skip to main content"
+    "skipToMain": "Skip to main content",
+    "close": "Close"
+  },
+  "topbar": {
+    "switchTo": "Switch to {{lang}}"
+  },
+  "dateNav": {
+    "previous": "Previous day",
+    "next": "Next day",
+    "selectDate": "Select date",
+    "today": "Today"
   },
   "home": {
     "greeting": "Hello, Lesso",
@@ -35,7 +46,18 @@
     "todaysAppointments": "Today's appointments",
     "walkInQueue": "Walk-in queue",
     "noAppointmentsToday": "No appointments today",
-    "noWalkInsToday": "No walk-ins today"
+    "noWalkInsToday": "No walk-ins today",
+    "kpi": {
+      "sectionLabel": "Today's metrics",
+      "queue": "Queue depth",
+      "queueHint": "Waiting + in progress",
+      "booked": "Booked",
+      "bookedHint": "Today's appointments",
+      "done": "Walk-ins done",
+      "doneHint": "Completed today",
+      "alerts": "Low-stock alerts",
+      "alertsHint": "Items below minimum"
+    }
   },
   "patient": {
     "title": "Patients",
@@ -108,7 +130,8 @@
     "exhausted": "All sessions used",
     "noCourses": "No courses yet",
     "activeCourses": "Active courses",
-    "courseBalance": "Course balance"
+    "courseBalance": "Course balance",
+    "progressLabel": "{{service}} progress"
   },
   "walkIn": {
     "title": "Walk-in",
@@ -229,6 +252,12 @@
     "title": "Audit Log",
     "description": "Tamper-evident log of every data change. Required for PDPA compliance and incident review.",
     "empty": "No audit entries yet",
+    "col": {
+      "when": "When",
+      "action": "Action",
+      "actor": "Actor",
+      "resource": "Resource"
+    },
     "filter": {
       "action": "Action",
       "from": "From",

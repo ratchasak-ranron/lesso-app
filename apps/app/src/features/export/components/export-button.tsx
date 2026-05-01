@@ -6,6 +6,7 @@ import { apiClient } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { useCtx } from '@/features/_shared/use-ctx';
 import { logger } from '@/lib/logger';
+import { FormError, FormStatus } from '@/components/ui/form-feedback';
 
 interface ExportButtonProps {
   patient: Patient;
@@ -152,11 +153,11 @@ export function ExportButton({ patient }: ExportButtonProps) {
         <Download className="size-4" aria-hidden="true" />
         {exporting ? t('export.inProgress') : t('export.cta')}
       </Button>
-      {error ? <p className="text-sm text-destructive">{error}</p> : null}
+      <FormError>{error}</FormError>
       {partial.length > 0 ? (
-        <p className="text-xs text-warning">
+        <FormStatus className="text-xs text-warning">
           {t('export.partial')}: {partial.join('; ')}
-        </p>
+        </FormStatus>
       ) : null}
     </div>
   );

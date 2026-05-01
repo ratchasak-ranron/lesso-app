@@ -18,17 +18,25 @@
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
   :focus-visible {
-    outline: 2px solid hsl(var(--ring));
-    outline-offset: 2px;
+    outline: 3px solid hsl(var(--ring));
+    outline-offset: 3px;
     border-radius: var(--radius);
   }
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
+      animation-name: none !important;
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+@layer components {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
   }
 }

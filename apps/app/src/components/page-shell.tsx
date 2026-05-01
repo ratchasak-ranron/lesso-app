@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Sidebar } from './sidebar';
 import { TopBar } from './top-bar';
 import { FeedbackButton } from './feedback-button';
+import { BottomTabBar } from './bottom-tab-bar';
 
 // Lazy-load dev toolbar so mock-server bundle only ships in DEV.
 // Vite guarantees the dynamic-import chunk is excluded when the static
@@ -33,11 +34,12 @@ export function PageShell({ children, title }: PageShellProps) {
         <main
           id="main-content"
           tabIndex={-1}
-          className="flex-1 p-4 pb-32 md:p-6 lg:p-8"
+          className="flex-1 p-4 pb-28 sm:pb-24 md:p-6 lg:p-8"
         >
           <div className="mx-auto w-full max-w-7xl">{children}</div>
         </main>
       </div>
+      <BottomTabBar />
       <FeedbackButton />
       {DevToolbar ? (
         <Suspense fallback={null}>

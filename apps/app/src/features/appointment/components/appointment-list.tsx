@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { Calendar as CalendarIcon, AlertCircle } from 'lucide-react';
 import type { Appointment, Patient } from '@lesso/domain';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
+import { SelectableCard } from '@/components/ui/selectable-card';
 import { formatTime } from '@/lib/format';
 
 interface AppointmentListProps {
@@ -43,39 +44,39 @@ export function AppointmentList({
     <ul className="space-y-2" role="list">
       {sorted.map((a) => {
         const patient = patientsById?.get(a.patientId);
+        const time = formatTime(a.startAt, i18n.language);
+        const name = patient?.fullName ?? '…';
+        const status = t(`appointment.status.${a.status}`);
+        const consentAlert =
+          patient?.consentStatus === 'expired' || patient?.consentStatus === 'expiring_soon';
+        const ariaLabel = `${time}, ${name}, ${a.serviceName}, ${status}${
+          consentAlert ? `, ${t('patient.consent.alertLabel')}` : ''
+        }`;
         return (
           <li key={a.id}>
-            <button
-              type="button"
-              onClick={() => onSelect?.(a)}
-              className="w-full cursor-pointer text-left transition-colors hover:bg-muted/40 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <Card>
-                <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4 sm:flex-nowrap sm:gap-4">
-                  <div className="flex min-w-0 flex-1 items-baseline gap-3">
-                    <span className="font-mono text-lg font-semibold tabular-nums">
-                      {formatTime(a.startAt, i18n.language)}
-                    </span>
-                    <div className="min-w-0">
-                      <div className="truncate font-medium">
-                        {patient?.fullName ?? <span className="text-muted-foreground">…</span>}
-                      </div>
-                      <div className="truncate text-sm text-muted-foreground">{a.serviceName}</div>
+            <SelectableCard ariaLabel={ariaLabel} onClick={() => onSelect?.(a)}>
+              <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4 sm:flex-nowrap sm:gap-4">
+                <div className="flex min-w-0 flex-1 items-baseline gap-3">
+                  <span className="font-mono text-lg font-semibold tabular-nums">{time}</span>
+                  <div className="min-w-0">
+                    <div className="truncate font-medium">
+                      {patient?.fullName ?? <span className="text-muted-foreground">…</span>}
                     </div>
+                    <div className="truncate text-sm text-muted-foreground">{a.serviceName}</div>
                   </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    {patient?.consentStatus === 'expired' ||
-                    patient?.consentStatus === 'expiring_soon' ? (
-                      <AlertCircle
-                        className="size-4 text-warning"
-                        aria-label={t('patient.consent.alertLabel')}
-                      />
-                    ) : null}
-                    <StatusBadge status={a.status} t={t} />
-                  </div>
-                </CardContent>
-              </Card>
-            </button>
+                </div>
+                <div className="flex shrink-0 items-center gap-2">
+                  {consentAlert ? (
+                    <AlertCircle
+                      role="img"
+                      className="size-4 text-warning"
+                      aria-label={t('patient.consent.alertLabel')}
+                    />
+                  ) : null}
+                  <StatusBadge status={a.status} t={t} />
+                </div>
+              </CardContent>
+            </SelectableCard>
           </li>
         );
       })}

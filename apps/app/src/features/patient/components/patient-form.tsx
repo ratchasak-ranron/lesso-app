@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { FormError } from '@/components/ui/form-feedback';
 import { normalizePhone } from '@/lib/phone';
 
 interface PatientFormProps {
@@ -73,7 +74,7 @@ export function PatientForm({ initial, onSubmit, isSubmitting, onCancel }: Patie
         <Label htmlFor="notes">{t('patient.notes')}</Label>
         <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} />
       </div>
-      {error ? <p className="text-sm text-destructive">{t('common.error')}: {error}</p> : null}
+      <FormError>{error ? `${t('common.error')}: ${error}` : null}</FormError>
       <div className="flex justify-end gap-2">
         {onCancel ? (
           <Button type="button" variant="outline" onClick={onCancel}>

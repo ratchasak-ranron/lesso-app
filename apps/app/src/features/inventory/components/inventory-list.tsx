@@ -4,6 +4,7 @@ import { isLowStock, type InventoryItem } from '@lesso/domain';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
+import { SelectableCard } from '@/components/ui/selectable-card';
 import { cn } from '@/lib/utils';
 
 interface InventoryListProps {
@@ -31,45 +32,45 @@ export function InventoryList({ items, isLoading, onSelectItem }: InventoryListP
     <ul className="grid gap-2 md:grid-cols-2 xl:grid-cols-3" role="list">
       {items.map((item) => {
         const low = isLowStock(item);
+        const ariaLabel = `${item.name}, ${t('inventory.currentStock')}: ${item.currentStock} ${item.unit}${
+          low ? `, ${t('inventory.lowStock')}` : ''
+        }`;
+        const inner = (
+          <CardContent className="flex items-center justify-between gap-3 p-4">
+            <div className="flex min-w-0 items-center gap-3">
+              {low ? (
+                <AlertTriangle
+                  role="img"
+                  className="size-4 shrink-0 text-warning"
+                  aria-label={t('inventory.lowStock')}
+                />
+              ) : null}
+              <div className="min-w-0">
+                <div className="truncate font-medium">{item.name}</div>
+                <div className="truncate text-xs text-muted-foreground tabular-nums">
+                  {item.sku} · {t('inventory.unit')}: {item.unit}
+                </div>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className={cn('font-semibold tabular-nums', low ? 'text-warning' : '')}>
+                {item.currentStock}
+              </div>
+              <div className="text-xs text-muted-foreground tabular-nums">
+                {t('inventory.minStock')}: {item.minStock}
+              </div>
+            </div>
+          </CardContent>
+        );
         return (
           <li key={item.id}>
-            <button
-              type="button"
-              onClick={() => onSelectItem?.(item)}
-              className={cn(
-                'w-full text-left rounded-xl transition-colors',
-                onSelectItem
-                  ? 'cursor-pointer hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                  : 'cursor-default',
-              )}
-            >
-              <Card>
-                <CardContent className="flex items-center justify-between gap-3 p-4">
-                  <div className="flex items-center gap-3">
-                    {low ? (
-                      <AlertTriangle
-                        className="size-4 text-warning"
-                        aria-label={t('inventory.lowStock')}
-                      />
-                    ) : null}
-                    <div>
-                      <div className="font-medium">{item.name}</div>
-                      <div className="text-xs text-muted-foreground tabular-nums">
-                        {item.sku} · {t('inventory.unit')}: {item.unit}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className={cn('font-semibold tabular-nums', low ? 'text-warning' : '')}>
-                      {item.currentStock}
-                    </div>
-                    <div className="text-xs text-muted-foreground tabular-nums">
-                      {t('inventory.minStock')}: {item.minStock}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </button>
+            {onSelectItem ? (
+              <SelectableCard ariaLabel={ariaLabel} onClick={() => onSelectItem(item)}>
+                {inner}
+              </SelectableCard>
+            ) : (
+              <Card aria-label={ariaLabel}>{inner}</Card>
+            )}
           </li>
         );
       })}

@@ -5,15 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select } from '@/components/ui/select';
 import { EmptyState } from '@/components/ui/empty-state';
-import { useDevToolbar } from '@/store/dev-toolbar';
 import { BranchSummaryCard, useBranchesSummary } from '@/features/branch';
 import { monthRangeToDates } from '@/features/report';
+import { PageHeader } from '@/components/page-header';
+import { TenantGate } from '@/components/tenant-gate';
+import { FormError } from '@/components/ui/form-feedback';
 import { formatCurrency, formatNumber } from '@/lib/format';
 import { monthsForLocale } from '@/lib/locale-months';
 
 export function BranchesPage() {
   const { t, i18n } = useTranslation();
-  const tenantId = useDevToolbar((s) => s.tenantId);
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth() + 1);
@@ -42,29 +43,28 @@ export function BranchesPage() {
     );
   }, [data]);
 
-  if (!tenantId) {
-    return <p className="text-muted-foreground">{t('common.noTenant')}</p>;
-  }
-
   return (
+    <TenantGate>
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <h2 className="font-heading text-3xl font-semibold tracking-tight">{t('branch.title')}</h2>
-        <div className="flex items-center gap-2">
-          <Select
-            options={monthOptions}
-            value={String(month)}
-            onValueChange={(v) => setMonth(Number(v))}
-            aria-label={t('report.month')}
-          />
-          <Select
-            options={yearOptions}
-            value={String(year)}
-            onValueChange={(v) => setYear(Number(v))}
-            aria-label={t('report.year')}
-          />
-        </div>
-      </div>
+      <PageHeader
+        title={t('branch.title')}
+        actions={
+          <div className="flex items-center gap-2">
+            <Select
+              options={monthOptions}
+              value={String(month)}
+              onValueChange={(v) => setMonth(Number(v))}
+              aria-label={t('report.month')}
+            />
+            <Select
+              options={yearOptions}
+              value={String(year)}
+              onValueChange={(v) => setYear(Number(v))}
+              aria-label={t('report.year')}
+            />
+          </div>
+        }
+      />
 
       {isLoading ? (
         <div className="grid gap-3 md:grid-cols-2">
@@ -74,9 +74,9 @@ export function BranchesPage() {
       ) : null}
 
       {isError ? (
-        <p className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
-          {t('common.error')}: {error.message}
-        </p>
+        <FormError className="rounded-md border border-destructive/40 bg-destructive/5 p-3">
+          {`${t('common.error')}: ${error.message}`}
+        </FormError>
       ) : null}
 
       {data && data.length === 0 && !isLoading ? (
@@ -119,5 +119,6 @@ export function BranchesPage() {
         </>
       ) : null}
     </div>
+    </TenantGate>
   );
 }

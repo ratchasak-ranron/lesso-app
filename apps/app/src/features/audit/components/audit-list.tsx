@@ -29,27 +29,48 @@ export function AuditList({ logs, isLoading }: AuditListProps) {
   }
 
   return (
-    <ul className="divide-y divide-border" role="list">
-      {logs.map((log) => (
-        <li key={log.id} className="py-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-xs text-muted-foreground tabular-nums">
+    <div className="overflow-x-auto rounded-lg border border-border">
+      <table className="w-full text-left text-sm">
+        <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
+          <tr>
+            <th scope="col" className="px-4 py-2 font-medium">
+              {t('audit.col.when')}
+            </th>
+            <th scope="col" className="px-4 py-2 font-medium">
+              {t('audit.col.action')}
+            </th>
+            <th scope="col" className="px-4 py-2 font-medium">
+              {t('audit.col.actor')}
+            </th>
+            <th scope="col" className="px-4 py-2 font-medium">
+              {t('audit.col.resource')}
+            </th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-border">
+          {logs.map((log) => (
+            <tr key={log.id}>
+              <td className="px-4 py-2 font-mono text-xs text-muted-foreground tabular-nums whitespace-nowrap">
                 {formatDateTime(log.createdAt, locale)}
-              </span>
-              <Badge variant="outline">{t(`audit.action.${log.action}`)}</Badge>
-              <span className="text-sm text-muted-foreground">{log.userName ?? '—'}</span>
-            </div>
-            {log.resourceId ? (
-              <span className="font-mono text-xs text-muted-foreground" title={log.resourceId}>
-                {log.resourceType}: <span className="break-all">{log.resourceId.slice(0, 8)}…</span>
-              </span>
-            ) : (
-              <span className="text-xs text-muted-foreground">{log.resourceType}</span>
-            )}
-          </div>
-        </li>
-      ))}
-    </ul>
+              </td>
+              <td className="px-4 py-2">
+                <Badge variant="outline">{t(`audit.action.${log.action}`)}</Badge>
+              </td>
+              <td className="px-4 py-2 text-muted-foreground">{log.userName ?? '—'}</td>
+              <td className="px-4 py-2 font-mono text-xs text-muted-foreground">
+                {log.resourceId ? (
+                  <span title={log.resourceId}>
+                    {log.resourceType}:{' '}
+                    <span className="break-all">{log.resourceId.slice(0, 8)}…</span>
+                  </span>
+                ) : (
+                  log.resourceType
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
