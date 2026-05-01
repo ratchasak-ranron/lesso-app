@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["vite/client", "vitest/globals", "node"]
+  },
+  "include": ["src/**/*", "tests/**/*", "vite.config.ts", "vitest.config.ts", "playwright.config.ts"]
+}

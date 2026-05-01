@@ -1,0 +1,137 @@
+{
+  "app": {
+    "name": "Lesso",
+    "tagline": "บริหารคลินิก น้อยกว่า แต่ดีกว่า"
+  },
+  "nav": {
+    "primary": "เมนูหลัก",
+    "today": "วันนี้",
+    "patients": "คนไข้",
+    "appointments": "นัดหมาย",
+    "courses": "คอร์ส",
+    "reports": "รายงาน"
+  },
+  "common": {
+    "loading": "กำลังโหลด...",
+    "error": "เกิดข้อผิดพลาด",
+    "retry": "ลองใหม่",
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "delete": "ลบ",
+    "edit": "แก้ไข",
+    "back": "ย้อนกลับ",
+    "search": "ค้นหา",
+    "actions": "การกระทำ",
+    "noTenant": "เลือกคลินิกใน Dev Toolbar",
+    "switchLanguage": "English"
+  },
+  "home": {
+    "greeting": "สวัสดี Lesso",
+    "tenantBanner": "คลินิก: {{tenant}} · สาขา: {{branch}} · ผู้ใช้: {{user}}",
+    "todaysAppointments": "นัดวันนี้",
+    "walkInQueue": "คิว Walk-in",
+    "noAppointmentsToday": "ไม่มีนัดวันนี้",
+    "noWalkInsToday": "ไม่มี Walk-in วันนี้"
+  },
+  "patient": {
+    "title": "คนไข้",
+    "newPatient": "เพิ่มคนไข้",
+    "editPatient": "แก้ไขข้อมูล",
+    "fullName": "ชื่อ-นามสกุล",
+    "phone": "เบอร์โทร",
+    "lineId": "LINE ID",
+    "nationalId": "เลขบัตรประชาชน",
+    "birthDate": "วันเกิด",
+    "notes": "บันทึก",
+    "consentStatus": "สถานะยินยอม PDPA",
+    "consent": {
+      "valid": "ยินยอมแล้ว",
+      "expiring_soon": "หมดอายุเร็วๆ นี้",
+      "expired": "หมดอายุ",
+      "missing": "ยังไม่ยินยอม",
+      "alertLabel": "ต้องตรวจสอบการยินยอม PDPA"
+    },
+    "errors": {
+      "fullNameRequired": "กรุณากรอกชื่อ-นามสกุล",
+      "phoneInvalid": "เบอร์โทรไม่ถูกต้อง"
+    },
+    "newPatientDescription": "กรอกข้อมูลติดต่อของคนไข้",
+    "noPatients": "ยังไม่มีคนไข้",
+    "noPatientsHint": "เพิ่มคนไข้คนแรกเพื่อเริ่มต้น",
+    "patientNotFound": "ไม่พบข้อมูลคนไข้",
+    "searchPlaceholder": "ค้นหาชื่อหรือเบอร์...",
+    "patientSince": "เริ่มเมื่อ {{date}}",
+    "checkIn": "Check In",
+    "bookAppointment": "นัดหมาย",
+    "addCourse": "เพิ่มคอร์ส"
+  },
+  "appointment": {
+    "title": "นัดหมาย",
+    "newAppointment": "นัดใหม่",
+    "service": "บริการ",
+    "doctor": "แพทย์",
+    "startAt": "เริ่ม",
+    "endAt": "สิ้นสุด",
+    "status": {
+      "scheduled": "นัดแล้ว",
+      "confirmed": "ยืนยัน",
+      "checked_in": "เช็คอิน",
+      "in_progress": "กำลังให้บริการ",
+      "completed": "เสร็จสิ้น",
+      "no_show": "ไม่มา",
+      "cancelled": "ยกเลิก"
+    },
+    "noAppointments": "ยังไม่มีนัด",
+    "reschedule": "เปลี่ยนเวลา"
+  },
+  "course": {
+    "title": "คอร์ส",
+    "newCourse": "เพิ่มคอร์ส",
+    "service": "บริการ",
+    "sessionsTotal": "จำนวน session ทั้งหมด",
+    "sessionsUsed": "ใช้ไปแล้ว",
+    "sessionsRemaining": "เหลือ {{count}} session",
+    "balance": "ยอดคงเหลือ",
+    "pricePaid": "ราคา",
+    "expiresAt": "หมดอายุ",
+    "status": {
+      "active": "ใช้งาน",
+      "completed": "ใช้ครบ",
+      "expired": "หมดอายุ",
+      "refunded": "คืนเงิน"
+    },
+    "decrement": "ใช้ session",
+    "exhausted": "ใช้ครบแล้ว",
+    "noCourses": "ยังไม่มีคอร์ส",
+    "activeCourses": "คอร์สที่ใช้งาน",
+    "courseBalance": "ยอดคงเหลือคอร์ส"
+  },
+  "walkIn": {
+    "title": "Walk-in",
+    "newWalkIn": "+ Walk-in ใหม่",
+    "queue": "คิว Walk-in",
+    "arrived": "มาถึง {{time}}",
+    "status": {
+      "waiting": "รอเรียก",
+      "in_progress": "กำลังให้บริการ",
+      "completed": "เสร็จแล้ว",
+      "cancelled": "ยกเลิก"
+    },
+    "checkInFlow": {
+      "selectPatient": "เลือกคนไข้",
+      "confirmCourse": "ยืนยันคอร์ส",
+      "complete": "เสร็จสิ้น",
+      "rebook": "นัดต่อ",
+      "done": "เสร็จเรียบร้อย",
+      "courseDecremented": "ใช้ session แล้ว"
+    }
+  },
+  "devToolbar": {
+    "title": "Dev Toolbar",
+    "tenant": "คลินิก",
+    "branch": "สาขา",
+    "user": "ผู้ใช้",
+    "reset": "รีเซ็ตข้อมูล",
+    "none": "—"
+  }
+}

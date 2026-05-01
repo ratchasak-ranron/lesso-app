@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans)",
+      "Bash(rtk ls *)"
+    ]
+  }
+}

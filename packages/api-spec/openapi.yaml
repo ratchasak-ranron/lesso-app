@@ -1,0 +1,63 @@
+openapi: 3.1.0
+info:
+  title: Lesso Backoffice API
+  version: 0.0.0
+  description: |
+    Lesso aesthetic clinic backoffice API. OpenAPI spec is the source of truth.
+    Both MSW mock handlers and the future Supabase adapter conform to this spec.
+servers:
+  - url: /v1
+    description: Default API base path
+paths:
+  /health:
+    get:
+      summary: Health check + current tenant context
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          $ref: '#/components/schemas/Health'
+    Health:
+      type: object
+      required: [status, tenantId, branchId, userId, serverTime]
+      properties:
+        status:
+          type: string
+          enum: [ok, degraded, down]
+        tenantId:
+          type: string
+          format: uuid
+          nullable: true
+        branchId:
+          type: string
+          format: uuid
+          nullable: true
+        userId:
+          type: string
+          format: uuid
+          nullable: true
+        serverTime:
+          type: string
+          format: date-time
+    ApiError:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true

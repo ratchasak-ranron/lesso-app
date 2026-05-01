@@ -1,0 +1,25 @@
+{
+  "name": "@lesso/ui-tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./css/tokens.css": "./src/css/tokens.css",
+    "./css/fonts.css": "./src/css/fonts.css",
+    "./tailwind-preset": {
+      "types": "./src/tailwind-preset.ts",
+      "default": "./src/tailwind-preset.ts"
+    }
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.4.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3"
+  }
+}

@@ -1,0 +1,63 @@
+/* Lesso design tokens — light + dark.
+ * HSL values mapped to PRD Design System palette.
+ * Reference: PRD §Design System §2 Color Palette.
+ */
+
+:root {
+  /* Brand */
+  --primary: 192 91% 36%;            /* #0891B2 cyan-600 */
+  --primary-foreground: 0 0% 100%;   /* white on primary */
+  --secondary: 187 85% 53%;          /* #22D3EE cyan-400 */
+  --secondary-foreground: 192 49% 23%;
+
+  /* Status */
+  --success: 158 84% 31%;            /* #059669 emerald-600 */
+  --success-foreground: 0 0% 100%;
+  --warning: 32 94% 44%;             /* #D97706 amber-600 */
+  --warning-foreground: 0 0% 100%;
+  --destructive: 0 72% 51%;          /* #DC2626 red-600 */
+  --destructive-foreground: 0 0% 100%;
+  --info: 217 91% 60%;               /* #2563EB blue-600 */
+  --info-foreground: 0 0% 100%;
+
+  /* Surfaces */
+  --background: 183 100% 96%;        /* #ECFEFF cyan-50 */
+  --card: 0 0% 100%;
+  --card-foreground: 192 49% 23%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 192 49% 23%;
+  --muted: 210 40% 96%;              /* slate-100 */
+  --muted-foreground: 215 16% 35%;   /* slate-600 */
+  --accent: 210 40% 96%;
+  --accent-foreground: 192 49% 23%;
+
+  /* Lines */
+  --border: 215 28% 89%;             /* slate-200 */
+  --input: 215 28% 89%;
+  --ring: 192 91% 36%;               /* match primary */
+
+  /* Text */
+  --foreground: 192 49% 23%;         /* #164E63 cyan-900 */
+
+  /* Radius */
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 222 47% 11%;         /* slate-900 */
+  --card: 217 33% 17%;               /* slate-800 */
+  --card-foreground: 210 40% 96%;
+  --popover: 217 33% 17%;
+  --popover-foreground: 210 40% 96%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;   /* slate-400 */
+  --accent: 217 33% 17%;
+  --accent-foreground: 210 40% 96%;
+  --border: 215 25% 27%;             /* slate-700 */
+  --input: 215 25% 27%;
+  --ring: 187 85% 53%;
+  --foreground: 210 40% 96%;         /* slate-100 */
+  --primary: 187 85% 53%;            /* cyan-400 — lighter for dark */
+  --primary-foreground: 222 47% 11%;
+  --success: 158 64% 52%;            /* emerald-400 */
+}

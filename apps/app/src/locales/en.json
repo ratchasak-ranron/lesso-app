@@ -1,0 +1,137 @@
+{
+  "app": {
+    "name": "Lesso",
+    "tagline": "Less cost. More care."
+  },
+  "nav": {
+    "primary": "Primary navigation",
+    "today": "Today",
+    "patients": "Patients",
+    "appointments": "Appointments",
+    "courses": "Courses",
+    "reports": "Reports"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "search": "Search",
+    "actions": "Actions",
+    "noTenant": "Pick a tenant in the Dev Toolbar",
+    "switchLanguage": "ภาษาไทย"
+  },
+  "home": {
+    "greeting": "Hello, Lesso",
+    "tenantBanner": "Clinic: {{tenant}} · Branch: {{branch}} · User: {{user}}",
+    "todaysAppointments": "Today's appointments",
+    "walkInQueue": "Walk-in queue",
+    "noAppointmentsToday": "No appointments today",
+    "noWalkInsToday": "No walk-ins today"
+  },
+  "patient": {
+    "title": "Patients",
+    "newPatient": "New patient",
+    "editPatient": "Edit patient",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "lineId": "LINE ID",
+    "nationalId": "National ID",
+    "birthDate": "Birth date",
+    "notes": "Notes",
+    "consentStatus": "PDPA consent",
+    "consent": {
+      "valid": "Valid",
+      "expiring_soon": "Expiring soon",
+      "expired": "Expired",
+      "missing": "Missing",
+      "alertLabel": "PDPA consent needs review"
+    },
+    "errors": {
+      "fullNameRequired": "Full name is required",
+      "phoneInvalid": "Phone number is invalid"
+    },
+    "newPatientDescription": "Enter the patient's contact details",
+    "noPatients": "No patients yet",
+    "noPatientsHint": "Add the first patient to get started",
+    "patientNotFound": "Patient not found",
+    "searchPlaceholder": "Search name or phone…",
+    "patientSince": "Patient since {{date}}",
+    "checkIn": "Check In",
+    "bookAppointment": "Book appointment",
+    "addCourse": "Add course"
+  },
+  "appointment": {
+    "title": "Appointments",
+    "newAppointment": "New appointment",
+    "service": "Service",
+    "doctor": "Doctor",
+    "startAt": "Start",
+    "endAt": "End",
+    "status": {
+      "scheduled": "Scheduled",
+      "confirmed": "Confirmed",
+      "checked_in": "Checked in",
+      "in_progress": "In progress",
+      "completed": "Completed",
+      "no_show": "No show",
+      "cancelled": "Cancelled"
+    },
+    "noAppointments": "No appointments yet",
+    "reschedule": "Reschedule"
+  },
+  "course": {
+    "title": "Courses",
+    "newCourse": "New course",
+    "service": "Service",
+    "sessionsTotal": "Total sessions",
+    "sessionsUsed": "Used",
+    "sessionsRemaining": "{{count}} sessions left",
+    "balance": "Balance",
+    "pricePaid": "Price paid",
+    "expiresAt": "Expires",
+    "status": {
+      "active": "Active",
+      "completed": "Completed",
+      "expired": "Expired",
+      "refunded": "Refunded"
+    },
+    "decrement": "Use session",
+    "exhausted": "All sessions used",
+    "noCourses": "No courses yet",
+    "activeCourses": "Active courses",
+    "courseBalance": "Course balance"
+  },
+  "walkIn": {
+    "title": "Walk-in",
+    "newWalkIn": "+ New walk-in",
+    "queue": "Walk-in queue",
+    "arrived": "Arrived {{time}}",
+    "status": {
+      "waiting": "Waiting",
+      "in_progress": "In progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "checkInFlow": {
+      "selectPatient": "Select patient",
+      "confirmCourse": "Confirm course",
+      "complete": "Complete",
+      "rebook": "Rebook",
+      "done": "Done",
+      "courseDecremented": "Session used"
+    }
+  },
+  "devToolbar": {
+    "title": "Dev Toolbar",
+    "tenant": "Tenant",
+    "branch": "Branch",
+    "user": "User",
+    "reset": "Reset data",
+    "none": "—"
+  }
+}
