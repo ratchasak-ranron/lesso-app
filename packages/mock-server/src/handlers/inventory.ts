@@ -5,12 +5,14 @@ import {
   type Id,
 } from '@lesso/domain';
 import { resolveContext } from '../context';
+import { auditRepo } from '../repositories/audit';
 import {
   InsufficientStockError,
   InventoryItemNotFoundError,
   inventoryRepo,
   type InventoryItemFilter,
 } from '../repositories/inventory';
+import { getUsers } from '../seed';
 import {
   badRequest,
   conflict,
@@ -18,6 +20,7 @@ import {
   notFound,
   parseIdParam,
   readJson,
+  resolveActorName,
 } from './_shared';
 
 export const inventoryHandlers = [
@@ -68,6 +71,23 @@ export const inventoryHandlers = [
     if (!parsed.success) return badRequest('VALIDATION', 'Invalid movement', parsed.error.flatten());
     try {
       const result = inventoryRepo.applyMovement(tenantId, parsed.data, userId ?? undefined);
+      auditRepo.append(
+        tenantId,
+        {
+          branchId: result.item.branchId,
+          action: 'inventory.movement',
+          resourceType: 'inventoryItem',
+          resourceId: result.item.id,
+          metadata: {
+            movementType: result.movement.type,
+            delta: result.movement.quantity,
+          },
+        },
+        {
+          userId: userId ?? undefined,
+          userName: resolveActorName(tenantId, userId, getUsers),
+        },
+      );
       return HttpResponse.json({ data: result }, { status: 201 });
     } catch (err) {
       if (err instanceof InsufficientStockError) {

@@ -228,7 +228,30 @@
   "audit": {
     "title": "Audit Log",
     "description": "Tamper-evident log of every data change. Required for PDPA compliance and incident review.",
-    "empty": "No audit entries yet"
+    "empty": "No audit entries yet",
+    "filter": {
+      "action": "Action",
+      "from": "From",
+      "to": "To",
+      "allActions": "All actions"
+    },
+    "action": {
+      "patient.create": "Patient created",
+      "patient.update": "Patient updated",
+      "patient.delete": "Patient deleted",
+      "patient.export": "Patient export (PDPA)",
+      "walkIn.create": "Walk-in checked in",
+      "walkIn.complete": "Walk-in completed",
+      "course.create": "Course created",
+      "course.decrement": "Course session used",
+      "receipt.create": "Receipt issued",
+      "inventory.movement": "Inventory movement",
+      "loyalty.earn": "Loyalty points earned",
+      "loyalty.redeem": "Loyalty points redeemed",
+      "consent.capture": "Consent captured",
+      "consent.withdraw": "Consent withdrawn",
+      "ai.copy": "AI output copied"
+    }
   },
   "consent": {
     "title": "PDPA consent",
@@ -265,6 +288,22 @@
     "cta": "Export data (PDPA)",
     "inProgress": "Exporting…",
     "partial": "Partial export — some sources failed"
+  },
+  "feedback": {
+    "cta": "Send feedback"
+  },
+  "loyalty": {
+    "title": "Loyalty",
+    "balance": "Points balance",
+    "lifetimeEarned": "Lifetime earned",
+    "redeemCta": "Redeem points",
+    "redeemTitle": "Redeem loyalty points",
+    "pointsToRedeem": "Points to redeem",
+    "equivalentDiscount": "Equivalent discount",
+    "minBalanceHint": "Minimum 100 points required to redeem",
+    "errors": {
+      "invalidPoints": "Invalid points amount"
+    }
   },
   "devToolbar": {
     "title": "Dev Toolbar",

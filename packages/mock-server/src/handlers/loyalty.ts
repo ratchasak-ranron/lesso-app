@@ -2,8 +2,10 @@ import { http, HttpResponse } from 'msw';
 import { z } from 'zod';
 import { IdSchema, type Id } from '@lesso/domain';
 import { resolveContext } from '../context';
+import { auditRepo } from '../repositories/audit';
 import { InsufficientPointsError, loyaltyRepo } from '../repositories/loyalty';
-import { badRequest, noTenant, notFound, readJson } from './_shared';
+import { getUsers } from '../seed';
+import { badRequest, noTenant, notFound, readJson, resolveActorName } from './_shared';
 
 const RedeemSchema = z.object({
   patientId: IdSchema,
@@ -40,7 +42,7 @@ export const loyaltyHandlers = [
   }),
 
   http.post('/v1/loyalty/redeem', async ({ request }) => {
-    const { tenantId } = resolveContext(request);
+    const { tenantId, userId } = resolveContext(request);
     if (!tenantId) return noTenant();
     const body = await readJson<unknown>(request);
     const parsed = RedeemSchema.safeParse(body);
@@ -51,6 +53,19 @@ export const loyaltyHandlers = [
         parsed.data.patientId,
         parsed.data.points,
         parsed.data.receiptId,
+      );
+      auditRepo.append(
+        tenantId,
+        {
+          action: 'loyalty.redeem',
+          resourceType: 'loyaltyAccount',
+          resourceId: result.account.id,
+          metadata: { points: parsed.data.points },
+        },
+        {
+          userId: userId ?? undefined,
+          userName: resolveActorName(tenantId, userId, getUsers),
+        },
       );
       return HttpResponse.json({ data: result });
     } catch (err) {

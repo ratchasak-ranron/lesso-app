@@ -6,6 +6,8 @@ import { router } from '@/router';
 import { queryClient } from '@/lib/query-client';
 import i18n from '@/lib/i18n';
 
+// Co-located inside App.tsx: only consumer is App; lifting to its own module
+// adds an import without a payoff. Move only when a second consumer appears.
 function HtmlLangSync() {
   const { i18n: i18nInstance } = useTranslation();
   useEffect(() => {

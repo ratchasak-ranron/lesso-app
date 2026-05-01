@@ -51,19 +51,19 @@ export function AppointmentList({
               className="w-full cursor-pointer text-left transition-colors hover:bg-muted/40 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Card>
-                <CardContent className="flex items-center justify-between gap-4 p-4">
-                  <div className="flex items-baseline gap-3">
+                <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4 sm:flex-nowrap sm:gap-4">
+                  <div className="flex min-w-0 flex-1 items-baseline gap-3">
                     <span className="font-mono text-lg font-semibold tabular-nums">
                       {formatTime(a.startAt, i18n.language)}
                     </span>
-                    <div>
-                      <div className="font-medium">
+                    <div className="min-w-0">
+                      <div className="truncate font-medium">
                         {patient?.fullName ?? <span className="text-muted-foreground">…</span>}
                       </div>
-                      <div className="text-sm text-muted-foreground">{a.serviceName}</div>
+                      <div className="truncate text-sm text-muted-foreground">{a.serviceName}</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex shrink-0 items-center gap-2">
                     {patient?.consentStatus === 'expired' ||
                     patient?.consentStatus === 'expiring_soon' ? (
                       <AlertCircle

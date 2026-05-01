@@ -39,16 +39,16 @@ export function WalkInQueue({ walkIns, isLoading, patientsById, onComplete }: Wa
         return (
           <li key={w.id}>
             <Card>
-              <CardContent className="flex items-center justify-between gap-3 p-4">
-                <div>
-                  <div className="font-medium">
+              <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4 sm:flex-nowrap">
+                <div className="min-w-0 flex-1">
+                  <div className="truncate font-medium">
                     {patient?.fullName ?? <span className="text-muted-foreground">…</span>}
                   </div>
-                  <div className="text-sm text-muted-foreground tabular-nums">
+                  <div className="truncate text-sm text-muted-foreground tabular-nums">
                     {t('walkIn.arrived', { time: formatTime(w.arrivedAt, i18n.language) })}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex shrink-0 items-center gap-2">
                   <Badge variant={w.status === 'waiting' ? 'secondary' : 'success'}>
                     {t(`walkIn.status.${w.status}`)}
                   </Badge>

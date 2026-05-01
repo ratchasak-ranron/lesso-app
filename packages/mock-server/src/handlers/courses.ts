@@ -8,12 +8,14 @@ import {
   type Id,
 } from '@lesso/domain';
 import { resolveContext } from '../context';
+import { auditRepo } from '../repositories/audit';
 import {
   CourseExhaustedError,
   CourseNotFoundError,
   courseRepo,
   type CourseFilter,
 } from '../repositories/course';
+import { getUsers } from '../seed';
 import {
   badRequest,
   conflict,
@@ -22,7 +24,15 @@ import {
   parseEnumParam,
   parseIdParam,
   readJson,
+  resolveActorName,
 } from './_shared';
+
+function actor(tenantId: Id, userId: Id | null) {
+  return {
+    userId: userId ?? undefined,
+    userName: resolveActorName(tenantId, userId, getUsers),
+  };
+}
 
 const DecrementBodySchema = z.object({
   branchId: IdSchema,
@@ -62,12 +72,17 @@ export const courseHandlers = [
   }),
 
   http.post('/v1/courses', async ({ request }) => {
-    const { tenantId } = resolveContext(request);
+    const { tenantId, userId } = resolveContext(request);
     if (!tenantId) return noTenant();
     const body = await readJson<unknown>(request);
     const parsed = CourseCreateSchema.safeParse(body);
     if (!parsed.success) return badRequest('VALIDATION', 'Invalid course', parsed.error.flatten());
     const created = courseRepo.create(tenantId, parsed.data);
+    auditRepo.append(
+      tenantId,
+      { action: 'course.create', resourceType: 'course', resourceId: created.id },
+      actor(tenantId, userId),
+    );
     return HttpResponse.json({ data: created }, { status: 201 });
   }),
 
@@ -83,7 +98,7 @@ export const courseHandlers = [
   }),
 
   http.post('/v1/courses/:id/decrement', async ({ request, params }) => {
-    const { tenantId } = resolveContext(request);
+    const { tenantId, userId } = resolveContext(request);
     if (!tenantId) return noTenant();
     const body = await readJson<unknown>(request);
     const parsed = DecrementBodySchema.safeParse(body);
@@ -92,6 +107,17 @@ export const courseHandlers = [
     }
     try {
       const result = courseRepo.decrement(tenantId, params.id as Id, parsed.data);
+      auditRepo.append(
+        tenantId,
+        {
+          branchId: parsed.data.branchId,
+          action: 'course.decrement',
+          resourceType: 'course',
+          resourceId: result.course.id,
+          metadata: { sessionsUsed: result.course.sessionsUsed, sessionsTotal: result.course.sessionsTotal },
+        },
+        actor(tenantId, userId),
+      );
       return HttpResponse.json({ data: result });
     } catch (err) {
       if (err instanceof CourseExhaustedError) return conflict('COURSE_EXHAUSTED', err.message);

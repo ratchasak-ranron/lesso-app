@@ -1,9 +1,11 @@
 import { http, HttpResponse } from 'msw';
 import { ReceiptCreateSchema, type Id } from '@lesso/domain';
 import { resolveContext } from '../context';
+import { auditRepo } from '../repositories/audit';
 import { receiptRepo, type ReceiptFilter } from '../repositories/receipt';
 import { commissionRepo } from '../repositories/commission';
 import { loyaltyRepo } from '../repositories/loyalty';
+import { getUsers } from '../seed';
 import {
   badRequest,
   noTenant,
@@ -11,6 +13,7 @@ import {
   parseDateParam,
   parseIdParam,
   readJson,
+  resolveActorName,
 } from './_shared';
 
 export const receiptHandlers = [
@@ -44,12 +47,17 @@ export const receiptHandlers = [
   }),
 
   http.post('/v1/receipts', async ({ request }) => {
-    const { tenantId } = resolveContext(request);
+    const { tenantId, userId } = resolveContext(request);
     if (!tenantId) return noTenant();
     const body = await readJson<unknown>(request);
     const parsed = ReceiptCreateSchema.safeParse(body);
     if (!parsed.success) return badRequest('VALIDATION', 'Invalid receipt', parsed.error.flatten());
     const created = receiptRepo.create(tenantId, parsed.data);
+
+    const actorInfo = {
+      userId: userId ?? undefined,
+      userName: resolveActorName(tenantId, userId, getUsers),
+    };
 
     // Side-effect cascade. Each call is wrapped so a partial failure never
     // causes the receipt POST to fail with 5xx after the receipt is already
@@ -66,10 +74,33 @@ export const receiptHandlers = [
       // Course-redeem receipts have total=0 and intentionally do not earn points.
       try {
         loyaltyRepo.earn(tenantId, created.patientId, created.total, created.id);
+        auditRepo.append(
+          tenantId,
+          {
+            action: 'loyalty.earn',
+            resourceType: 'receipt',
+            resourceId: created.id,
+            metadata: { points: created.total },
+          },
+          actorInfo,
+        );
       } catch (err) {
         warnings.push(`loyalty earn failed: ${err instanceof Error ? err.message : 'unknown'}`);
       }
     }
+
+    auditRepo.append(
+      tenantId,
+      {
+        branchId: created.branchId,
+        action: 'receipt.create',
+        resourceType: 'receipt',
+        resourceId: created.id,
+        // PII-safe metadata only — count of line items + total bucket.
+        metadata: { lineItemCount: created.lineItems.length, hasCourseRedeem: created.lineItems.some((li) => li.isCourseRedeem) },
+      },
+      actorInfo,
+    );
 
     return HttpResponse.json(
       warnings.length > 0 ? { data: created, warnings } : { data: created },

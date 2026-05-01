@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(mkdir -p /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans)",
-      "Bash(rtk ls *)"
+      "Bash(rtk ls *)",
+      "Bash(mkdir -p /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/reports)",
+      "Bash(mv /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/a6-pilot-prep.plan.md /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/completed/)"
     ]
   }
 }

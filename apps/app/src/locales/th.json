@@ -228,7 +228,50 @@
   "audit": {
     "title": "Audit Log",
     "description": "บันทึกการเปลี่ยนแปลงข้อมูลทั้งหมด สำหรับการตรวจสอบและความสอดคล้องตาม PDPA",
-    "empty": "ยังไม่มีบันทึก"
+    "empty": "ยังไม่มีบันทึก",
+    "filter": {
+      "action": "การกระทำ",
+      "from": "ตั้งแต่",
+      "to": "ถึง",
+      "allActions": "ทั้งหมด"
+    },
+    "action": {
+      "patient.create": "เพิ่มคนไข้",
+      "patient.update": "แก้ไขคนไข้",
+      "patient.delete": "ลบคนไข้",
+      "patient.export": "ส่งออกข้อมูลคนไข้",
+      "appointment.create": "เพิ่มนัด",
+      "appointment.update": "แก้ไขนัด",
+      "appointment.cancel": "ยกเลิกนัด",
+      "walkIn.create": "Walk-in ใหม่",
+      "walkIn.complete": "Walk-in เสร็จ",
+      "course.create": "เพิ่มคอร์ส",
+      "course.decrement": "ใช้ session คอร์ส",
+      "receipt.create": "ออกใบเสร็จ",
+      "receipt.void": "ยกเลิกใบเสร็จ",
+      "loyalty.earn": "ได้รับพอยท์",
+      "loyalty.redeem": "ใช้พอยท์",
+      "inventory.movement": "เคลื่อนไหวสต็อก",
+      "consent.capture": "บันทึกความยินยอม",
+      "consent.withdraw": "ถอนความยินยอม",
+      "ai.copy": "คัดลอกผลลัพธ์ AI"
+    }
+  },
+  "feedback": {
+    "cta": "ส่งความเห็น"
+  },
+  "loyalty": {
+    "title": "พอยท์สะสม",
+    "balance": "พอยท์คงเหลือ",
+    "lifetimeEarned": "สะสมตลอด",
+    "redeemCta": "ใช้พอยท์",
+    "redeemTitle": "ใช้พอยท์เป็นส่วนลด",
+    "pointsToRedeem": "จำนวนพอยท์",
+    "equivalentDiscount": "ส่วนลดที่ได้รับ",
+    "minBalanceHint": "ต้องมีอย่างน้อย 100 พอยท์",
+    "errors": {
+      "invalidPoints": "จำนวนพอยท์ไม่ถูกต้อง"
+    }
   },
   "consent": {
     "title": "ความยินยอม PDPA",

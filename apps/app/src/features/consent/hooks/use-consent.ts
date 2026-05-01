@@ -36,10 +36,14 @@ export function useCaptureConsent() {
   });
 }
 
+// Hook variables carry `patientId` so the success callback can invalidate the
+// patient-scoped consent cache. The transport-level withdraw input does not.
+export type WithdrawConsentVars = ConsentWithdrawInput & { patientId: Id };
+
 export function useWithdrawConsent() {
   const ctx = useCtx();
   const qc = useQueryClient();
-  return useMutation<ConsentRecord, Error, ConsentWithdrawInput & { patientId: Id }>({
+  return useMutation<ConsentRecord, Error, WithdrawConsentVars>({
     mutationFn: ({ consentId, reason }) =>
       apiClient.consent.withdraw(ctx, { consentId, reason }),
     onSuccess: (_, vars) => {

@@ -688,7 +688,7 @@ Two work tracks, one monorepo: **A = `apps/app` (backoffice)**, **B = `apps/web`
 | A3 | Supporting Modules | Billing, commission, points, inventory | complete | with A4 | A2 | [plan](../plans/completed/a3-supporting-modules.plan.md) · [report](../reports/a3-supporting-modules-report.md) |
 | A4 | Multi-Branch + AI | Branch switcher, dashboard, AI stubs (visit summary, recall drafter) | complete | with A3 | A2 | [plan](../plans/completed/a4-multi-branch-ai.plan.md) · [report](../reports/a4-multi-branch-ai-report.md) |
 | A5 | Compliance + Polish | PDPA UI (consent + audit), i18n th/en, tablet polish | complete | - | A3, A4 | [plan](../plans/completed/a5-compliance-polish.plan.md) · [report](../reports/a5-compliance-polish-report.md) |
-| A6 | Pilot Prep | Demo data, Vercel project A → `app.lesso.clinic`, pilot onboarding doc | pending | - | A5 | - |
+| A6 | Pilot Prep | Demo data, Vercel project A → `app.lesso.clinic`, pilot onboarding doc | complete | - | A5 | [plan](../plans/completed/a6-pilot-prep.plan.md) · [report](../reports/a6-pilot-prep-report.md) |
 | A7 | Backend Stand-Up | Supabase project, schema, RLS, swap ApiClient adapter | pending | - | A6 | - |
 | A8 | Pilot Run | 5 clinics × 30 days, feedback loop | pending | - | A7 | - |
 

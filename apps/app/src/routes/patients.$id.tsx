@@ -9,6 +9,7 @@ import { ActiveCoursesList } from '@/features/course';
 import { VisitSummarySection } from '@/features/ai';
 import { ConsentDialog } from '@/features/consent';
 import { ExportButton } from '@/features/export';
+import { LoyaltyCard } from '@/features/loyalty';
 
 interface PatientDetailPageProps {
   patientId: string;
@@ -50,7 +51,10 @@ export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
             </Button>
             <ExportButton patient={data} />
           </div>
-          <ActiveCoursesList patientId={data.id} />
+          <div className="grid gap-4 md:grid-cols-2">
+            <ActiveCoursesList patientId={data.id} />
+            <LoyaltyCard patient={data} />
+          </div>
           <VisitSummarySection patient={data} />
           <ConsentDialog
             open={consentOpen}

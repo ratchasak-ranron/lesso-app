@@ -37,7 +37,7 @@ export function AuditList({ logs, isLoading }: AuditListProps) {
               <span className="font-mono text-xs text-muted-foreground tabular-nums">
                 {formatDateTime(log.createdAt, locale)}
               </span>
-              <Badge variant="outline">{log.action}</Badge>
+              <Badge variant="outline">{t(`audit.action.${log.action}`)}</Badge>
               <span className="text-sm text-muted-foreground">{log.userName ?? '—'}</span>
             </div>
             {log.resourceId ? (

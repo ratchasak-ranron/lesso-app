@@ -14,6 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
@@ -116,13 +117,19 @@ export function ConsentDialog({ open, onOpenChange, patient }: ConsentDialogProp
                     aria-describedby={`consent-scope-${scope}-desc`}
                   />
                   <span className="space-y-0.5">
-                    <span className="font-medium">{t(`consent.scope.${scope}.label`)}</span>
+                    <span className="flex flex-wrap items-center gap-2">
+                      <span className="font-medium">{t(`consent.scope.${scope}.label`)}</span>
+                      {required ? (
+                        <Badge variant="secondary" className="uppercase tracking-wide">
+                          {t('consent.required')}
+                        </Badge>
+                      ) : null}
+                    </span>
                     <span
                       id={`consent-scope-${scope}-desc`}
                       className="block text-xs text-muted-foreground"
                     >
                       {t(`consent.scope.${scope}.description`)}
-                      {required ? ` · ${t('consent.required')}` : ''}
                     </span>
                   </span>
                 </label>

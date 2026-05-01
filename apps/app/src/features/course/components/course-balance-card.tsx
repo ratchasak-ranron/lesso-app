@@ -17,9 +17,12 @@ export function CourseBalanceCard({ course }: CourseBalanceCardProps) {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg">{course.serviceName}</CardTitle>
-          <Badge variant={variant === 'destructive' ? 'destructive' : variant === 'warning' ? 'warning' : 'success'}>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <CardTitle className="min-w-0 break-words text-lg">{course.serviceName}</CardTitle>
+          <Badge
+            className="shrink-0"
+            variant={variant === 'destructive' ? 'destructive' : variant === 'warning' ? 'warning' : 'success'}
+          >
             {t('course.sessionsRemaining', { count: remaining })}
           </Badge>
         </div>
