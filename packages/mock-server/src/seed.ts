@@ -1,13 +1,21 @@
 import { z } from 'zod';
 import {
   BranchSchema,
+  DEFAULT_COMMISSION_RATE,
+  POINTS_PER_BAHT,
   TenantSchema,
   UserSchema,
   type Appointment,
   type Branch,
+  type CommissionEntry,
   type Course,
   type Id,
+  type InventoryItem,
+  type LineItem,
+  type LoyaltyAccount,
+  type LoyaltyTransaction,
   type Patient,
+  type Receipt,
   type Tenant,
   type User,
 } from '@lesso/domain';
@@ -18,7 +26,7 @@ export const TENANTS_KEY = 'lesso:seed:tenants';
 export const BRANCHES_KEY = 'lesso:seed:branches';
 export const USERS_KEY = 'lesso:seed:users';
 export const SEED_VERSION_KEY = 'lesso:seed:version';
-export const SEED_VERSION = 2;
+export const SEED_VERSION = 3;
 
 const SEED_KEYS = [TENANTS_KEY, BRANCHES_KEY, USERS_KEY, SEED_VERSION_KEY] as const;
 
@@ -203,6 +211,154 @@ function pickFrom<T>(rng: () => number, arr: ReadonlyArray<T>): T {
   return arr[Math.floor(rng() * arr.length)]!;
 }
 
+const INVENTORY_FIXTURES = [
+  { sku: 'BTX-100', name: 'Botulinum 100u', unit: 'unit' as const, min: 10, init: 32 },
+  { sku: 'HA-1ML', name: 'Hyaluronic 1ml', unit: 'ml' as const, min: 8, init: 24 },
+  { sku: 'LIDO-2', name: 'Lidocaine 2ml', unit: 'ml' as const, min: 10, init: 3 },
+  { sku: 'GAUZE', name: 'Sterile gauze', unit: 'pack' as const, min: 50, init: 150 },
+  { sku: 'NEEDLE-30G', name: 'Needle 30G', unit: 'box' as const, min: 5, init: 12 },
+  { sku: 'ALC-500', name: 'Alcohol 500ml', unit: 'unit' as const, min: 6, init: 4 },
+  { sku: 'GLOVE-M', name: 'Nitrile glove M', unit: 'box' as const, min: 4, init: 9 },
+  { sku: 'COTTON', name: 'Cotton roll', unit: 'pack' as const, min: 20, init: 35 },
+];
+
+function generateInventoryForTenant(tenantId: Id, branches: Branch[]): InventoryItem[] {
+  const items: InventoryItem[] = [];
+  const now = new Date().toISOString();
+  for (const branch of branches.filter((b) => b.tenantId === tenantId)) {
+    for (const f of INVENTORY_FIXTURES) {
+      items.push({
+        id: crypto.randomUUID(),
+        tenantId,
+        branchId: branch.id,
+        sku: f.sku,
+        name: f.name,
+        unit: f.unit,
+        currentStock: f.init,
+        minStock: f.min,
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+  }
+  return items;
+}
+
+interface ReceiptDerivatives {
+  receipts: Receipt[];
+  commissions: CommissionEntry[];
+  loyaltyAccounts: LoyaltyAccount[];
+  loyaltyTransactions: LoyaltyTransaction[];
+}
+
+const SERVICE_PRICE_TIERS = [3000, 5000, 8000, 12000, 18000] as const;
+
+function generateReceiptDerivatives(
+  tenantId: Id,
+  appts: Appointment[],
+  doctorIds: Id[],
+  seedBase: number,
+): ReceiptDerivatives {
+  const rng = makeRng(seedBase + 3);
+  const receipts: Receipt[] = [];
+  const commissions: CommissionEntry[] = [];
+  const txs: LoyaltyTransaction[] = [];
+  const accountsByPatient = new Map<Id, LoyaltyAccount>();
+  let receiptCounter = 0;
+
+  const completed = appts.filter((a) => a.status === 'completed');
+  for (const appt of completed) {
+    receiptCounter += 1;
+    const price = SERVICE_PRICE_TIERS[Math.floor(rng() * SERVICE_PRICE_TIERS.length)]!;
+    const doctorId = doctorIds[Math.floor(rng() * doctorIds.length)]!;
+    const lineItem: LineItem = {
+      description: appt.serviceName,
+      quantity: 1,
+      unitPrice: price,
+      amount: price,
+      serviceName: appt.serviceName,
+      doctorId,
+      isCourseRedeem: false,
+    };
+    const created = appt.startAt;
+    const receipt: Receipt = {
+      id: crypto.randomUUID(),
+      tenantId,
+      branchId: appt.branchId,
+      patientId: appt.patientId,
+      appointmentId: appt.id,
+      number: receiptCounter.toString().padStart(5, '0'),
+      lineItems: [lineItem],
+      subtotal: price,
+      tip: 0,
+      discount: 0,
+      total: price,
+      status: 'paid',
+      paidAt: created,
+      paymentMethod: rng() < 0.6 ? 'cash' : rng() < 0.8 ? 'card' : 'transfer',
+      createdAt: created,
+      updatedAt: created,
+    };
+    receipts.push(receipt);
+
+    commissions.push({
+      id: crypto.randomUUID(),
+      tenantId,
+      branchId: appt.branchId,
+      doctorId,
+      receiptId: receipt.id,
+      patientId: appt.patientId,
+      serviceName: appt.serviceName,
+      baseAmount: price,
+      rate: DEFAULT_COMMISSION_RATE,
+      amount: Math.round(price * DEFAULT_COMMISSION_RATE),
+      status: rng() < 0.7 ? 'accrued' : 'paid',
+      createdAt: created,
+      paidAt: rng() < 0.3 ? created : undefined,
+    });
+
+    let account = accountsByPatient.get(appt.patientId);
+    if (!account) {
+      account = {
+        id: crypto.randomUUID(),
+        tenantId,
+        patientId: appt.patientId,
+        balance: 0,
+        lifetimeEarned: 0,
+        createdAt: created,
+        updatedAt: created,
+      };
+      accountsByPatient.set(appt.patientId, account);
+    }
+    const earnedPoints = Math.floor(price * POINTS_PER_BAHT);
+    account = {
+      ...account,
+      balance: account.balance + earnedPoints,
+      lifetimeEarned: account.lifetimeEarned + earnedPoints,
+      updatedAt: created,
+    };
+    accountsByPatient.set(appt.patientId, account);
+    txs.push({
+      id: crypto.randomUUID(),
+      tenantId,
+      patientId: appt.patientId,
+      accountId: account.id,
+      type: 'earn',
+      amount: earnedPoints,
+      balanceAfter: account.balance,
+      receiptId: receipt.id,
+      createdAt: created,
+    });
+  }
+
+  return {
+    receipts,
+    commissions,
+    loyaltyAccounts: Array.from(accountsByPatient.values()),
+    loyaltyTransactions: txs,
+  };
+}
+
 export function seedIfEmpty(): void {
   const VersionSchema = z.object({ version: z.number() });
   const existing = storage.read(SEED_VERSION_KEY, VersionSchema);
@@ -212,6 +368,14 @@ export function seedIfEmpty(): void {
   storage.write(BRANCHES_KEY, SEED_BRANCHES);
   storage.write(USERS_KEY, SEED_USERS);
 
+  const doctorIdsByTenant = new Map<Id, Id[]>();
+  for (const u of SEED_USERS) {
+    if (u.role !== 'doctor') continue;
+    const list = doctorIdsByTenant.get(u.tenantId) ?? [];
+    list.push(u.id);
+    doctorIdsByTenant.set(u.tenantId, list);
+  }
+
   SEED_TENANTS.forEach((tenant, idx) => {
     const seedBase = 1000 + idx * 100;
     const patients = generatePatientsForTenant(tenant, seedBase);
@@ -220,6 +384,29 @@ export function seedIfEmpty(): void {
     storage.write(patientsKey(tenant.id), patients);
     storage.write(coursesKey(tenant.id), courses);
     storage.write(appointmentsKey(tenant.id), appts);
+
+    const doctorIds = doctorIdsByTenant.get(tenant.id) ?? [];
+    if (doctorIds.length > 0) {
+      const derivatives = generateReceiptDerivatives(tenant.id, appts, doctorIds, seedBase);
+      storage.write(`lesso:tenant:${tenant.id}:receipts`, derivatives.receipts);
+      storage.write(`lesso:tenant:${tenant.id}:commissions`, derivatives.commissions);
+      storage.write(
+        `lesso:tenant:${tenant.id}:loyalty-accounts`,
+        derivatives.loyaltyAccounts,
+      );
+      storage.write(
+        `lesso:tenant:${tenant.id}:loyalty-transactions`,
+        derivatives.loyaltyTransactions,
+      );
+      storage.write(`lesso:tenant:${tenant.id}:receipts:counter`, {
+        value: derivatives.receipts.length,
+      });
+    }
+
+    storage.write(
+      `lesso:tenant:${tenant.id}:inventory-items`,
+      generateInventoryForTenant(tenant.id, SEED_BRANCHES),
+    );
   });
 
   storage.write(SEED_VERSION_KEY, { version: SEED_VERSION });
@@ -249,5 +436,12 @@ export function resetData(): void {
     storage.remove(coursesKey(t.id));
     storage.remove(`lesso:tenant:${t.id}:walk-ins`);
     storage.remove(`lesso:tenant:${t.id}:course-sessions`);
+    storage.remove(`lesso:tenant:${t.id}:receipts`);
+    storage.remove(`lesso:tenant:${t.id}:receipts:counter`);
+    storage.remove(`lesso:tenant:${t.id}:commissions`);
+    storage.remove(`lesso:tenant:${t.id}:loyalty-accounts`);
+    storage.remove(`lesso:tenant:${t.id}:loyalty-transactions`);
+    storage.remove(`lesso:tenant:${t.id}:inventory-items`);
+    storage.remove(`lesso:tenant:${t.id}:inventory-movements`);
   });
 }

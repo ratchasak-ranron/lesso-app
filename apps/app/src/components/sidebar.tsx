@@ -1,4 +1,4 @@
-import { Calendar, Users, GraduationCap, Home } from 'lucide-react';
+import { Calendar, Users, GraduationCap, Home, BarChart3, Package } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
@@ -8,6 +8,8 @@ const NAV_ITEMS = [
   { to: '/patients' as const, icon: Users, labelKey: 'nav.patients' as const, exact: false },
   { to: '/appointments' as const, icon: Calendar, labelKey: 'nav.appointments' as const, exact: false },
   { to: '/courses' as const, icon: GraduationCap, labelKey: 'nav.courses' as const, exact: false },
+  { to: '/inventory' as const, icon: Package, labelKey: 'nav.inventory' as const, exact: false },
+  { to: '/reports' as const, icon: BarChart3, labelKey: 'nav.reports' as const, exact: false },
 ];
 
 export function Sidebar() {

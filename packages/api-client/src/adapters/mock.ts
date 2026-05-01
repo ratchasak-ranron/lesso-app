@@ -1,23 +1,39 @@
 import { z } from 'zod';
 import {
   AppointmentSchema,
+  CommissionEntrySchema,
   CourseSchema,
   CourseSessionSchema,
   HealthSchema,
+  InventoryItemSchema,
+  InventoryMovementSchema,
+  LoyaltyAccountSchema,
+  LoyaltyTransactionSchema,
   PatientSchema,
+  ReceiptSchema,
   WalkInSchema,
   type Appointment,
   type AppointmentCreateInput,
   type AppointmentUpdateInput,
+  type CommissionEntry,
   type Course,
   type CourseCreateInput,
   type CourseSession,
   type CourseUpdateInput,
+  type DoctorCommissionSummary,
   type Health,
   type Id,
+  type InventoryItem,
+  type InventoryItemCreateInput,
+  type InventoryMovement,
+  type InventoryMovementCreateInput,
+  type LoyaltyAccount,
+  type LoyaltyTransaction,
   type Patient,
   type PatientCreateInput,
   type PatientUpdateInput,
+  type Receipt,
+  type ReceiptCreateInput,
   type WalkIn,
   type WalkInCreateInput,
   type WalkInUpdateInput,
@@ -27,9 +43,14 @@ import type {
   ApiClient,
   ApiClientOptions,
   AppointmentListQuery,
+  CommissionListQuery,
+  CommissionSummaryQuery,
   CourseDecrementInput,
   CourseListQuery,
+  InventoryItemListQuery,
+  LoyaltyRedeemInput,
   PatientListQuery,
+  ReceiptListQuery,
   RequestContext,
   WalkInListQuery,
 } from '../types';
@@ -337,6 +358,207 @@ export function createMockApiClient(opts: ApiClientOptions = {}): ApiClient {
       },
       async delete(ctx: RequestContext, id: Id): Promise<void> {
         await fetchVoid(`${baseUrl}/walk-ins/${id}`, { method: 'DELETE' }, ctx);
+      },
+    },
+
+    receipts: {
+      async list(ctx: RequestContext, query: ReceiptListQuery = {}): Promise<Receipt[]> {
+        const qs = buildQuery({
+          branchId: query.branchId,
+          patientId: query.patientId,
+          from: query.from,
+          to: query.to,
+        });
+        const body = await fetchValidated(
+          `${baseUrl}/receipts${qs}`,
+          ListEnvelopeSchema(ReceiptSchema),
+          {},
+          ctx,
+        );
+        return body.data;
+      },
+      async get(ctx: RequestContext, id: Id): Promise<Receipt> {
+        const body = await fetchValidated(
+          `${baseUrl}/receipts/${id}`,
+          EnvelopeSchema(ReceiptSchema),
+          {},
+          ctx,
+        );
+        return body.data;
+      },
+      async create(ctx: RequestContext, input: ReceiptCreateInput): Promise<Receipt> {
+        const body = await fetchValidated(
+          `${baseUrl}/receipts`,
+          EnvelopeSchema(ReceiptSchema),
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
+      },
+    },
+
+    commissions: {
+      async list(ctx: RequestContext, query: CommissionListQuery = {}): Promise<CommissionEntry[]> {
+        const qs = buildQuery({
+          doctorId: query.doctorId,
+          branchId: query.branchId,
+          status: query.status,
+          from: query.from,
+          to: query.to,
+        });
+        const body = await fetchValidated(
+          `${baseUrl}/commissions${qs}`,
+          ListEnvelopeSchema(CommissionEntrySchema),
+          {},
+          ctx,
+        );
+        return body.data;
+      },
+      async summary(
+        ctx: RequestContext,
+        query: CommissionSummaryQuery = {},
+      ): Promise<DoctorCommissionSummary[]> {
+        const qs = buildQuery({
+          branchId: query.branchId,
+          from: query.from,
+          to: query.to,
+        });
+        const SummarySchema = z.object({
+          data: z.array(
+            z.object({
+              doctorId: z.string(),
+              doctorName: z.string(),
+              visitCount: z.number().int().nonnegative(),
+              totalAmount: z.number().nonnegative(),
+              status: z.string(),
+            }),
+          ),
+        });
+        const body = await fetchValidated(`${baseUrl}/commissions/summary${qs}`, SummarySchema, {}, ctx);
+        return body.data as DoctorCommissionSummary[];
+      },
+      async pay(ctx: RequestContext, id: Id): Promise<CommissionEntry> {
+        const body = await fetchValidated(
+          `${baseUrl}/commissions/${id}/pay`,
+          EnvelopeSchema(CommissionEntrySchema),
+          { method: 'PATCH' },
+          ctx,
+        );
+        return body.data;
+      },
+    },
+
+    loyalty: {
+      async listAccounts(ctx: RequestContext) {
+        const Schema = z.object({
+          data: z.array(LoyaltyAccountSchema),
+          meta: z.object({
+            total: z.number().int().nonnegative(),
+            totalOutstanding: z.number().int().nonnegative(),
+          }),
+        });
+        const body = await fetchValidated(`${baseUrl}/loyalty/accounts`, Schema, {}, ctx);
+        return { accounts: body.data, totalOutstanding: body.meta.totalOutstanding };
+      },
+      async accountByPatient(ctx: RequestContext, patientId: Id): Promise<LoyaltyAccount> {
+        const body = await fetchValidated(
+          `${baseUrl}/loyalty/accounts/by-patient/${patientId}`,
+          EnvelopeSchema(LoyaltyAccountSchema),
+          {},
+          ctx,
+        );
+        return body.data;
+      },
+      async transactionsByPatient(
+        ctx: RequestContext,
+        patientId: Id,
+      ): Promise<LoyaltyTransaction[]> {
+        const body = await fetchValidated(
+          `${baseUrl}/loyalty/transactions/by-patient/${patientId}`,
+          ListEnvelopeSchema(LoyaltyTransactionSchema),
+          {},
+          ctx,
+        );
+        return body.data;
+      },
+      async redeem(
+        ctx: RequestContext,
+        input: LoyaltyRedeemInput,
+      ): Promise<{ account: LoyaltyAccount; transaction: LoyaltyTransaction }> {
+        const Schema = z.object({
+          data: z.object({
+            account: LoyaltyAccountSchema,
+            transaction: LoyaltyTransactionSchema,
+          }),
+        });
+        const body = await fetchValidated(
+          `${baseUrl}/loyalty/redeem`,
+          Schema,
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
+      },
+    },
+
+    inventory: {
+      async listItems(
+        ctx: RequestContext,
+        query: InventoryItemListQuery = {},
+      ): Promise<InventoryItem[]> {
+        const qs = buildQuery({
+          branchId: query.branchId,
+          lowStockOnly: query.lowStockOnly ? 'true' : undefined,
+        });
+        const body = await fetchValidated(
+          `${baseUrl}/inventory/items${qs}`,
+          ListEnvelopeSchema(InventoryItemSchema),
+          {},
+          ctx,
+        );
+        return body.data;
+      },
+      async getItem(ctx: RequestContext, id: Id): Promise<InventoryItem> {
+        const body = await fetchValidated(
+          `${baseUrl}/inventory/items/${id}`,
+          EnvelopeSchema(InventoryItemSchema),
+          {},
+          ctx,
+        );
+        return body.data;
+      },
+      async movementsByItem(ctx: RequestContext, id: Id): Promise<InventoryMovement[]> {
+        const body = await fetchValidated(
+          `${baseUrl}/inventory/items/${id}/movements`,
+          ListEnvelopeSchema(InventoryMovementSchema),
+          {},
+          ctx,
+        );
+        return body.data;
+      },
+      async createItem(ctx: RequestContext, input: InventoryItemCreateInput): Promise<InventoryItem> {
+        const body = await fetchValidated(
+          `${baseUrl}/inventory/items`,
+          EnvelopeSchema(InventoryItemSchema),
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
+      },
+      async applyMovement(
+        ctx: RequestContext,
+        input: InventoryMovementCreateInput,
+      ): Promise<{ item: InventoryItem; movement: InventoryMovement }> {
+        const Schema = z.object({
+          data: z.object({ item: InventoryItemSchema, movement: InventoryMovementSchema }),
+        });
+        const body = await fetchValidated(
+          `${baseUrl}/inventory/movements`,
+          Schema,
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
       },
     },
   };

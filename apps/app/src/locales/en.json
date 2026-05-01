@@ -9,6 +9,7 @@
     "patients": "Patients",
     "appointments": "Appointments",
     "courses": "Courses",
+    "inventory": "Inventory",
     "reports": "Reports"
   },
   "common": {
@@ -124,6 +125,67 @@
       "rebook": "Rebook",
       "done": "Done",
       "courseDecremented": "Session used"
+    }
+  },
+  "report": {
+    "title": "Reports",
+    "month": "Month",
+    "year": "Year",
+    "revenue": "Revenue",
+    "visits": "Visits",
+    "receipts": "receipts",
+    "loyaltyOutstanding": "Points outstanding",
+    "activeMembers": "active members",
+    "lowStockAlerts": "Low-stock alerts",
+    "commissionByDoctor": "Commission by doctor",
+    "noCommission": "No commission this month"
+  },
+  "commission": {
+    "status": {
+      "accrued": "Accrued",
+      "paid": "Paid",
+      "voided": "Voided",
+      "mixed": "Mixed"
+    }
+  },
+  "payment": {
+    "title": "Take payment",
+    "takePayment": "Take payment",
+    "payAndPrint": "Pay & print",
+    "servicePrice": "Service price",
+    "tip": "Tip",
+    "discount": "Discount",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "courseRedeemNote": "Course redeem — no payment required",
+    "walkInService": "Walk-in service",
+    "receiptCreated": "Receipt #{{number}}",
+    "method": {
+      "label": "Payment method",
+      "cash": "Cash",
+      "card": "Card",
+      "transfer": "Bank transfer",
+      "line_pay": "LINE Pay"
+    }
+  },
+  "inventory": {
+    "title": "Inventory",
+    "newItem": "New item",
+    "newMovement": "New movement",
+    "noItems": "No inventory items yet",
+    "lowStock": "Below minimum stock",
+    "minStock": "Min",
+    "currentStock": "Current",
+    "unit": "Unit",
+    "quantity": "Quantity",
+    "newStockLevel": "New stock level",
+    "reason": "Reason",
+    "movementType": "Type",
+    "invalidQuantity": "Invalid quantity",
+    "movement": {
+      "in": "Stock in",
+      "out": "Stock out",
+      "adjust": "Adjust"
     }
   },
   "devToolbar": {

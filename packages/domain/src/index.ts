@@ -5,3 +5,7 @@ export * from './patient';
 export * from './appointment';
 export * from './course';
 export * from './walk-in';
+export * from './receipt';
+export * from './commission';
+export * from './loyalty';
+export * from './inventory';

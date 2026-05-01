@@ -1,4 +1,4 @@
-// Hand-authored route tree (A2 — 5 routes).
+// Hand-authored route tree (A3 — 7 routes).
 // File-based generation via @tanstack/router-plugin/vite is deferred until the
 // route count crosses ~10 or nested routes proliferate. Filename retained as
 // `routeTree.gen.ts` so the generator can overwrite this file in place later.
@@ -9,6 +9,8 @@ import { PatientsPage } from './routes/patients';
 import { PatientDetailRouteComponent } from './routes/patients.$id.route';
 import { AppointmentsPage } from './routes/appointments';
 import { CoursesPage } from './routes/courses';
+import { ReportsPage } from './routes/reports';
+import { InventoryPage } from './routes/inventory';
 
 const rootRoute = createRootRoute({ component: RootLayout });
 
@@ -42,10 +44,24 @@ const coursesRoute = createRoute({
   component: CoursesPage,
 });
 
+const reportsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/reports',
+  component: ReportsPage,
+});
+
+const inventoryRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/inventory',
+  component: InventoryPage,
+});
+
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   patientsRoute,
   patientDetailRoute,
   appointmentsRoute,
   coursesRoute,
+  reportsRoute,
+  inventoryRoute,
 ]);

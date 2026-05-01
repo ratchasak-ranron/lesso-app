@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CheckCircle2 } from 'lucide-react';
-import { sessionsRemaining, type Course, type Patient, type WalkIn } from '@lesso/domain';
+import { CheckCircle2, Wallet } from 'lucide-react';
+import { sessionsRemaining, type Course, type Patient, type Receipt, type WalkIn } from '@lesso/domain';
 import { apiClient } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sheet';
 import { PatientSearch } from '@/features/patient';
 import { useActiveCoursesForPatient, useDecrementCourse } from '@/features/course';
+import { PaymentDialog } from '@/features/receipt';
 import { useCtx } from '@/features/_shared/use-ctx';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
@@ -35,6 +36,8 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
   const [walkIn, setWalkIn] = useState<WalkIn | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [lastReceipt, setLastReceipt] = useState<Receipt | null>(null);
 
   const createWalkIn = useCreateWalkIn();
   const updateWalkIn = useUpdateWalkIn();
@@ -50,6 +53,8 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
     setWalkIn(null);
     setSelectedCourse(null);
     setError(null);
+    setPaymentOpen(false);
+    setLastReceipt(null);
   }
 
   function handleClose(nextOpen: boolean) {
@@ -195,10 +200,43 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
                 {t('walkIn.checkInFlow.courseDecremented')}
               </p>
             ) : null}
-            <Button onClick={() => handleClose(false)}>{t('common.save')}</Button>
+            {lastReceipt ? (
+              <p className="text-sm font-medium">
+                {t('payment.receiptCreated', { number: lastReceipt.number })}
+              </p>
+            ) : null}
+            <div className="flex gap-2">
+              {!lastReceipt ? (
+                <Button onClick={() => setPaymentOpen(true)}>
+                  <Wallet className="size-4" aria-hidden="true" />
+                  {t('payment.takePayment')}
+                </Button>
+              ) : null}
+              <Button variant="outline" onClick={() => handleClose(false)}>
+                {t('common.save')}
+              </Button>
+            </div>
           </div>
         ) : null}
       </SheetContent>
+      {patient ? (
+        <PaymentDialog
+          open={paymentOpen}
+          onOpenChange={setPaymentOpen}
+          patient={patient}
+          walkIn={walkIn}
+          selectedCourse={selectedCourse}
+          onPaid={(receipt) => {
+            setLastReceipt(receipt);
+            // Browser print stub: real PDF generation lands in A7.
+            try {
+              window.print();
+            } catch {
+              /* print disabled — silent skip */
+            }
+          }}
+        />
+      ) : null}
     </Sheet>
   );
 }

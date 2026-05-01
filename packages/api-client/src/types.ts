@@ -2,16 +2,27 @@ import type {
   Appointment,
   AppointmentCreateInput,
   AppointmentUpdateInput,
+  CommissionEntry,
+  CommissionStatus,
   Course,
   CourseCreateInput,
   CourseSession,
   CourseStatus,
   CourseUpdateInput,
+  DoctorCommissionSummary,
   Health,
   Id,
+  InventoryItem,
+  InventoryItemCreateInput,
+  InventoryMovement,
+  InventoryMovementCreateInput,
+  LoyaltyAccount,
+  LoyaltyTransaction,
   Patient,
   PatientCreateInput,
   PatientUpdateInput,
+  Receipt,
+  ReceiptCreateInput,
   WalkIn,
   WalkInCreateInput,
   WalkInStatus,
@@ -94,12 +105,85 @@ export interface WalkInResource {
   delete(ctx: RequestContext, id: Id): Promise<void>;
 }
 
+export interface ReceiptListQuery {
+  branchId?: Id;
+  patientId?: Id;
+  from?: string;
+  to?: string;
+}
+
+export interface ReceiptResource {
+  list(ctx: RequestContext, query?: ReceiptListQuery): Promise<Receipt[]>;
+  get(ctx: RequestContext, id: Id): Promise<Receipt>;
+  create(ctx: RequestContext, input: ReceiptCreateInput): Promise<Receipt>;
+}
+
+export interface CommissionListQuery {
+  doctorId?: Id;
+  branchId?: Id;
+  status?: CommissionStatus;
+  from?: string;
+  to?: string;
+}
+
+export interface CommissionSummaryQuery {
+  branchId?: Id;
+  from?: string;
+  to?: string;
+}
+
+export interface CommissionResource {
+  list(ctx: RequestContext, query?: CommissionListQuery): Promise<CommissionEntry[]>;
+  summary(ctx: RequestContext, query?: CommissionSummaryQuery): Promise<DoctorCommissionSummary[]>;
+  pay(ctx: RequestContext, id: Id): Promise<CommissionEntry>;
+}
+
+export interface LoyaltyRedeemInput {
+  patientId: Id;
+  points: number;
+  receiptId?: Id;
+  reason?: string;
+}
+
+export interface LoyaltyResource {
+  listAccounts(ctx: RequestContext): Promise<{
+    accounts: LoyaltyAccount[];
+    totalOutstanding: number;
+  }>;
+  accountByPatient(ctx: RequestContext, patientId: Id): Promise<LoyaltyAccount>;
+  transactionsByPatient(ctx: RequestContext, patientId: Id): Promise<LoyaltyTransaction[]>;
+  redeem(
+    ctx: RequestContext,
+    input: LoyaltyRedeemInput,
+  ): Promise<{ account: LoyaltyAccount; transaction: LoyaltyTransaction }>;
+}
+
+export interface InventoryItemListQuery {
+  branchId?: Id;
+  lowStockOnly?: boolean;
+}
+
+export interface InventoryResource {
+  listItems(ctx: RequestContext, query?: InventoryItemListQuery): Promise<InventoryItem[]>;
+  getItem(ctx: RequestContext, id: Id): Promise<InventoryItem>;
+  movementsByItem(ctx: RequestContext, id: Id): Promise<InventoryMovement[]>;
+  createItem(ctx: RequestContext, input: InventoryItemCreateInput): Promise<InventoryItem>;
+  applyMovement(
+    ctx: RequestContext,
+    input: InventoryMovementCreateInput,
+  ): Promise<{ item: InventoryItem; movement: InventoryMovement }>;
+}
+
 export interface ApiClient {
   health: HealthResource;
   patients: PatientResource;
   appointments: AppointmentResource;
   courses: CourseResource;
   walkIns: WalkInResource;
+  receipts: ReceiptResource;
+  commissions: CommissionResource;
+  loyalty: LoyaltyResource;
+  inventory: InventoryResource;
 }
 
 export type ApiAdapter = 'mock' | 'supabase';

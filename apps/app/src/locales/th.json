@@ -9,6 +9,7 @@
     "patients": "คนไข้",
     "appointments": "นัดหมาย",
     "courses": "คอร์ส",
+    "inventory": "คลังสินค้า",
     "reports": "รายงาน"
   },
   "common": {
@@ -124,6 +125,67 @@
       "rebook": "นัดต่อ",
       "done": "เสร็จเรียบร้อย",
       "courseDecremented": "ใช้ session แล้ว"
+    }
+  },
+  "report": {
+    "title": "รายงาน",
+    "month": "เดือน",
+    "year": "ปี",
+    "revenue": "รายได้",
+    "visits": "ครั้งให้บริการ",
+    "receipts": "ใบเสร็จ",
+    "loyaltyOutstanding": "พอยท์คงเหลือ",
+    "activeMembers": "สมาชิก",
+    "lowStockAlerts": "สต็อกต่ำ",
+    "commissionByDoctor": "ค่ามือแพทย์",
+    "noCommission": "ยังไม่มีค่ามือในเดือนนี้"
+  },
+  "commission": {
+    "status": {
+      "accrued": "ค้างจ่าย",
+      "paid": "จ่ายแล้ว",
+      "voided": "ยกเลิก",
+      "mixed": "ผสม"
+    }
+  },
+  "payment": {
+    "title": "รับชำระเงิน",
+    "takePayment": "รับชำระ",
+    "payAndPrint": "ชำระและพิมพ์",
+    "servicePrice": "ราคาบริการ",
+    "tip": "ทิป",
+    "discount": "ส่วนลด",
+    "subtotal": "ยอดรวม",
+    "total": "รวมทั้งสิ้น",
+    "courseRedeemNote": "ใช้คอร์ส — ไม่ต้องชำระเพิ่ม",
+    "walkInService": "บริการ Walk-in",
+    "receiptCreated": "ใบเสร็จ #{{number}}",
+    "method": {
+      "label": "ช่องทางชำระ",
+      "cash": "เงินสด",
+      "card": "บัตร",
+      "transfer": "โอน",
+      "line_pay": "LINE Pay"
+    }
+  },
+  "inventory": {
+    "title": "คลังสินค้า",
+    "newItem": "เพิ่มสินค้า",
+    "newMovement": "บันทึกการเคลื่อนไหว",
+    "noItems": "ยังไม่มีสินค้า",
+    "lowStock": "สต็อกต่ำกว่ากำหนด",
+    "minStock": "ขั้นต่ำ",
+    "currentStock": "คงเหลือ",
+    "unit": "หน่วย",
+    "quantity": "จำนวน",
+    "newStockLevel": "ระดับสต็อกใหม่",
+    "reason": "เหตุผล",
+    "movementType": "ประเภท",
+    "invalidQuantity": "จำนวนไม่ถูกต้อง",
+    "movement": {
+      "in": "รับเข้า",
+      "out": "เบิกออก",
+      "adjust": "ปรับปรุง"
     }
   },
   "devToolbar": {
