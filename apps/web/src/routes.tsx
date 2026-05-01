@@ -5,8 +5,12 @@ import { NotFoundPage } from '@/pages/not-found';
 import { siteConfig } from '@/lib/site-config';
 
 // Each locale gets an explicit `/<locale>` parent route so vite-react-ssg
-// prerenders both `/en/index.html` and `/th/index.html`. Wildcard routes
-// are NOT prerendered — they only render at runtime, which is fine for 404.
+// prerenders both `/en.html` and `/th.html`. We do NOT register a `/`
+// index route — Vercel's redirect (`/` → `/en`, see `vercel.json`) is the
+// only entry point at the root, so a prerendered `/index.html` would only
+// be a duplicate of `/en.html` (same canonical) and cause a duplicate-
+// content SEO issue. Wildcard 404 routes are NOT prerendered; they only
+// render at runtime.
 const localeRoutes: RouteObject[] = siteConfig.locales.map((locale) => ({
   path: `/${locale}`,
   element: <RootLayout />,
@@ -18,11 +22,6 @@ const localeRoutes: RouteObject[] = siteConfig.locales.map((locale) => ({
 
 export const routes: RouteObject[] = [
   ...localeRoutes,
-  {
-    path: '/',
-    element: <RootLayout />,
-    children: [{ index: true, element: <HomePage /> }],
-  },
   {
     path: '*',
     element: <RootLayout />,

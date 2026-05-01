@@ -1,14 +1,10 @@
-/* eslint-disable security/detect-object-injection -- locale is a constant union and key paths are matched against a known dict */
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import en from '@/locales/en.json';
-import th from '@/locales/th.json';
-import { siteConfig, type Locale } from './site-config';
+import type { Locale } from './site-config';
+import { localeFromPath } from './locale-utils';
+import { makeT, type TFunction } from './i18n-dict';
 
-const SUPPORTED: ReadonlySet<string> = new Set<string>(siteConfig.locales);
-const DICTS = { en, th } as const;
-
-export type TFunction = (key: string, vars?: Record<string, string | number>) => string;
+export type { TFunction } from './i18n-dict';
 
 export interface ResolvedLocale {
   locale: Locale;
@@ -23,44 +19,17 @@ export interface ResolvedLocale {
  * vite-react-ssg can prerender them by name. That means `useParams` returns
  * an empty object — we read `useLocation().pathname` instead.
  *
- * We bypass `i18next`'s reactive language switch because SSG renders
- * happen during a single React pass: `i18n.changeLanguage` is effectively
- * async and doesn't update the active `t` returned by `useTranslation`
- * within the same render. Reading from a static dict keeps the prerendered
- * HTML deterministic.
+ * We bypass `i18next`'s reactive language switch because SSG renders happen
+ * during a single React pass: `i18n.changeLanguage` is effectively async
+ * and doesn't update the active `t` returned by `useTranslation` within
+ * the same render. Reading from a static dict keeps the prerendered HTML
+ * deterministic.
  */
 export function useResolvedLocale(): ResolvedLocale {
   const { pathname } = useLocation();
-  const firstSegment = pathname.split('/').filter(Boolean)[0];
-  const resolved: Locale =
-    firstSegment && SUPPORTED.has(firstSegment)
-      ? (firstSegment as Locale)
-      : siteConfig.defaultLocale;
-
-  const t = useMemo<TFunction>(() => {
-    const dict = DICTS[resolved] as Record<string, unknown>;
-    return (key, vars) => {
-      const value = lookup(dict, key);
-      if (typeof value !== 'string') return key;
-      if (!vars) return value;
-      return value.replace(/{{(\w+)}}/g, (_, name: string) => {
-        const v = vars[name];
-        return v === undefined ? '' : String(v);
-      });
-    };
-  }, [resolved]);
-
-  return { locale: resolved, t };
-}
-
-function lookup(dict: Record<string, unknown>, key: string): unknown {
-  const parts = key.split('.');
-  let cur: unknown = dict;
-  for (const p of parts) {
-    if (typeof cur !== 'object' || cur === null) return undefined;
-    cur = (cur as Record<string, unknown>)[p];
-  }
-  return cur;
+  const locale = localeFromPath(pathname);
+  const t = useMemo<TFunction>(() => makeT(locale), [locale]);
+  return { locale, t };
 }
 
 /**

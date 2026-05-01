@@ -1,5 +1,7 @@
+/* eslint-disable security/detect-object-injection -- locale is a constant union */
 import { useLocation } from 'react-router-dom';
 import { useResolvedLocale } from '@/lib/use-locale';
+import { localeSwitchHref } from '@/lib/locale-utils';
 import { siteConfig, type Locale } from '@/lib/site-config';
 
 interface SiteHeaderProps {
@@ -13,25 +15,16 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
   const { t } = useResolvedLocale();
   const { pathname } = useLocation();
 
-  // eslint-disable-next-line security/detect-object-injection -- locale is a constant union
   const next = NEXT_LANG[locale];
-  // eslint-disable-next-line security/detect-object-injection -- locale is a constant union
   const nextLabel = NEXT_LABEL[locale];
-  // Strip the current `/<locale>` prefix and rewrite to the other locale.
   // Real anchor (not Link) — full reload keeps SSG-prerendered `<html lang>`
   // in sync without a client-side flicker.
-  // eslint-disable-next-line security/detect-non-literal-regexp -- `locale` is a constant union ('en' | 'th'), not user input
-  const stripPrefix = new RegExp(`^/${locale}(/|$)`);
-  const restOfPath = pathname.replace(stripPrefix, '/').replace(/^\/+$/, '/');
-  const switchHref = `/${next}${restOfPath === '/' ? '' : restOfPath}`;
+  const switchHref = localeSwitchHref(pathname, locale, next);
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 md:px-6">
-        <a
-          href={`/${locale}`}
-          className="font-heading text-xl font-bold text-primary"
-        >
+        <a href={`/${locale}`} className="font-heading text-xl font-bold text-primary">
           {siteConfig.name}
         </a>
         <a
