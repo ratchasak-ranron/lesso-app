@@ -4,14 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { formatDate } from '@/lib/format';
+import { useLocale } from '@/lib/use-locale';
 
 interface CourseBalanceCardProps {
   course: Course;
 }
 
 export function CourseBalanceCard({ course }: CourseBalanceCardProps) {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language === 'th' ? 'th' : 'en';
+  const { t } = useTranslation();
+  const locale = useLocale();
   const remaining = sessionsRemaining(course);
   const percent = (course.sessionsUsed / course.sessionsTotal) * 100;
   const variant = remaining === 0 ? 'destructive' : remaining <= 1 ? 'warning' : 'default';

@@ -14,10 +14,10 @@ import { PageHeader } from '@/components/page-header';
 import { TenantGate } from '@/components/tenant-gate';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { usePatients } from '@/features/patient';
-import { useTodaysAppointments, AppointmentList } from '@/features/appointment';
-import { useTodaysWalkIns, WalkInQueue, CheckInFlow } from '@/features/walk-in';
+import { AppointmentList } from '@/features/appointment';
+import { WalkInQueue, CheckInFlow } from '@/features/walk-in';
 import { useUpdateWalkIn } from '@/features/walk-in';
-import { useTodayKpis } from '@/features/_shared/use-today-kpis';
+import { useTodayDashboard } from '@/features/_shared/use-today-kpis';
 
 function HomePage() {
   const { t } = useTranslation();
@@ -25,11 +25,9 @@ function HomePage() {
 
   const [walkInOpen, setWalkInOpen] = useState(false);
 
-  const appts = useTodaysAppointments(branchId);
-  const walkIns = useTodaysWalkIns(branchId);
+  const dashboard = useTodayDashboard(branchId);
   const patients = usePatients('');
   const updateWalkIn = useUpdateWalkIn();
-  const kpis = useTodayKpis(branchId);
 
   const patientsById = useMemo(() => {
     const map = new Map<string, Patient>();
@@ -56,28 +54,28 @@ function HomePage() {
         >
           <KpiTile
             label={t('home.kpi.queue')}
-            value={kpis.queueDepth}
+            value={dashboard.kpis.queueDepth}
             icon={Users}
             description={t('home.kpi.queueHint')}
           />
           <KpiTile
             label={t('home.kpi.booked')}
-            value={kpis.appointmentsBooked}
+            value={dashboard.kpis.appointmentsBooked}
             icon={CalendarIcon}
             description={t('home.kpi.bookedHint')}
           />
           <KpiTile
             label={t('home.kpi.done')}
-            value={kpis.walkInsCompleted}
+            value={dashboard.kpis.walkInsCompleted}
             icon={CheckCircle2}
             description={t('home.kpi.doneHint')}
           />
           <KpiTile
             label={t('home.kpi.alerts')}
-            value={kpis.lowStockAlerts}
+            value={dashboard.kpis.lowStockAlerts}
             icon={AlertTriangle}
             description={t('home.kpi.alertsHint')}
-            status={kpis.lowStockAlerts > 0 ? 'warning' : 'default'}
+            status={dashboard.kpis.lowStockAlerts > 0 ? 'warning' : 'default'}
           />
         </section>
 
@@ -85,8 +83,8 @@ function HomePage() {
           <section className="space-y-3">
             <h3 className="font-heading text-xl font-semibold">{t('home.walkInQueue')}</h3>
             <WalkInQueue
-              walkIns={walkIns.data}
-              isLoading={walkIns.isLoading}
+              walkIns={dashboard.walkIns}
+              isLoading={dashboard.isLoading}
               patientsById={patientsById}
               onComplete={(w) =>
                 updateWalkIn.mutate({ id: w.id, patch: { status: 'completed' } })
@@ -97,8 +95,8 @@ function HomePage() {
           <section className="space-y-3">
             <h3 className="font-heading text-xl font-semibold">{t('home.todaysAppointments')}</h3>
             <AppointmentList
-              appointments={appts.data}
-              isLoading={appts.isLoading}
+              appointments={dashboard.appointments}
+              isLoading={dashboard.isLoading}
               patientsById={patientsById}
             />
           </section>

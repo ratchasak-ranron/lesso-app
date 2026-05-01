@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatNumber } from '@/lib/format';
+import { useLocale } from '@/lib/use-locale';
 import { useLoyaltyAccount } from '../hooks/use-loyalty';
 import { RedeemDialog } from './redeem-dialog';
 
@@ -14,8 +15,8 @@ interface LoyaltyCardProps {
 }
 
 export function LoyaltyCard({ patient }: LoyaltyCardProps) {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language === 'th' ? 'th' : 'en';
+  const { t } = useTranslation();
+  const locale = useLocale();
   const { data, isLoading, isError } = useLoyaltyAccount(patient.id);
   const [redeemOpen, setRedeemOpen] = useState(false);
 

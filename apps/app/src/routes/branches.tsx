@@ -12,16 +12,17 @@ import { TenantGate } from '@/components/tenant-gate';
 import { FormError } from '@/components/ui/form-feedback';
 import { formatCurrency, formatNumber } from '@/lib/format';
 import { monthsForLocale } from '@/lib/locale-months';
+import { useLocale } from '@/lib/use-locale';
 
 export function BranchesPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth() + 1);
 
   const range = useMemo(() => monthRangeToDates(year, month), [year, month]);
   const { data, isLoading, isError, error } = useBranchesSummary(range);
-  const locale = i18n.language === 'th' ? 'th' : 'en';
   const monthOptions = useMemo(
     () => monthsForLocale(locale).map((m, idx) => ({ value: String(idx + 1), label: m })),
     [locale],

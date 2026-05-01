@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { Patient } from '@lesso/domain';
 import { useAppointments } from '@/features/appointment';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useLocale } from '@/lib/use-locale';
 import { AiButton } from './ai-button';
 import { AiOutputCard } from './ai-output-card';
 import { useVisitSummary } from '../hooks/use-ai';
@@ -12,7 +13,8 @@ interface VisitSummarySectionProps {
 }
 
 export function VisitSummarySection({ patient }: VisitSummarySectionProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
   const visitSummary = useVisitSummary();
   const [output, setOutput] = useState<string | null>(null);
   const appointments = useAppointments({ patientId: patient.id });
@@ -22,8 +24,6 @@ export function VisitSummarySection({ patient }: VisitSummarySectionProps) {
 
   const sessionN = (appointments.data ?? []).filter((a) => a.status === 'completed').length;
   const serviceName = lastCompleted?.serviceName ?? 'Consultation';
-
-  const locale = i18n.language === 'th' ? 'th' : 'en';
 
   function handleGenerate(): void {
     visitSummary.mutate(

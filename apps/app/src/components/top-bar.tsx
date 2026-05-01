@@ -22,11 +22,16 @@ export function TopBar({ title }: TopBarProps) {
         <MobileNav />
         <h1 className="truncate font-heading text-xl font-semibold">{title}</h1>
       </div>
+      {/*
+       * Language toggle is modelled as a plain action Button (not a stateful
+       * `aria-pressed` toggle) — pressing it switches to the OTHER language.
+       * `aria-label` carries the target action so AT users hear "Switch to
+       * English" / "Switch to Thai" instead of an ambiguous toggle state.
+       */}
       <Button
         variant="ghost"
         onClick={toggleLanguage}
         aria-label={t('topbar.switchTo', { lang: nextLabel })}
-        aria-pressed={isThai}
         className="touch-target"
       >
         <Languages className="size-5" aria-hidden="true" />

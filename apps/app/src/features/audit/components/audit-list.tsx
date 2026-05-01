@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { formatDateTime } from '@/lib/format';
+import { useLocale } from '@/lib/use-locale';
 
 interface AuditListProps {
   logs: AuditLog[] | undefined;
@@ -12,8 +13,8 @@ interface AuditListProps {
 }
 
 export function AuditList({ logs, isLoading }: AuditListProps) {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language === 'th' ? 'th' : 'en';
+  const { t } = useTranslation();
+  const locale = useLocale();
 
   if (isLoading) {
     return (

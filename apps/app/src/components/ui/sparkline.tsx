@@ -22,8 +22,13 @@ const STROKE = {
  */
 export function Sparkline({ data, ariaLabel, className, variant = 'default' }: SparklineProps) {
   if (data.length < 2) return null;
-  const min = Math.min(...data);
-  const max = Math.max(...data);
+  // `Math.min(...data)` blows the stack on huge arrays; use reduce so the
+  // primitive remains safe at any size even if a caller wires this up to
+  // raw transaction history later.
+  const { min, max } = data.reduce(
+    (acc, v) => ({ min: Math.min(acc.min, v), max: Math.max(acc.max, v) }),
+    { min: Infinity, max: -Infinity },
+  );
   const range = max - min || 1;
   const stepX = 100 / (data.length - 1);
   const points = data

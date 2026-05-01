@@ -5,10 +5,11 @@ import { TopBar } from './top-bar';
 import { FeedbackButton } from './feedback-button';
 import { BottomTabBar } from './bottom-tab-bar';
 
-// Lazy-load dev toolbar so mock-server bundle only ships in DEV.
-// Vite guarantees the dynamic-import chunk is excluded when the static
-// `import.meta.env.DEV` branch is dead-code-eliminated in production.
-const DevToolbar = import.meta.env.DEV
+const IS_DEV = import.meta.env.DEV;
+
+// Lazy-load dev toolbar so the mock-server bundle only ships in DEV.
+// Vite dead-code-eliminates the dynamic import when `IS_DEV` is `false`.
+const DevToolbar = IS_DEV
   ? lazy(() => import('./dev-toolbar').then((m) => ({ default: m.DevToolbar })))
   : null;
 
@@ -34,14 +35,16 @@ export function PageShell({ children, title }: PageShellProps) {
         <main
           id="main-content"
           tabIndex={-1}
-          className="flex-1 p-4 pb-28 sm:pb-24 md:p-6 lg:p-8"
+          // <sm: reserve space for the BottomTabBar (~56 px + safe-area).
+          // sm+: no tab bar — fall back to the standard page padding.
+          className="flex-1 p-4 pb-28 sm:p-6 sm:pb-6 lg:p-8 lg:pb-8"
         >
           <div className="mx-auto w-full max-w-7xl">{children}</div>
         </main>
       </div>
       <BottomTabBar />
       <FeedbackButton />
-      {DevToolbar ? (
+      {IS_DEV && DevToolbar ? (
         <Suspense fallback={null}>
           <DevToolbar />
         </Suspense>

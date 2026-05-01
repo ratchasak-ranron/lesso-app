@@ -46,10 +46,14 @@ export function DevToolbar() {
   const userOptions = toOptions(users, t('devToolbar.none'));
 
   return (
+    // `bottom-14 sm:bottom-0`: at <sm the BottomTabBar (~56 px tall, z-30)
+    // sits at viewport bottom — we float DevToolbar 56 px above so the two
+    // DEV-only fixed bars don't collide. At sm+ the tab bar disappears so
+    // we pin DevToolbar to bottom-0 again.
     <aside
       aria-label={t('devToolbar.title')}
       className={cn(
-        'fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card text-card-foreground shadow-lg',
+        'fixed inset-x-0 bottom-14 sm:bottom-0 z-50 border-t border-border bg-card text-card-foreground shadow-lg',
         'transition-transform',
         collapsed ? 'translate-y-[calc(100%-2.75rem)]' : 'translate-y-0',
       )}

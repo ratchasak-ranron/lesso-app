@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FormError } from '@/components/ui/form-feedback';
 import { formatCurrency, formatNumber } from '@/lib/format';
+import { useLocale } from '@/lib/use-locale';
 import { useRedeemPoints } from '../hooks/use-loyalty';
 
 interface RedeemDialogProps {
@@ -27,8 +28,8 @@ interface RedeemDialogProps {
 const PRESETS = [100, 200, 500, 1000];
 
 export function RedeemDialog({ open, onOpenChange, patient, availableBalance }: RedeemDialogProps) {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language === 'th' ? 'th' : 'en';
+  const { t } = useTranslation();
+  const locale = useLocale();
   const redeem = useRedeemPoints();
   const [points, setPoints] = useState<number>(100);
   const [error, setError] = useState<string | null>(null);
@@ -78,7 +79,7 @@ export function RedeemDialog({ open, onOpenChange, patient, availableBalance }: 
           <DialogDescription>{patient.fullName}</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="rounded-md border border-border p-3 text-sm">
+          <div id="redeem-balance-hint" className="rounded-md border border-border p-3 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">{t('loyalty.balance')}</span>
               <span className="font-medium tabular-nums">

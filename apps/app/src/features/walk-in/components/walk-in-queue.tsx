@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { formatTime } from '@/lib/format';
+import { useLocale } from '@/lib/use-locale';
 
 interface WalkInQueueProps {
   walkIns: WalkIn[] | undefined;
@@ -16,7 +17,8 @@ interface WalkInQueueProps {
 }
 
 export function WalkInQueue({ walkIns, isLoading, patientsById, onComplete }: WalkInQueueProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
 
   if (isLoading) {
     return (
@@ -45,7 +47,7 @@ export function WalkInQueue({ walkIns, isLoading, patientsById, onComplete }: Wa
                     {patient?.fullName ?? <span className="text-muted-foreground">…</span>}
                   </div>
                   <div className="truncate text-sm text-muted-foreground tabular-nums">
-                    {t('walkIn.arrived', { time: formatTime(w.arrivedAt, i18n.language) })}
+                    {t('walkIn.arrived', { time: formatTime(w.arrivedAt, locale) })}
                   </div>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">

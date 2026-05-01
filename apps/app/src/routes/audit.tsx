@@ -91,7 +91,6 @@ export function AuditPage() {
           id="audit-range-error"
           className="rounded-md border border-warning/40 bg-warning/5 p-3 text-sm text-warning-foreground"
           role="alert"
-          aria-live="polite"
         >
           {rangeError}
         </p>

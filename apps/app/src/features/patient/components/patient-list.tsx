@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { Users, Plus } from 'lucide-react';
 import type { Patient } from '@lesso/domain';
-import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -75,7 +74,7 @@ export function PatientList({ onSelect, onAddNew }: PatientListProps) {
             return (
               <li key={p.id}>
                 <SelectableCard ariaLabel={ariaLabel} onClick={() => onSelect(p)}>
-                  <CardContent className="flex items-center justify-between p-4">
+                  <div className="flex items-center justify-between p-4">
                     <div className="min-w-0">
                       <div className="truncate font-medium">{p.fullName}</div>
                       <div className="truncate text-sm text-muted-foreground tabular-nums">
@@ -84,7 +83,7 @@ export function PatientList({ onSelect, onAddNew }: PatientListProps) {
                       </div>
                     </div>
                     <ConsentBadge status={p.consentStatus} t={t} />
-                  </CardContent>
+                  </div>
                 </SelectableCard>
               </li>
             );

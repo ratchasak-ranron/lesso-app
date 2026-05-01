@@ -22,6 +22,7 @@ import { Label } from '@/components/ui/label';
 import { Select, type SelectOption } from '@/components/ui/select';
 import { FormError } from '@/components/ui/form-feedback';
 import { formatCurrency } from '@/lib/format';
+import { useLocale } from '@/lib/use-locale';
 import { useCtx } from '@/features/_shared/use-ctx';
 import { useCreateReceipt } from '../hooks/use-receipts';
 
@@ -42,7 +43,8 @@ export function PaymentDialog({
   selectedCourse,
   onPaid,
 }: PaymentDialogProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
   const ctx = useCtx();
   const createReceipt = useCreateReceipt();
 
@@ -58,7 +60,6 @@ export function PaymentDialog({
   const isCourseRedeem = !!selectedCourse;
   const subtotal = isCourseRedeem ? 0 : servicePrice;
   const total = Math.max(0, subtotal + tip - discount);
-  const locale = i18n.language === 'th' ? 'th' : 'en';
 
   const methodOptions: SelectOption[] = useMemo(
     () => [

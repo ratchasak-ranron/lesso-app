@@ -35,8 +35,8 @@ export function InventoryList({ items, isLoading, onSelectItem }: InventoryListP
         const ariaLabel = `${item.name}, ${t('inventory.currentStock')}: ${item.currentStock} ${item.unit}${
           low ? `, ${t('inventory.lowStock')}` : ''
         }`;
-        const inner = (
-          <CardContent className="flex items-center justify-between gap-3 p-4">
+        const body = (
+          <div className="flex items-center justify-between gap-3 p-4">
             <div className="flex min-w-0 items-center gap-3">
               {low ? (
                 <AlertTriangle
@@ -60,16 +60,18 @@ export function InventoryList({ items, isLoading, onSelectItem }: InventoryListP
                 {t('inventory.minStock')}: {item.minStock}
               </div>
             </div>
-          </CardContent>
+          </div>
         );
         return (
           <li key={item.id}>
             {onSelectItem ? (
               <SelectableCard ariaLabel={ariaLabel} onClick={() => onSelectItem(item)}>
-                {inner}
+                {body}
               </SelectableCard>
             ) : (
-              <Card aria-label={ariaLabel}>{inner}</Card>
+              <Card aria-label={ariaLabel}>
+                <CardContent className="p-0">{body}</CardContent>
+              </Card>
             )}
           </li>
         );

@@ -4,14 +4,15 @@ import type { BranchSummary } from '@lesso/api-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency, formatNumber } from '@/lib/format';
+import { useLocale } from '@/lib/use-locale';
 
 interface BranchSummaryCardProps {
   summary: BranchSummary;
 }
 
 export function BranchSummaryCard({ summary }: BranchSummaryCardProps) {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language === 'th' ? 'th' : 'en';
+  const { t } = useTranslation();
+  const locale = useLocale();
 
   return (
     <Card>

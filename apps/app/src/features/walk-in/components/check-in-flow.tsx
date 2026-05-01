@@ -2,7 +2,6 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, CheckCircle2, Wallet } from 'lucide-react';
 import { sessionsRemaining, type Course, type Patient, type Receipt, type WalkIn } from '@lesso/domain';
-import { apiClient } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
@@ -19,6 +18,7 @@ import { PaymentDialog } from '@/features/receipt';
 import { AiButton, AiOutputCard, useRecallMessage } from '@/features/ai';
 import { useCtx } from '@/features/_shared/use-ctx';
 import { logger } from '@/lib/logger';
+import { useLocale } from '@/lib/use-locale';
 import { cn } from '@/lib/utils';
 import { useCreateWalkIn, useUpdateWalkIn } from '../hooks/use-walk-ins';
 
@@ -31,7 +31,8 @@ interface CheckInFlowProps {
 type Step = 'select_patient' | 'confirm' | 'done';
 
 export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
   const ctx = useCtx();
   const [step, setStep] = useState<Step>('select_patient');
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -118,24 +119,18 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
     } catch (err) {
       setError(err instanceof Error ? err.message : t('common.error'));
       // Compensating rollback: if the course session was already burned but
-      // walk-in failed to update, restore sessionsUsed. Best-effort — failure
-      // here is logged but not surfaced (the original error is what user sees).
+      // walk-in failed to update, log the divergence so it can be reconciled.
+      //
+      // FIXME(A7): mock API lacks a reverse-decrement endpoint, so we cannot
+      // actually restore `sessionsUsed` here. The previous implementation
+      // wrote `sessionsTotal` (wrong field) — kept the call out so we don't
+      // corrupt the course record. Real backend will own an idempotency-key
+      // based reverse operation; until then this is a manual reconcile flag.
       if (courseDecremented && selectedCourse) {
-        try {
-          await apiClient.courses.update(ctx, selectedCourse.id, {
-            sessionsTotal: selectedCourse.sessionsTotal,
-          });
-          // The mock API doesn't expose a direct decrement-reverse endpoint;
-          // this is a TODO for A7 backend (idempotency key + reverse op).
-          logger.warn('walk-in.complete failed after decrement — manual reconciliation needed', {
-            courseId: selectedCourse.id,
-            walkInId: walkIn.id,
-          });
-        } catch (rollbackErr) {
-          logger.error('rollback failed', {
-            err: rollbackErr instanceof Error ? rollbackErr.message : 'unknown',
-          });
-        }
+        logger.warn('walk-in.complete failed after decrement — manual reconciliation needed', {
+          courseId: selectedCourse.id,
+          walkInId: walkIn.id,
+        });
       }
     } finally {
       submittingRef.current = false;
@@ -232,7 +227,7 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
                       remainingSessions: selectedCourse
                         ? selectedCourse.sessionsTotal - selectedCourse.sessionsUsed
                         : 0,
-                      locale: i18n.language === 'th' ? 'th' : 'en',
+                      locale,
                     },
                     { onSuccess: (data) => setRecallText(data.text) },
                   )

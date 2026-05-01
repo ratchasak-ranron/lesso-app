@@ -16,11 +16,13 @@ import {
 } from '@/features/report';
 import { formatCurrency, formatNumber } from '@/lib/format';
 import { monthsForLocale } from '@/lib/locale-months';
+import { useLocale } from '@/lib/use-locale';
 import { PageHeader } from '@/components/page-header';
 import { TenantGate } from '@/components/tenant-gate';
 
 export function ReportsPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
   const branchId = useDevToolbar((s) => s.branchId);
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -34,7 +36,6 @@ export function ReportsPage() {
 
   const report = useMonthlyReport(range);
   const dimensionReport = useDimensionReport(dimension, range);
-  const locale = i18n.language === 'th' ? 'th' : 'en';
   const monthOptions = useMemo(
     () => monthsForLocale(locale).map((m, idx) => ({ value: String(idx + 1), label: m })),
     [locale],

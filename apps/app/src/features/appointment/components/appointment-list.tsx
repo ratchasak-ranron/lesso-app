@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { Calendar as CalendarIcon, AlertCircle } from 'lucide-react';
 import type { Appointment, Patient } from '@lesso/domain';
-import { CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { SelectableCard } from '@/components/ui/selectable-card';
 import { formatTime } from '@/lib/format';
+import { useLocale } from '@/lib/use-locale';
 
 interface AppointmentListProps {
   appointments: Appointment[] | undefined;
@@ -21,7 +21,8 @@ export function AppointmentList({
   patientsById,
   onSelect,
 }: AppointmentListProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
 
   if (isLoading) {
     return (
@@ -44,7 +45,7 @@ export function AppointmentList({
     <ul className="space-y-2" role="list">
       {sorted.map((a) => {
         const patient = patientsById?.get(a.patientId);
-        const time = formatTime(a.startAt, i18n.language);
+        const time = formatTime(a.startAt, locale);
         const name = patient?.fullName ?? '…';
         const status = t(`appointment.status.${a.status}`);
         const consentAlert =
@@ -55,7 +56,7 @@ export function AppointmentList({
         return (
           <li key={a.id}>
             <SelectableCard ariaLabel={ariaLabel} onClick={() => onSelect?.(a)}>
-              <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4 sm:flex-nowrap sm:gap-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 p-4 sm:flex-nowrap sm:gap-4">
                 <div className="flex min-w-0 flex-1 items-baseline gap-3">
                   <span className="font-mono text-lg font-semibold tabular-nums">{time}</span>
                   <div className="min-w-0">
@@ -75,7 +76,7 @@ export function AppointmentList({
                   ) : null}
                   <StatusBadge status={a.status} t={t} />
                 </div>
-              </CardContent>
+              </div>
             </SelectableCard>
           </li>
         );

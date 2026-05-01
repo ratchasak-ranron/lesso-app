@@ -27,12 +27,12 @@ export function PatientForm({ initial, onSubmit, isSubmitting, onCancel }: Patie
     e.preventDefault();
     setError(null);
     if (!fullName.trim()) {
-      setError(t('patient.fullName'));
+      setError(t('patient.errors.fullNameRequired'));
       return;
     }
     const digits = normalizePhone(phoneInput);
     if (digits.length < 8) {
-      setError(t('patient.phone'));
+      setError(t('patient.errors.phoneInvalid'));
       return;
     }
     onSubmit({
