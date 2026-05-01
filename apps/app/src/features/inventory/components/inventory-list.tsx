@@ -28,7 +28,7 @@ export function InventoryList({ items, isLoading, onSelectItem }: InventoryListP
   }
 
   return (
-    <ul className="space-y-2" role="list">
+    <ul className="grid gap-2 md:grid-cols-2 xl:grid-cols-3" role="list">
       {items.map((item) => {
         const low = isLowStock(item);
         return (

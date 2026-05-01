@@ -9,3 +9,6 @@ export * from './receipt';
 export * from './commission';
 export * from './loyalty';
 export * from './inventory';
+export * from './audit';
+export * from './consent';
+export * from './service';

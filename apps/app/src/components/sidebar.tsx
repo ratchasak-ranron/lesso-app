@@ -1,4 +1,13 @@
-import { Calendar, Users, GraduationCap, Home, BarChart3, Package, Building2 } from 'lucide-react';
+import {
+  Calendar,
+  Users,
+  GraduationCap,
+  Home,
+  BarChart3,
+  Package,
+  Building2,
+  ShieldCheck,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
@@ -11,6 +20,7 @@ const NAV_ITEMS = [
   { to: '/inventory' as const, icon: Package, labelKey: 'nav.inventory' as const, exact: false },
   { to: '/branches' as const, icon: Building2, labelKey: 'nav.branches' as const, exact: false },
   { to: '/reports' as const, icon: BarChart3, labelKey: 'nav.reports' as const, exact: false },
+  { to: '/audit' as const, icon: ShieldCheck, labelKey: 'nav.audit' as const, exact: false },
 ];
 
 export function Sidebar() {

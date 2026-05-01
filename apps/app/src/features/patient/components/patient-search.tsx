@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search } from 'lucide-react';
 import type { Patient } from '@lesso/domain';
@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { displayPhone } from '@/lib/format';
+import { useDebounce } from '@/lib/use-debounce';
 import { usePatients } from '../hooks/use-patients';
 
 interface PatientSearchProps {
@@ -16,13 +17,8 @@ interface PatientSearchProps {
 export function PatientSearch({ onSelect, autoFocus }: PatientSearchProps) {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-  const [debounced, setDebounced] = useState('');
+  const debounced = useDebounce(query, 200);
   const { data, isLoading } = usePatients(debounced);
-
-  useEffect(() => {
-    const id = setTimeout(() => setDebounced(query), 200);
-    return () => clearTimeout(id);
-  }, [query]);
 
   const results = data ?? [];
 

@@ -10,6 +10,8 @@ import { inventoryHandlers } from './inventory';
 import { branchHandlers } from './branches';
 import { reportHandlers } from './reports';
 import { aiHandlers } from './ai';
+import { auditHandlers } from './audit';
+import { consentHandlers } from './consent';
 
 export const handlers = [
   ...healthHandlers,
@@ -24,4 +26,6 @@ export const handlers = [
   ...branchHandlers,
   ...reportHandlers,
   ...aiHandlers,
+  ...auditHandlers,
+  ...consentHandlers,
 ];

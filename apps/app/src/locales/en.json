@@ -11,7 +11,8 @@
     "courses": "Courses",
     "inventory": "Inventory",
     "branches": "Branches",
-    "reports": "Reports"
+    "reports": "Reports",
+    "audit": "Audit Log"
   },
   "common": {
     "loading": "Loading...",
@@ -25,7 +26,8 @@
     "search": "Search",
     "actions": "Actions",
     "noTenant": "Pick a tenant in the Dev Toolbar",
-    "switchLanguage": "ภาษาไทย"
+    "switchLanguage": "ภาษาไทย",
+    "skipToMain": "Skip to main content"
   },
   "home": {
     "greeting": "Hello, Lesso",
@@ -222,6 +224,46 @@
       "out": "Stock out",
       "adjust": "Adjust"
     }
+  },
+  "audit": {
+    "title": "Audit Log",
+    "description": "Tamper-evident log of every data change. Required for PDPA compliance and incident review.",
+    "empty": "No audit entries yet"
+  },
+  "consent": {
+    "title": "PDPA consent",
+    "description": "Capture the patient's consent to process their personal data.",
+    "scopesLegend": "Consent scopes",
+    "captureCta": "Capture consent",
+    "duration": "Duration",
+    "required": "required",
+    "scope": {
+      "medical_records": {
+        "label": "Medical records",
+        "description": "Allow the clinic to keep treatment records for continuity of care."
+      },
+      "recall_contact": {
+        "label": "Recall contact",
+        "description": "Allow recall reminders and follow-up messages."
+      },
+      "photo_marketing": {
+        "label": "Before/after photos for marketing",
+        "description": "Allow use of (face-redacted) before/after photos in marketing material."
+      }
+    },
+    "durationOptions": {
+      "6m": "6 months",
+      "12m": "1 year",
+      "24m": "2 years",
+      "60m": "5 years"
+    },
+    "errors": {
+      "atLeastOneScope": "Select at least one scope"
+    }
+  },
+  "export": {
+    "cta": "Export data (PDPA)",
+    "inProgress": "Exporting…"
   },
   "devToolbar": {
     "title": "Dev Toolbar",

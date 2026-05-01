@@ -1,7 +1,13 @@
 import { useMemo, useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Printer } from 'lucide-react';
-import type { Course, Patient, Receipt, WalkIn } from '@lesso/domain';
+import {
+  SERVICE_PRICE_TIERS,
+  type Course,
+  type Patient,
+  type Receipt,
+  type WalkIn,
+} from '@lesso/domain';
 import {
   Dialog,
   DialogContent,
@@ -17,8 +23,6 @@ import { Select, type SelectOption } from '@/components/ui/select';
 import { formatCurrency } from '@/lib/format';
 import { useCtx } from '@/features/_shared/use-ctx';
 import { useCreateReceipt } from '../hooks/use-receipts';
-
-const SERVICE_PRESETS = [3000, 5000, 8000, 12000];
 
 interface PaymentDialogProps {
   open: boolean;
@@ -41,7 +45,7 @@ export function PaymentDialog({
   const ctx = useCtx();
   const createReceipt = useCreateReceipt();
 
-  const [servicePrice, setServicePrice] = useState<number>(SERVICE_PRESETS[1]!);
+  const [servicePrice, setServicePrice] = useState<number>(SERVICE_PRICE_TIERS[1]!);
   const [tip, setTip] = useState<number>(0);
   const [discount, setDiscount] = useState<number>(0);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'transfer' | 'line_pay'>(
@@ -137,7 +141,7 @@ export function PaymentDialog({
                   onChange={(e) => setServicePrice(Number(e.target.value) || 0)}
                 />
                 <div className="flex flex-wrap gap-1.5">
-                  {SERVICE_PRESETS.map((p) => (
+                  {SERVICE_PRICE_TIERS.map((p) => (
                     <Button
                       key={p}
                       type="button"

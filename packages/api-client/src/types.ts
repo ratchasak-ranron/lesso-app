@@ -2,8 +2,14 @@ import type {
   Appointment,
   AppointmentCreateInput,
   AppointmentUpdateInput,
+  AuditAction,
+  AuditLog,
+  AuditLogCreateInput,
   CommissionEntry,
   CommissionStatus,
+  ConsentCaptureInput,
+  ConsentRecord,
+  ConsentWithdrawInput,
   Course,
   CourseCreateInput,
   CourseSession,
@@ -270,6 +276,28 @@ export interface AiResource {
   tagPhoto(ctx: RequestContext, input: PhotoTagRequest): Promise<PhotoTagResult>;
 }
 
+export interface AuditListQuery {
+  action?: AuditAction;
+  resourceType?: string;
+  userId?: Id;
+  from?: string;
+  to?: string;
+}
+
+export interface AuditResource {
+  list(ctx: RequestContext, query?: AuditListQuery): Promise<AuditLog[]>;
+  append(ctx: RequestContext, input: AuditLogCreateInput): Promise<AuditLog>;
+}
+
+export interface ConsentResource {
+  byPatient(
+    ctx: RequestContext,
+    patientId: Id,
+  ): Promise<{ records: ConsentRecord[]; active: ConsentRecord | null }>;
+  capture(ctx: RequestContext, input: ConsentCaptureInput): Promise<ConsentRecord>;
+  withdraw(ctx: RequestContext, input: ConsentWithdrawInput): Promise<ConsentRecord>;
+}
+
 export interface ApiClient {
   health: HealthResource;
   patients: PatientResource;
@@ -283,6 +311,8 @@ export interface ApiClient {
   branches: BranchesResource;
   reports: ReportsResource;
   ai: AiResource;
+  audit: AuditResource;
+  consent: ConsentResource;
 }
 
 export type ApiAdapter = 'mock' | 'supabase';

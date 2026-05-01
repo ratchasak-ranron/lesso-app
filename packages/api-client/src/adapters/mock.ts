@@ -1,8 +1,10 @@
 import { z } from 'zod';
 import {
   AppointmentSchema,
+  AuditLogSchema,
   CommissionEntrySchema,
   CommissionStatusSchema,
+  ConsentRecordSchema,
   CourseSchema,
   CourseSessionSchema,
   HealthSchema,
@@ -16,7 +18,12 @@ import {
   type Appointment,
   type AppointmentCreateInput,
   type AppointmentUpdateInput,
+  type AuditLog,
+  type AuditLogCreateInput,
   type CommissionEntry,
+  type ConsentCaptureInput,
+  type ConsentRecord,
+  type ConsentWithdrawInput,
   type Course,
   type CourseCreateInput,
   type CourseSession,
@@ -44,6 +51,7 @@ import type {
   ApiClient,
   ApiClientOptions,
   AppointmentListQuery,
+  AuditListQuery,
   BranchSummary,
   BranchesSummaryQuery,
   CommissionListQuery,
@@ -687,6 +695,71 @@ export function createMockApiClient(opts: ApiClientOptions = {}): ApiClient {
         const body = await fetchValidated(
           `${baseUrl}/ai/tag-photo`,
           Schema,
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
+      },
+    },
+
+    audit: {
+      async list(ctx: RequestContext, query: AuditListQuery = {}): Promise<AuditLog[]> {
+        const qs = buildQuery({
+          action: query.action,
+          resourceType: query.resourceType,
+          userId: query.userId,
+          from: query.from,
+          to: query.to,
+        });
+        const body = await fetchValidated(
+          `${baseUrl}/audit${qs}`,
+          ListEnvelopeSchema(AuditLogSchema),
+          {},
+          ctx,
+        );
+        return body.data;
+      },
+      async append(ctx: RequestContext, input: AuditLogCreateInput): Promise<AuditLog> {
+        const body = await fetchValidated(
+          `${baseUrl}/audit`,
+          EnvelopeSchema(AuditLogSchema),
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
+      },
+    },
+
+    consent: {
+      async byPatient(
+        ctx: RequestContext,
+        patientId: Id,
+      ): Promise<{ records: ConsentRecord[]; active: ConsentRecord | null }> {
+        const Schema = z.object({
+          data: z.array(ConsentRecordSchema),
+          meta: z.object({ active: ConsentRecordSchema.nullable() }),
+        });
+        const body = await fetchValidated(
+          `${baseUrl}/consent/by-patient/${patientId}`,
+          Schema,
+          {},
+          ctx,
+        );
+        return { records: body.data, active: body.meta.active };
+      },
+      async capture(ctx: RequestContext, input: ConsentCaptureInput): Promise<ConsentRecord> {
+        const body = await fetchValidated(
+          `${baseUrl}/consent`,
+          EnvelopeSchema(ConsentRecordSchema),
+          { method: 'POST', body: JSON.stringify(input) },
+          ctx,
+        );
+        return body.data;
+      },
+      async withdraw(ctx: RequestContext, input: ConsentWithdrawInput): Promise<ConsentRecord> {
+        const body = await fetchValidated(
+          `${baseUrl}/consent/withdraw`,
+          EnvelopeSchema(ConsentRecordSchema),
           { method: 'POST', body: JSON.stringify(input) },
           ctx,
         );

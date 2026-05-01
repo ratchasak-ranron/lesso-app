@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@tanstack/react-router';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ShieldCheck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PatientCard, usePatient } from '@/features/patient';
 import { ActiveCoursesList } from '@/features/course';
 import { VisitSummarySection } from '@/features/ai';
+import { ConsentDialog } from '@/features/consent';
+import { ExportButton } from '@/features/export';
 
 interface PatientDetailPageProps {
   patientId: string;
@@ -13,6 +17,7 @@ interface PatientDetailPageProps {
 export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
   const { t } = useTranslation();
   const { data, isLoading, isError } = usePatient(patientId);
+  const [consentOpen, setConsentOpen] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -38,8 +43,20 @@ export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
       {data ? (
         <div className="space-y-4">
           <PatientCard patient={data} />
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" onClick={() => setConsentOpen(true)}>
+              <ShieldCheck className="size-4" aria-hidden="true" />
+              {t('consent.captureCta')}
+            </Button>
+            <ExportButton patient={data} />
+          </div>
           <ActiveCoursesList patientId={data.id} />
           <VisitSummarySection patient={data} />
+          <ConsentDialog
+            open={consentOpen}
+            onOpenChange={setConsentOpen}
+            patient={data}
+          />
         </div>
       ) : null}
     </div>

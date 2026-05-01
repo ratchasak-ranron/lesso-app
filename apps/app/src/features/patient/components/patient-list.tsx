@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { Users, Plus } from 'lucide-react';
@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { displayPhone } from '@/lib/format';
+import { useDebounce } from '@/lib/use-debounce';
 import { usePatients } from '../hooks/use-patients';
 
 interface PatientListProps {
@@ -20,13 +21,8 @@ interface PatientListProps {
 export function PatientList({ onSelect, onAddNew }: PatientListProps) {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-  const [debounced, setDebounced] = useState('');
+  const debounced = useDebounce(query, 200);
   const { data, isLoading, isError, error } = usePatients(debounced);
-
-  useEffect(() => {
-    const id = setTimeout(() => setDebounced(query), 200);
-    return () => clearTimeout(id);
-  }, [query]);
 
   return (
     <div className="space-y-4">
@@ -71,7 +67,7 @@ export function PatientList({ onSelect, onAddNew }: PatientListProps) {
       ) : null}
 
       {data && data.length > 0 ? (
-        <ul className="space-y-2" role="list">
+        <ul className="grid gap-2 md:grid-cols-2 xl:grid-cols-3" role="list">
           {data.map((p) => (
             <li key={p.id}>
               <button

@@ -11,7 +11,8 @@
     "courses": "คอร์ส",
     "inventory": "คลังสินค้า",
     "branches": "สาขา",
-    "reports": "รายงาน"
+    "reports": "รายงาน",
+    "audit": "Audit Log"
   },
   "common": {
     "loading": "กำลังโหลด...",
@@ -25,7 +26,8 @@
     "search": "ค้นหา",
     "actions": "การกระทำ",
     "noTenant": "เลือกคลินิกใน Dev Toolbar",
-    "switchLanguage": "English"
+    "switchLanguage": "English",
+    "skipToMain": "ข้ามไปยังเนื้อหาหลัก"
   },
   "home": {
     "greeting": "สวัสดี Lesso",
@@ -222,6 +224,46 @@
       "out": "เบิกออก",
       "adjust": "ปรับปรุง"
     }
+  },
+  "audit": {
+    "title": "Audit Log",
+    "description": "บันทึกการเปลี่ยนแปลงข้อมูลทั้งหมด สำหรับการตรวจสอบและความสอดคล้องตาม PDPA",
+    "empty": "ยังไม่มีบันทึก"
+  },
+  "consent": {
+    "title": "ความยินยอม PDPA",
+    "description": "บันทึกความยินยอมในการใช้ข้อมูลส่วนบุคคลของผู้ป่วย",
+    "scopesLegend": "ขอบเขตที่ยินยอม",
+    "captureCta": "บันทึกความยินยอม",
+    "duration": "ระยะเวลา",
+    "required": "จำเป็น",
+    "scope": {
+      "medical_records": {
+        "label": "การบันทึกประวัติการรักษา",
+        "description": "ยินยอมให้คลินิกเก็บประวัติการรักษาเพื่อการดูแลต่อเนื่อง"
+      },
+      "recall_contact": {
+        "label": "การติดต่อกลับเพื่อนัดหมาย",
+        "description": "ยินยอมให้ส่งข้อความเตือนนัดและติดตามผล"
+      },
+      "photo_marketing": {
+        "label": "ภาพก่อน-หลังเพื่อการโฆษณา",
+        "description": "ยินยอมให้ใช้ภาพก่อน-หลัง (ปิดใบหน้า) ในสื่อการตลาดของคลินิก"
+      }
+    },
+    "durationOptions": {
+      "6m": "6 เดือน",
+      "12m": "1 ปี",
+      "24m": "2 ปี",
+      "60m": "5 ปี"
+    },
+    "errors": {
+      "atLeastOneScope": "กรุณาเลือกอย่างน้อยหนึ่งขอบเขต"
+    }
+  },
+  "export": {
+    "cta": "ส่งออกข้อมูล (PDPA)",
+    "inProgress": "กำลังส่งออก..."
   },
   "devToolbar": {
     "title": "Dev Toolbar",
