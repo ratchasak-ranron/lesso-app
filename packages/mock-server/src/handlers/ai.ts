@@ -6,7 +6,8 @@ import { generateVisitSummary } from '../ai/visit-summary';
 import { generateRecallMessage } from '../ai/recall-message';
 import { suggestSlots } from '../ai/slot-suggestion';
 import { tagPhoto } from '../ai/photo-tag';
-import { badRequest, noTenant, readJson } from './_shared';
+import { patientRepo } from '../repositories/patient';
+import { badRequest, noTenant, notFound, readJson } from './_shared';
 
 const LocaleSchema = z.enum(['th', 'en']);
 
@@ -17,9 +18,11 @@ const VisitSummarySchema = z.object({
   locale: LocaleSchema,
 });
 
+// patientName intentionally NOT in this contract — server resolves from
+// patientId so PII never enters the API request body. A7 LLM swap inherits
+// this contract and forwards ID-only input.
 const RecallSchema = z.object({
   patientId: IdSchema,
-  patientName: z.string().min(1).max(120),
   serviceName: z.string().min(1).max(120),
   weeksSinceLastVisit: z.number().int().nonnegative().max(520),
   remainingSessions: z.number().int().nonnegative().max(100),
@@ -55,12 +58,21 @@ export const aiHandlers = [
   }),
 
   http.post('/v1/ai/recall-message', async ({ request }) => {
-    if (!resolveContext(request).tenantId) return noTenant();
+    const { tenantId } = resolveContext(request);
+    if (!tenantId) return noTenant();
     const body = await readJson<unknown>(request);
     const parsed = RecallSchema.safeParse(body);
     if (!parsed.success) return badRequest('VALIDATION', 'Invalid input', parsed.error.flatten());
+    // Resolve patient name server-side from patientId — name never crosses the
+    // wire. A7 LLM swap MUST keep this server-resolved contract.
+    const patient = patientRepo.findById(tenantId, parsed.data.patientId);
+    if (!patient) return notFound('Patient not found');
     await pretendThink();
-    return HttpResponse.json({ data: { text: generateRecallMessage(parsed.data) } });
+    return HttpResponse.json({
+      data: {
+        text: generateRecallMessage({ ...parsed.data, patientName: patient.fullName }),
+      },
+    });
   }),
 
   http.post('/v1/ai/suggest-slots', async ({ request }) => {

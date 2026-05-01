@@ -87,10 +87,12 @@ export function aggregateByDimension(
   const buckets = new Map<string, { label: string; visitCount: number; revenue: number }>();
 
   function add(key: string, label: string, total: number): void {
-    const existing = buckets.get(key) ?? { label, visitCount: 0, revenue: 0 };
-    existing.visitCount += 1;
-    existing.revenue += total;
-    buckets.set(key, existing);
+    const existing = buckets.get(key);
+    buckets.set(key, {
+      label: existing?.label ?? label,
+      visitCount: (existing?.visitCount ?? 0) + 1,
+      revenue: (existing?.revenue ?? 0) + total,
+    });
   }
 
   for (const r of receipts) {

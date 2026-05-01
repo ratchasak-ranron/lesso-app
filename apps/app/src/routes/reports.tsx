@@ -13,9 +13,7 @@ import {
   useMonthlyReport,
 } from '@/features/report';
 import { formatCurrency, formatNumber } from '@/lib/format';
-
-const MONTHS_TH = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+import { monthsForLocale } from '@/lib/locale-months';
 
 export function ReportsPage() {
   const { t, i18n } = useTranslation();
@@ -34,7 +32,14 @@ export function ReportsPage() {
   const report = useMonthlyReport(range);
   const dimensionReport = useDimensionReport(dimension, range);
   const locale = i18n.language === 'th' ? 'th' : 'en';
-  const months = locale === 'th' ? MONTHS_TH : MONTHS_EN;
+  const monthOptions = useMemo(
+    () => monthsForLocale(locale).map((m, idx) => ({ value: String(idx + 1), label: m })),
+    [locale],
+  );
+  const yearOptions = useMemo(
+    () => [year - 1, year, year + 1].map((y) => ({ value: String(y), label: String(y) })),
+    [year],
+  );
 
   if (!tenantId) {
     return <p className="text-muted-foreground">{t('common.noTenant')}</p>;
@@ -46,13 +51,13 @@ export function ReportsPage() {
         <h2 className="font-heading text-3xl font-semibold tracking-tight">{t('report.title')}</h2>
         <div className="flex items-center gap-2">
           <Select
-            options={months.map((m, idx) => ({ value: String(idx + 1), label: m }))}
+            options={monthOptions}
             value={String(month)}
             onValueChange={(v) => setMonth(Number(v))}
             aria-label={t('report.month')}
           />
           <Select
-            options={[year - 1, year, year + 1].map((y) => ({ value: String(y), label: String(y) }))}
+            options={yearOptions}
             value={String(year)}
             onValueChange={(v) => setYear(Number(v))}
             aria-label={t('report.year')}

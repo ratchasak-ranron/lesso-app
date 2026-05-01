@@ -21,8 +21,9 @@ export const reportHandlers = [
     if (branchId === null || fromDate === null || toDate === null) {
       return badRequest('VALIDATION', 'Invalid filter parameter');
     }
+    // Tenant-filter — same rationale as branches.ts.
     const doctorMap = new Map<Id, string>();
-    for (const u of getUsers()) {
+    for (const u of getUsers().filter((u) => u.tenantId === tenantId)) {
       if (u.role === 'doctor') doctorMap.set(u.id, u.name);
     }
     const branchMap = new Map<Id, string>();

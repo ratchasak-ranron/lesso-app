@@ -30,7 +30,7 @@ interface CheckInFlowProps {
 type Step = 'select_patient' | 'confirm' | 'done';
 
 export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const ctx = useCtx();
   const [step, setStep] = useState<Step>('select_patient');
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -222,13 +222,16 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
                   recallMessage.mutate(
                     {
                       patientId: patient.id,
-                      patientName: patient.fullName,
+                      // patientName intentionally NOT sent — server resolves
+                      // from patientId so PII never enters the API contract.
+                      // Real LLM at A7 must continue to receive ID-only input.
                       serviceName: selectedCourse?.serviceName ?? 'follow-up',
+                      // Stub default; A7 backend derives from real visit history.
                       weeksSinceLastVisit: 4,
                       remainingSessions: selectedCourse
                         ? selectedCourse.sessionsTotal - selectedCourse.sessionsUsed
                         : 0,
-                      locale: t('common.switchLanguage') === 'English' ? 'th' : 'en',
+                      locale: i18n.language === 'th' ? 'th' : 'en',
                     },
                     { onSuccess: (data) => setRecallText(data.text) },
                   )

@@ -28,8 +28,15 @@ const RATIONALE_EN = [
   'Morning slot — doctor has more buffer time.',
 ];
 
+/**
+ * Pinned to the start of the current calendar day (local 00:00) so repeated
+ * calls within the same day return identical timestamps. Crossing midnight
+ * shifts the base by one day — acceptable trade-off; the alternative (fully
+ * fixed epoch) would surface stale "next slot" times to receptionists.
+ */
 function nextWorkdayAt(daysAhead: number, hour: number): { startAt: string; endAt: string } {
   const start = new Date();
+  start.setHours(0, 0, 0, 0);
   start.setDate(start.getDate() + daysAhead);
   start.setHours(hour, 0, 0, 0);
   const end = new Date(start.getTime() + 60 * 60_000);

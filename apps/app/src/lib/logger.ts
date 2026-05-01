@@ -47,6 +47,10 @@ const PII_FIELD_NAMES = new Set<string>([
   'rate',
   'pricePaid',
   'totalAmount',
+  // AI output (added A4 review H5) — generated text may contain patient name
+  // post template substitution; rationale may reference clinical context.
+  'text',
+  'rationale',
 ]);
 
 const REDACTED = '[redacted]';

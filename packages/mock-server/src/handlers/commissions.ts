@@ -52,8 +52,9 @@ export const commissionHandlers = [
     if (branchId === null || fromDate === null || toDate === null) {
       return badRequest('VALIDATION', 'Invalid filter parameter');
     }
+    // Tenant-filter — prevents cross-tenant doctor name leak.
     const doctorMap = new Map<Id, string>();
-    for (const u of getUsers()) {
+    for (const u of getUsers().filter((u) => u.tenantId === tenantId)) {
       if (u.role === 'doctor') doctorMap.set(u.id, u.name);
     }
     const data = commissionRepo.summaryByDoctor(tenantId, doctorMap, {

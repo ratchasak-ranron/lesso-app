@@ -225,7 +225,10 @@ export interface VisitSummaryRequest {
 
 export interface RecallMessageRequest {
   patientId: Id;
-  patientName: string;
+  // patientName intentionally NOT in this contract. Server resolves the
+  // patient's name from `patientId` before template substitution so PII
+  // stays off the wire. The A7 LLM swap must continue to receive ID-only
+  // input — never forward names to third-party AI providers.
   serviceName: string;
   weeksSinceLastVisit: number;
   remainingSessions: number;

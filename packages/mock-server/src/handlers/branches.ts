@@ -15,8 +15,11 @@ export const branchHandlers = [
     if (fromDate === null || toDate === null) {
       return badRequest('VALIDATION', 'Invalid date filter');
     }
+    // Tenant-filter before building the doctor map. `getUsers()` returns all
+    // tenants; filtering here prevents cross-tenant ID/name leak when the
+    // pattern carries to A7 backend.
     const doctorMap = new Map<Id, string>();
-    for (const u of getUsers()) {
+    for (const u of getUsers().filter((u) => u.tenantId === tenantId)) {
       if (u.role === 'doctor') doctorMap.set(u.id, u.name);
     }
     const data = aggregateByBranch(
