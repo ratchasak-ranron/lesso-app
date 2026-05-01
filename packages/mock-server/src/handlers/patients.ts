@@ -4,14 +4,10 @@ import { resolveContext } from '../context';
 import { auditRepo } from '../repositories/audit';
 import { patientRepo } from '../repositories/patient';
 import { getUsers } from '../seed';
-import { badRequest, noTenant, notFound, readJson, resolveActorName } from './_shared';
+import { actorFromContext, badRequest, noTenant, notFound, readJson } from './_shared';
 
-function actor(tenantId: Id, userId: Id | null) {
-  return {
-    userId: userId ?? undefined,
-    userName: resolveActorName(tenantId, userId, getUsers),
-  };
-}
+const actor = (tenantId: Id, userId: Id | null) =>
+  actorFromContext(tenantId, userId, getUsers);
 
 export const patientHandlers = [
   http.get('/v1/patients', ({ request }) => {

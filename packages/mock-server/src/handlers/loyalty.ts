@@ -5,14 +5,26 @@ import { resolveContext } from '../context';
 import { auditRepo } from '../repositories/audit';
 import { InsufficientPointsError, loyaltyRepo } from '../repositories/loyalty';
 import { getUsers } from '../seed';
-import { badRequest, noTenant, notFound, readJson, resolveActorName } from './_shared';
+import { actorFromContext, badRequest, noTenant, notFound, readJson } from './_shared';
+
+const actor = (tenantId: Id, userId: Id | null) =>
+  actorFromContext(tenantId, userId, getUsers);
+
+// Pilot rule: minimum 100-point redemption (matches the UI gate). Server-side
+// floor prevents direct-API bypass of the LoyaltyCard threshold.
+const REDEEM_MIN_POINTS = 100;
 
 const RedeemSchema = z.object({
   patientId: IdSchema,
-  points: z.number().int().positive(),
+  points: z.number().int().min(REDEEM_MIN_POINTS),
   receiptId: IdSchema.optional(),
   reason: z.string().max(200).optional(),
 });
+
+function parsePatientIdParam(raw: unknown): Id | null {
+  const parsed = IdSchema.safeParse(raw);
+  return parsed.success ? parsed.data : null;
+}
 
 export const loyaltyHandlers = [
   http.get('/v1/loyalty/accounts', ({ request }) => {
@@ -29,7 +41,9 @@ export const loyaltyHandlers = [
   http.get('/v1/loyalty/accounts/by-patient/:patientId', ({ request, params }) => {
     const { tenantId } = resolveContext(request);
     if (!tenantId) return noTenant();
-    const account = loyaltyRepo.findAccountByPatient(tenantId, params.patientId as Id);
+    const patientId = parsePatientIdParam(params.patientId);
+    if (!patientId) return badRequest('VALIDATION', 'Invalid patientId');
+    const account = loyaltyRepo.findAccountByPatient(tenantId, patientId);
     if (!account) return notFound('Loyalty account not found');
     return HttpResponse.json({ data: account });
   }),
@@ -37,7 +51,9 @@ export const loyaltyHandlers = [
   http.get('/v1/loyalty/transactions/by-patient/:patientId', ({ request, params }) => {
     const { tenantId } = resolveContext(request);
     if (!tenantId) return noTenant();
-    const data = loyaltyRepo.findTransactionsByPatient(tenantId, params.patientId as Id);
+    const patientId = parsePatientIdParam(params.patientId);
+    if (!patientId) return badRequest('VALIDATION', 'Invalid patientId');
+    const data = loyaltyRepo.findTransactionsByPatient(tenantId, patientId);
     return HttpResponse.json({ data, meta: { total: data.length } });
   }),
 
@@ -62,10 +78,7 @@ export const loyaltyHandlers = [
           resourceId: result.account.id,
           metadata: { points: parsed.data.points },
         },
-        {
-          userId: userId ?? undefined,
-          userName: resolveActorName(tenantId, userId, getUsers),
-        },
+        actor(tenantId, userId),
       );
       return HttpResponse.json({ data: result });
     } catch (err) {

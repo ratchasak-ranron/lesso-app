@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { LoyaltyRedeemInput } from '@lesso/api-client';
+import { ApiError, type LoyaltyRedeemInput } from '@lesso/api-client';
 import type { Id, LoyaltyAccount, LoyaltyTransaction } from '@lesso/domain';
 import { apiClient } from '@/lib/api';
 import { useCtx } from '@/features/_shared/use-ctx';
@@ -15,9 +15,12 @@ export function useLoyaltyAccount(patientId: Id | undefined) {
     queryFn: async () => {
       try {
         return await apiClient.loyalty.accountByPatient(ctx, patientId as Id);
-      } catch {
-        // Patient with zero history has no account; render zero balance.
-        return null;
+      } catch (err) {
+        // 404 = patient with zero history has no account → render zero balance.
+        // Propagate everything else (auth, network, 5xx) so the UI shows
+        // an error state instead of a misleading zero balance.
+        if (err instanceof ApiError && err.status === 404) return null;
+        throw err;
       }
     },
     enabled: ctx.tenantId !== null && !!patientId,

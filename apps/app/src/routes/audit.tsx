@@ -1,29 +1,20 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { AuditAction } from '@lesso/domain';
+import { AuditActionSchema, type AuditAction } from '@lesso/domain';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { AuditList, useAuditLog } from '@/features/audit';
 
-const ACTION_OPTIONS: AuditAction[] = [
-  'patient.create',
-  'patient.update',
-  'patient.delete',
-  'patient.export',
-  'walkIn.create',
-  'walkIn.complete',
-  'course.create',
-  'course.decrement',
-  'receipt.create',
-  'inventory.movement',
-  'loyalty.earn',
-  'loyalty.redeem',
-  'consent.capture',
-  'consent.withdraw',
-  'ai.copy',
-];
+// Derive from the domain enum so new actions land in the filter automatically.
+const ACTION_OPTIONS: readonly AuditAction[] = AuditActionSchema.options;
+
+function toAuditAction(value: string): AuditAction | undefined {
+  if (!value) return undefined;
+  const parsed = AuditActionSchema.safeParse(value);
+  return parsed.success ? parsed.data : undefined;
+}
 
 export function AuditPage() {
   const { t } = useTranslation();
@@ -32,13 +23,17 @@ export function AuditPage() {
   const [from, setFrom] = useState<string>('');
   const [to, setTo] = useState<string>('');
 
+  // Surface inverted-range mistakes directly — server `inRange` would
+  // silently return an empty list otherwise.
+  const rangeError = from && to && from > to ? t('audit.filter.invalidRange') : null;
+
   const query = useMemo(
     () => ({
-      action: (action || undefined) as AuditAction | undefined,
-      from: from || undefined,
-      to: to || undefined,
+      action: toAuditAction(action),
+      from: !rangeError && from ? from : undefined,
+      to: !rangeError && to ? to : undefined,
     }),
-    [action, from, to],
+    [action, from, to, rangeError],
   );
 
   const { data, isLoading, isError, error } = useAuditLog(query);
@@ -85,6 +80,15 @@ export function AuditPage() {
         </div>
       </div>
 
+      {rangeError ? (
+        <p
+          className="rounded-md border border-warning/40 bg-warning/5 p-3 text-sm text-warning-foreground"
+          role="alert"
+          aria-live="polite"
+        >
+          {rangeError}
+        </p>
+      ) : null}
       {isError ? (
         <p className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
           {t('common.error')}: {error instanceof Error ? error.message : 'unknown'}

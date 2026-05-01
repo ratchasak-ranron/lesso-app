@@ -14,14 +14,17 @@ import {
 } from '../repositories/inventory';
 import { getUsers } from '../seed';
 import {
+  actorFromContext,
   badRequest,
   conflict,
   noTenant,
   notFound,
   parseIdParam,
   readJson,
-  resolveActorName,
 } from './_shared';
+
+const actor = (tenantId: Id, userId: Id | null) =>
+  actorFromContext(tenantId, userId, getUsers);
 
 export const inventoryHandlers = [
   http.get('/v1/inventory/items', ({ request }) => {
@@ -54,12 +57,22 @@ export const inventoryHandlers = [
   }),
 
   http.post('/v1/inventory/items', async ({ request }) => {
-    const { tenantId } = resolveContext(request);
+    const { tenantId, userId } = resolveContext(request);
     if (!tenantId) return noTenant();
     const body = await readJson<unknown>(request);
     const parsed = InventoryItemCreateSchema.safeParse(body);
     if (!parsed.success) return badRequest('VALIDATION', 'Invalid item', parsed.error.flatten());
     const created = inventoryRepo.createItem(tenantId, parsed.data);
+    auditRepo.append(
+      tenantId,
+      {
+        branchId: created.branchId,
+        action: 'inventory.create',
+        resourceType: 'inventoryItem',
+        resourceId: created.id,
+      },
+      actor(tenantId, userId),
+    );
     return HttpResponse.json({ data: created }, { status: 201 });
   }),
 
@@ -83,10 +96,7 @@ export const inventoryHandlers = [
             delta: result.movement.quantity,
           },
         },
-        {
-          userId: userId ?? undefined,
-          userName: resolveActorName(tenantId, userId, getUsers),
-        },
+        actor(tenantId, userId),
       );
       return HttpResponse.json({ data: result }, { status: 201 });
     } catch (err) {

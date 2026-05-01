@@ -45,7 +45,13 @@ export function RedeemDialog({ open, onOpenChange, patient, availableBalance }: 
     e.preventDefault();
     if (submittingRef.current) return;
     setError(null);
-    if (points <= 0 || points > availableBalance) {
+    // Fractional / NaN / over-balance / zero — all rejected client-side so the
+    // user gets a typed message instead of a generic 4xx surface from Zod.
+    if (
+      !Number.isInteger(points) ||
+      points < 1 ||
+      points > availableBalance
+    ) {
       setError(t('loyalty.errors.invalidPoints'));
       return;
     }
@@ -86,10 +92,14 @@ export function RedeemDialog({ open, onOpenChange, patient, availableBalance }: 
               id="redeem-points"
               type="number"
               inputMode="numeric"
+              step={1}
               min={1}
               max={availableBalance}
               value={points}
-              onChange={(e) => setPoints(Number(e.target.value) || 0)}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                setPoints(Number.isFinite(v) ? Math.trunc(v) : 0);
+              }}
             />
             <div className="flex flex-wrap gap-1.5">
               {PRESETS.filter((p) => p <= availableBalance).map((p) => (
@@ -111,13 +121,25 @@ export function RedeemDialog({ open, onOpenChange, patient, availableBalance }: 
             <span className="font-medium tabular-nums">{formatCurrency(points, locale)}</span>
           </div>
 
-          {error ? <p className="text-sm text-destructive">{error}</p> : null}
+          {error ? (
+            <p className="text-sm text-destructive" role="alert" aria-live="polite">
+              {error}
+            </p>
+          ) : null}
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               {t('common.cancel')}
             </Button>
-            <Button type="submit" disabled={redeem.isPending}>
+            <Button
+              type="submit"
+              disabled={
+                redeem.isPending ||
+                !Number.isInteger(points) ||
+                points < 1 ||
+                points > availableBalance
+              }
+            >
               {t('loyalty.redeemCta')}
             </Button>
           </DialogFooter>

@@ -233,7 +233,8 @@
       "action": "การกระทำ",
       "from": "ตั้งแต่",
       "to": "ถึง",
-      "allActions": "ทั้งหมด"
+      "allActions": "ทั้งหมด",
+      "invalidRange": "วันเริ่มต้นต้องไม่หลังวันสิ้นสุด"
     },
     "action": {
       "patient.create": "เพิ่มคนไข้",
@@ -245,12 +246,15 @@
       "appointment.cancel": "ยกเลิกนัด",
       "walkIn.create": "Walk-in ใหม่",
       "walkIn.complete": "Walk-in เสร็จ",
+      "walkIn.delete": "ลบ Walk-in",
       "course.create": "เพิ่มคอร์ส",
       "course.decrement": "ใช้ session คอร์ส",
+      "course.delete": "ลบคอร์ส",
       "receipt.create": "ออกใบเสร็จ",
       "receipt.void": "ยกเลิกใบเสร็จ",
       "loyalty.earn": "ได้รับพอยท์",
       "loyalty.redeem": "ใช้พอยท์",
+      "inventory.create": "เพิ่มสินค้าคงคลัง",
       "inventory.movement": "เคลื่อนไหวสต็อก",
       "consent.capture": "บันทึกความยินยอม",
       "consent.withdraw": "ถอนความยินยอม",

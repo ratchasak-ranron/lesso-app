@@ -7,14 +7,17 @@ import { commissionRepo } from '../repositories/commission';
 import { loyaltyRepo } from '../repositories/loyalty';
 import { getUsers } from '../seed';
 import {
+  actorFromContext,
   badRequest,
   noTenant,
   notFound,
   parseDateParam,
   parseIdParam,
   readJson,
-  resolveActorName,
 } from './_shared';
+
+const actor = (tenantId: Id, userId: Id | null) =>
+  actorFromContext(tenantId, userId, getUsers);
 
 export const receiptHandlers = [
   http.get('/v1/receipts', ({ request }) => {
@@ -54,10 +57,7 @@ export const receiptHandlers = [
     if (!parsed.success) return badRequest('VALIDATION', 'Invalid receipt', parsed.error.flatten());
     const created = receiptRepo.create(tenantId, parsed.data);
 
-    const actorInfo = {
-      userId: userId ?? undefined,
-      userName: resolveActorName(tenantId, userId, getUsers),
-    };
+    const actorInfo = actor(tenantId, userId);
 
     // Side-effect cascade. Each call is wrapped so a partial failure never
     // causes the receipt POST to fail with 5xx after the receipt is already
@@ -73,14 +73,17 @@ export const receiptHandlers = [
     if (created.total > 0) {
       // Course-redeem receipts have total=0 and intentionally do not earn points.
       try {
-        loyaltyRepo.earn(tenantId, created.patientId, created.total, created.id);
+        // Audit the actual credited points (delta) — earn applies the
+        // POINTS_PER_BAHT rate. Auditing `created.total` would lie if the
+        // rate ever drifts from 1:1.
+        const earned = loyaltyRepo.earn(tenantId, created.patientId, created.total, created.id);
         auditRepo.append(
           tenantId,
           {
             action: 'loyalty.earn',
             resourceType: 'receipt',
             resourceId: created.id,
-            metadata: { points: created.total },
+            metadata: { points: earned.transaction.amount },
           },
           actorInfo,
         );

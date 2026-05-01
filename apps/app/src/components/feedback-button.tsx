@@ -1,7 +1,22 @@
 import { MessageCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-const FEEDBACK_URL = import.meta.env.VITE_FEEDBACK_URL ?? '';
+const RAW_FEEDBACK_URL = import.meta.env.VITE_FEEDBACK_URL ?? '';
+
+// Render only https:// URLs. Defends against a misconfigured env value
+// containing a `javascript:` URI, which would otherwise produce a live
+// JS-execution link in the DOM.
+function safeFeedbackUrl(raw: string): string | null {
+  if (!raw) return null;
+  try {
+    const parsed = new URL(raw);
+    return parsed.protocol === 'https:' ? parsed.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+const FEEDBACK_URL = safeFeedbackUrl(RAW_FEEDBACK_URL);
 
 export function FeedbackButton() {
   const { t } = useTranslation();

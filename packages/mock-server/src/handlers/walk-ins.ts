@@ -10,6 +10,7 @@ import { auditRepo } from '../repositories/audit';
 import { walkInRepo, type WalkInFilter } from '../repositories/walk-in';
 import { getUsers } from '../seed';
 import {
+  actorFromContext,
   badRequest,
   noTenant,
   notFound,
@@ -17,15 +18,10 @@ import {
   parseEnumParam,
   parseIdParam,
   readJson,
-  resolveActorName,
 } from './_shared';
 
-function actor(tenantId: Id, userId: Id | null) {
-  return {
-    userId: userId ?? undefined,
-    userName: resolveActorName(tenantId, userId, getUsers),
-  };
-}
+const actor = (tenantId: Id, userId: Id | null) =>
+  actorFromContext(tenantId, userId, getUsers);
 
 export const walkInHandlers = [
   http.get('/v1/walk-ins', ({ request }) => {
@@ -95,10 +91,22 @@ export const walkInHandlers = [
   }),
 
   http.delete('/v1/walk-ins/:id', ({ request, params }) => {
-    const { tenantId } = resolveContext(request);
+    const { tenantId, userId } = resolveContext(request);
     if (!tenantId) return noTenant();
-    const ok = walkInRepo.delete(tenantId, params.id as Id);
+    const id = params.id as Id;
+    const existing = walkInRepo.findById(tenantId, id);
+    const ok = walkInRepo.delete(tenantId, id);
     if (!ok) return notFound(`Walk-in ${params.id as string} not found`);
+    auditRepo.append(
+      tenantId,
+      {
+        branchId: existing?.branchId,
+        action: 'walkIn.delete',
+        resourceType: 'walkIn',
+        resourceId: id,
+      },
+      actor(tenantId, userId),
+    );
     return new HttpResponse(null, { status: 204 });
   }),
 ];

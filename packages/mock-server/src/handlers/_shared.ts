@@ -76,3 +76,24 @@ export function resolveActorName(
     .filter((u) => u.tenantId === tenantId)
     .find((u) => u.id === userId)?.name;
 }
+
+export interface ActorInfo {
+  userId: Id | undefined;
+  userName: string | undefined;
+}
+
+/**
+ * Build the audit-emission actor info from request context. Centralised here
+ * so handlers don't redefine an `actor()` helper each. Pass the live
+ * `getUsers` accessor from `seed.ts` to keep the lazy-resolution contract.
+ */
+export function actorFromContext(
+  tenantId: Id,
+  userId: Id | null,
+  getUsers: () => ReadonlyArray<{ id: Id; tenantId: Id; name: string }>,
+): ActorInfo {
+  return {
+    userId: userId ?? undefined,
+    userName: resolveActorName(tenantId, userId, getUsers),
+  };
+}

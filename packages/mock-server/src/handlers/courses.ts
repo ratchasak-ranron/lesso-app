@@ -17,6 +17,7 @@ import {
 } from '../repositories/course';
 import { getUsers } from '../seed';
 import {
+  actorFromContext,
   badRequest,
   conflict,
   noTenant,
@@ -24,15 +25,10 @@ import {
   parseEnumParam,
   parseIdParam,
   readJson,
-  resolveActorName,
 } from './_shared';
 
-function actor(tenantId: Id, userId: Id | null) {
-  return {
-    userId: userId ?? undefined,
-    userName: resolveActorName(tenantId, userId, getUsers),
-  };
-}
+const actor = (tenantId: Id, userId: Id | null) =>
+  actorFromContext(tenantId, userId, getUsers);
 
 const DecrementBodySchema = z.object({
   branchId: IdSchema,
@@ -107,6 +103,10 @@ export const courseHandlers = [
     }
     try {
       const result = courseRepo.decrement(tenantId, params.id as Id, parsed.data);
+      const decrementMetadata = {
+        sessionsUsed: result.course.sessionsUsed,
+        sessionsTotal: result.course.sessionsTotal,
+      };
       auditRepo.append(
         tenantId,
         {
@@ -114,7 +114,7 @@ export const courseHandlers = [
           action: 'course.decrement',
           resourceType: 'course',
           resourceId: result.course.id,
-          metadata: { sessionsUsed: result.course.sessionsUsed, sessionsTotal: result.course.sessionsTotal },
+          metadata: decrementMetadata,
         },
         actor(tenantId, userId),
       );
@@ -127,10 +127,16 @@ export const courseHandlers = [
   }),
 
   http.delete('/v1/courses/:id', ({ request, params }) => {
-    const { tenantId } = resolveContext(request);
+    const { tenantId, userId } = resolveContext(request);
     if (!tenantId) return noTenant();
-    const ok = courseRepo.delete(tenantId, params.id as Id);
+    const id = params.id as Id;
+    const ok = courseRepo.delete(tenantId, id);
     if (!ok) return notFound(`Course ${params.id as string} not found`);
+    auditRepo.append(
+      tenantId,
+      { action: 'course.delete', resourceType: 'course', resourceId: id },
+      actor(tenantId, userId),
+    );
     return new HttpResponse(null, { status: 204 });
   }),
 ];
