@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShieldCheck } from 'lucide-react';
 import {
@@ -34,6 +34,17 @@ export function ConsentDialog({ open, onOpenChange, patient }: ConsentDialogProp
   const [scopes, setScopes] = useState<Set<ConsentScope>>(new Set(REQUIRED_CONSENT_SCOPES));
   const [duration, setDuration] = useState<string>('12');
   const [error, setError] = useState<string | null>(null);
+
+  // Radix Dialog keeps the subtree mounted when `open` is false. Reset every
+  // time the dialog opens so the previous patient's selections + error state
+  // never leak across open/close cycles.
+  useEffect(() => {
+    if (open) {
+      setScopes(new Set(REQUIRED_CONSENT_SCOPES));
+      setDuration('12');
+      setError(null);
+    }
+  }, [open]);
 
   function toggle(scope: ConsentScope): void {
     setScopes((prev) => {

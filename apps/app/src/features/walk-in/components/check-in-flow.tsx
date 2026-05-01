@@ -245,7 +245,11 @@ export function CheckInFlow({ open, onOpenChange, onCompleted }: CheckInFlowProp
             </div>
             {recallText ? (
               <div className="mt-3 w-full max-w-md text-left">
-                <AiOutputCard text={recallText} />
+                <AiOutputCard
+                  text={recallText}
+                  resourceId={patient.id}
+                  resourceType="patient"
+                />
               </div>
             ) : null}
           </div>

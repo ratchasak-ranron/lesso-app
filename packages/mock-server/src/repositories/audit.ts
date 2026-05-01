@@ -39,6 +39,15 @@ export const auditRepo = {
   },
   /**
    * Append-only insert. Caller MUST redact PII from `metadata` before passing.
+   *
+   * Atomicity: read + spread + write happen synchronously inside the JS event
+   * loop, so concurrent MSW requests cannot interleave a half-applied append.
+   * The pattern still matches the A3 H1 receipt counter — same TODO applies
+   * for the real backend.
+   *
+   * TODO A7: replace with DB INSERT (Postgres). Under the real backend two
+   * concurrent requests can race read-modify-write across DB connections
+   * without explicit locking; use append-only insert + sequence column.
    */
   append(
     tenantId: Id,
@@ -57,7 +66,9 @@ export const auditRepo = {
       metadata: input.metadata,
       createdAt: new Date().toISOString(),
     };
-    writeAll(tenantId, [...readAll(tenantId), next]);
+    // Single read-modify-write in one synchronous block.
+    const existing = readAll(tenantId);
+    writeAll(tenantId, [...existing, next]);
     return next;
   },
 };

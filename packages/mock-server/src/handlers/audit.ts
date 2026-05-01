@@ -10,6 +10,7 @@ import {
   parseEnumParam,
   parseIdParam,
   readJson,
+  resolveActorName,
 } from './_shared';
 
 export const auditHandlers = [
@@ -43,13 +44,9 @@ export const auditHandlers = [
     const body = await readJson<unknown>(request);
     const parsed = AuditLogCreateSchema.safeParse(body);
     if (!parsed.success) return badRequest('VALIDATION', 'Invalid audit', parsed.error.flatten());
-    const userName =
-      userId !== null
-        ? getUsers().filter((u) => u.tenantId === tenantId).find((u) => u.id === userId)?.name
-        : undefined;
     const created = auditRepo.append(tenantId, parsed.data, {
       userId: userId ?? undefined,
-      userName,
+      userName: resolveActorName(tenantId, userId, getUsers),
     });
     return HttpResponse.json({ data: created }, { status: 201 });
   }),

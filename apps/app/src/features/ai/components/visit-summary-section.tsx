@@ -48,7 +48,9 @@ export function VisitSummarySection({ patient }: VisitSummarySectionProps) {
         {!lastCompleted ? (
           <p className="text-xs text-muted-foreground">{t('ai.visitSummary.noVisitsYet')}</p>
         ) : null}
-        {output ? <AiOutputCard text={output} /> : null}
+        {output ? (
+          <AiOutputCard text={output} resourceId={patient.id} resourceType="patient" />
+        ) : null}
       </CardContent>
     </Card>
   );

@@ -59,3 +59,20 @@ export function parseDateParam(value: string | null): string | undefined | null 
   const parsed = DateOnlySchema.safeParse(value);
   return parsed.success ? parsed.data : null;
 }
+
+/**
+ * Resolve actor name from tenant + userId for audit emission. Tenant-filtered
+ * to prevent cross-tenant lookup. Used by every handler that emits audit
+ * events. Lazy `getUsers` callback so this helper has no static dependency
+ * on `seed.ts`.
+ */
+export function resolveActorName(
+  tenantId: Id,
+  userId: Id | null,
+  getUsers: () => ReadonlyArray<{ id: Id; tenantId: Id; name: string }>,
+): string | undefined {
+  if (!userId) return undefined;
+  return getUsers()
+    .filter((u) => u.tenantId === tenantId)
+    .find((u) => u.id === userId)?.name;
+}

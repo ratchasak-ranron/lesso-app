@@ -263,7 +263,8 @@
   },
   "export": {
     "cta": "ส่งออกข้อมูล (PDPA)",
-    "inProgress": "กำลังส่งออก..."
+    "inProgress": "กำลังส่งออก...",
+    "partial": "ส่งออกบางส่วนสำเร็จ"
   },
   "devToolbar": {
     "title": "Dev Toolbar",

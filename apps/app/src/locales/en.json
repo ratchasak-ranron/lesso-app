@@ -263,7 +263,8 @@
   },
   "export": {
     "cta": "Export data (PDPA)",
-    "inProgress": "Exporting…"
+    "inProgress": "Exporting…",
+    "partial": "Partial export — some sources failed"
   },
   "devToolbar": {
     "title": "Dev Toolbar",

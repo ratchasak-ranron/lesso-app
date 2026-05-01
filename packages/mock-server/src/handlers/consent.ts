@@ -8,12 +8,7 @@ import { resolveContext } from '../context';
 import { auditRepo } from '../repositories/audit';
 import { consentRepo } from '../repositories/consent';
 import { getUsers } from '../seed';
-import { badRequest, noTenant, notFound, readJson } from './_shared';
-
-function actorName(tenantId: Id, userId: Id | null): string | undefined {
-  if (!userId) return undefined;
-  return getUsers().filter((u) => u.tenantId === tenantId).find((u) => u.id === userId)?.name;
-}
+import { badRequest, noTenant, notFound, readJson, resolveActorName } from './_shared';
 
 export const consentHandlers = [
   http.get('/v1/consent/by-patient/:patientId', ({ request, params }) => {
@@ -41,7 +36,7 @@ export const consentHandlers = [
         // PII-safe metadata: scopes only, no patient name.
         metadata: { scopes: created.scopes, expiresAt: created.expiresAt },
       },
-      { userId: userId ?? undefined, userName: actorName(tenantId, userId) },
+      { userId: userId ?? undefined, userName: resolveActorName(tenantId, userId, getUsers) },
     );
     return HttpResponse.json({ data: created }, { status: 201 });
   }),
@@ -60,9 +55,12 @@ export const consentHandlers = [
         action: 'consent.withdraw',
         resourceType: 'consent',
         resourceId: updated.id,
-        metadata: { reason: parsed.data.reason ?? null },
+        // Reason text may contain free-text PII (e.g., a receptionist typing
+        // a patient name). Persist only a flag in audit metadata; the actual
+        // reason lives on ConsentRecord.withdrawalReason for the audit subject.
+        metadata: { hasReason: parsed.data.reason != null },
       },
-      { userId: userId ?? undefined, userName: actorName(tenantId, userId) },
+      { userId: userId ?? undefined, userName: resolveActorName(tenantId, userId, getUsers) },
     );
     return HttpResponse.json({ data: updated });
   }),
