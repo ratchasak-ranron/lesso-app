@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { InventoryItem, InventoryMovementType } from '@lesso/domain';
 import { Button } from '@/components/ui/button';
@@ -21,14 +21,17 @@ export function MovementForm({ item, onDone, onCancel }: MovementFormProps) {
   const [reason, setReason] = useState('');
   const [error, setError] = useState<string | null>(null);
   const apply = useApplyMovement();
+  const submittingRef = useRef(false);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (submittingRef.current) return;
     setError(null);
     if (quantity <= 0 && type !== 'adjust') {
       setError(t('inventory.invalidQuantity'));
       return;
     }
+    submittingRef.current = true;
     apply.mutate(
       {
         itemId: item.id,
@@ -37,8 +40,14 @@ export function MovementForm({ item, onDone, onCancel }: MovementFormProps) {
         reason: reason.trim() || undefined,
       },
       {
-        onSuccess: onDone,
-        onError: (err) => setError(err.message),
+        onSuccess: () => {
+          submittingRef.current = false;
+          onDone();
+        },
+        onError: (err) => {
+          submittingRef.current = false;
+          setError(err.message);
+        },
       },
     );
   }

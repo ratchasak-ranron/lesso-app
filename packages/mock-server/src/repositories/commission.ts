@@ -9,6 +9,7 @@ import {
   type Receipt,
 } from '@lesso/domain';
 import { storage } from '../storage';
+import { inRange } from './_utils';
 
 const KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:commissions`;
 
@@ -26,12 +27,6 @@ export interface CommissionFilter {
   fromIso?: string;
   toIso?: string;
   status?: CommissionEntry['status'];
-}
-
-function inRange(iso: string, fromIso?: string, toIso?: string): boolean {
-  if (fromIso && iso < fromIso) return false;
-  if (toIso && iso > toIso) return false;
-  return true;
 }
 
 export const commissionRepo = {

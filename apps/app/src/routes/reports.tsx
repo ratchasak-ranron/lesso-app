@@ -62,6 +62,12 @@ export function ReportsPage() {
         </div>
       ) : null}
 
+      {report.isError ? (
+        <p className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+          {t('common.error')}: {report.error.message}
+        </p>
+      ) : null}
+
       {report.data ? (
         <>
           <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">

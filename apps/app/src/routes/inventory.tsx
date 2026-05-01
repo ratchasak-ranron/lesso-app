@@ -15,7 +15,7 @@ export function InventoryPage() {
   const { t } = useTranslation();
   const tenantId = useDevToolbar((s) => s.tenantId);
   const branchId = useDevToolbar((s) => s.branchId);
-  const { data, isLoading } = useInventoryItems(branchId);
+  const { data, isLoading, isError, error } = useInventoryItems(branchId);
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
 
   if (!tenantId) {
@@ -27,6 +27,11 @@ export function InventoryPage() {
       <h2 className="font-heading text-3xl font-semibold tracking-tight">
         {t('inventory.title')}
       </h2>
+      {isError ? (
+        <p className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+          {t('common.error')}: {error.message}
+        </p>
+      ) : null}
       <InventoryList items={data} isLoading={isLoading} onSelectItem={setSelectedItem} />
 
       <Dialog

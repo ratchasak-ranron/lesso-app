@@ -49,7 +49,8 @@ export const inventoryRepo = {
   findAllItems(tenantId: Id, filter: InventoryItemFilter = {}): InventoryItem[] {
     return readItems(tenantId).filter((i) => {
       if (filter.branchId && i.branchId !== filter.branchId) return false;
-      if (filter.lowStockOnly && i.currentStock > i.minStock) return false;
+      // lowStockOnly: keep items strictly below minStock to match isLowStock helper.
+      if (filter.lowStockOnly && i.currentStock >= i.minStock) return false;
       return true;
     });
   },
@@ -84,16 +85,23 @@ export const inventoryRepo = {
     if (idx < 0) throw new InventoryItemNotFoundError(input.itemId);
     const item = items[idx]!;
     let nextStock: number;
+    let recordedDelta: number;
     if (input.type === 'in') {
-      nextStock = item.currentStock + Math.abs(input.quantity);
+      const qty = Math.abs(input.quantity);
+      nextStock = item.currentStock + qty;
+      recordedDelta = qty;
     } else if (input.type === 'out') {
-      const requested = Math.abs(input.quantity);
-      if (item.currentStock < requested) throw new InsufficientStockError(item.id, item.currentStock);
-      nextStock = item.currentStock - requested;
+      const qty = Math.abs(input.quantity);
+      if (item.currentStock < qty) throw new InsufficientStockError(item.id, item.currentStock);
+      nextStock = item.currentStock - qty;
+      recordedDelta = -qty;
     } else {
-      // adjust — set to absolute value (quantity is the new stock level, not delta)
+      // adjust — caller supplies the new absolute stock level.
+      // Persist the delta in the movement record so the audit trail shows
+      // actual change rather than the absolute target.
       if (input.quantity < 0) throw new InsufficientStockError(item.id, item.currentStock);
       nextStock = input.quantity;
+      recordedDelta = nextStock - item.currentStock;
     }
     const now = new Date().toISOString();
     const updatedItem: InventoryItem = {
@@ -107,7 +115,7 @@ export const inventoryRepo = {
       branchId: item.branchId,
       itemId: item.id,
       type: input.type,
-      quantity: input.quantity,
+      quantity: recordedDelta,
       reason: input.reason,
       performedByUserId,
       createdAt: now,

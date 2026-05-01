@@ -50,12 +50,30 @@ export const receiptHandlers = [
     const parsed = ReceiptCreateSchema.safeParse(body);
     if (!parsed.success) return badRequest('VALIDATION', 'Invalid receipt', parsed.error.flatten());
     const created = receiptRepo.create(tenantId, parsed.data);
-    // Side effects: accrue commissions + loyalty earn (atomic-per-key writes;
-    // multi-key seam documented as A2/A3 known gap until A7 backend transaction).
-    commissionRepo.accrueFromReceipt(tenantId, created);
-    if (created.total > 0) {
-      loyaltyRepo.earn(tenantId, created.patientId, created.total, created.id);
+
+    // Side-effect cascade. Each call is wrapped so a partial failure never
+    // causes the receipt POST to fail with 5xx after the receipt is already
+    // persisted. Surfaces failures in the response body so the caller knows
+    // reconciliation is needed.
+    // TODO A7: replace with a real DB transaction wrapping all three writes.
+    const warnings: string[] = [];
+    try {
+      commissionRepo.accrueFromReceipt(tenantId, created);
+    } catch (err) {
+      warnings.push(`commission accrual failed: ${err instanceof Error ? err.message : 'unknown'}`);
     }
-    return HttpResponse.json({ data: created }, { status: 201 });
+    if (created.total > 0) {
+      // Course-redeem receipts have total=0 and intentionally do not earn points.
+      try {
+        loyaltyRepo.earn(tenantId, created.patientId, created.total, created.id);
+      } catch (err) {
+        warnings.push(`loyalty earn failed: ${err instanceof Error ? err.message : 'unknown'}`);
+      }
+    }
+
+    return HttpResponse.json(
+      warnings.length > 0 ? { data: created, warnings } : { data: created },
+      { status: 201 },
+    );
   }),
 ];

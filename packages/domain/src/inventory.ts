@@ -54,6 +54,11 @@ export const InventoryMovementCreateSchema = z.object({
 });
 export type InventoryMovementCreateInput = z.infer<typeof InventoryMovementCreateSchema>;
 
+/**
+ * Low-stock alert fires when current stock is BELOW the minimum threshold.
+ * `<=` would trigger at exactly minStock (e.g., restocking to 10 when min is 10
+ * would alert), which is surprising — `<` matches the natural "below min" UX.
+ */
 export function isLowStock(item: Pick<InventoryItem, 'currentStock' | 'minStock'>): boolean {
-  return item.currentStock <= item.minStock;
+  return item.currentStock < item.minStock;
 }

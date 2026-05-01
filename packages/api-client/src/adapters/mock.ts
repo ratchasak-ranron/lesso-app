@@ -2,6 +2,7 @@ import { z } from 'zod';
 import {
   AppointmentSchema,
   CommissionEntrySchema,
+  CommissionStatusSchema,
   CourseSchema,
   CourseSessionSchema,
   HealthSchema,
@@ -430,12 +431,12 @@ export function createMockApiClient(opts: ApiClientOptions = {}): ApiClient {
               doctorName: z.string(),
               visitCount: z.number().int().nonnegative(),
               totalAmount: z.number().nonnegative(),
-              status: z.string(),
+              status: z.union([CommissionStatusSchema, z.literal('mixed')]),
             }),
           ),
         });
         const body = await fetchValidated(`${baseUrl}/commissions/summary${qs}`, SummarySchema, {}, ctx);
-        return body.data as DoctorCommissionSummary[];
+        return body.data;
       },
       async pay(ctx: RequestContext, id: Id): Promise<CommissionEntry> {
         const body = await fetchValidated(

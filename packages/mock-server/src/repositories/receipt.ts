@@ -6,6 +6,7 @@ import {
   type ReceiptCreateInput,
 } from '@lesso/domain';
 import { storage } from '../storage';
+import { inRange } from './_utils';
 
 const KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:receipts`;
 const COUNTER_KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:receipts:counter`;
@@ -18,6 +19,14 @@ function writeAll(tenantId: Id, items: Receipt[]): void {
   storage.write(KEY(tenantId), items);
 }
 
+/**
+ * Read-increment-write counter. Single-threaded JS event loop makes this safe
+ * inside MSW. Cross-tenant isolation via scoped key.
+ *
+ * TODO A7: replace with DB sequence (Postgres SERIAL or nextval) — concurrent
+ * requests on the same tenant under the real backend would otherwise produce
+ * duplicate receipt numbers.
+ */
 function nextNumber(tenantId: Id): string {
   const counterSchema = z.object({ value: z.number().int().nonnegative() });
   const current = storage.read(COUNTER_KEY(tenantId), counterSchema)?.value ?? 0;
@@ -31,12 +40,6 @@ export interface ReceiptFilter {
   patientId?: Id;
   fromIso?: string;
   toIso?: string;
-}
-
-function inRange(iso: string, fromIso?: string, toIso?: string): boolean {
-  if (fromIso && iso < fromIso) return false;
-  if (toIso && iso > toIso) return false;
-  return true;
 }
 
 export const receiptRepo = {

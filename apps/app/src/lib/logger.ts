@@ -8,6 +8,7 @@ const isDev = import.meta.env.DEV;
  * fields land. Never log raw patient data; pass IDs only.
  */
 const PII_FIELD_NAMES = new Set<string>([
+  // Personal identifiers
   'name',
   'firstName',
   'lastName',
@@ -24,6 +25,7 @@ const PII_FIELD_NAMES = new Set<string>([
   'birthDate',
   'dateOfBirth',
   'dob',
+  // Clinical / health
   'notes',
   'medicalNotes',
   'visitNotes',
@@ -31,6 +33,20 @@ const PII_FIELD_NAMES = new Set<string>([
   'photoUrl',
   'beforePhotoUrl',
   'afterPhotoUrl',
+  // Financial / commercial (added A3 review M4)
+  'amount',
+  'balance',
+  'lifetimeEarned',
+  'total',
+  'subtotal',
+  'tip',
+  'discount',
+  'unitCost',
+  'unitPrice',
+  'baseAmount',
+  'rate',
+  'pricePaid',
+  'totalAmount',
 ]);
 
 const REDACTED = '[redacted]';

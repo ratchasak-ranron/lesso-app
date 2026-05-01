@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { IdSchema, type Id } from '@lesso/domain';
 import { resolveContext } from '../context';
 import { InsufficientPointsError, loyaltyRepo } from '../repositories/loyalty';
-import { badRequest, conflict, noTenant, notFound, readJson } from './_shared';
+import { badRequest, noTenant, notFound, readJson } from './_shared';
 
 const RedeemSchema = z.object({
   patientId: IdSchema,
@@ -55,7 +55,16 @@ export const loyaltyHandlers = [
       return HttpResponse.json({ data: result });
     } catch (err) {
       if (err instanceof InsufficientPointsError) {
-        return conflict('INSUFFICIENT_POINTS', err.message);
+        // Generic message + structured details so client can format locale-aware
+        // text without echoing the available balance into error logs.
+        return HttpResponse.json(
+          {
+            code: 'INSUFFICIENT_POINTS',
+            message: err.message,
+            details: { available: err.available, requested: err.requested },
+          },
+          { status: 409 },
+        );
       }
       throw err;
     }

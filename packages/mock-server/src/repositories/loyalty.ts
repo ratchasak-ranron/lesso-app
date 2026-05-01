@@ -26,18 +26,20 @@ function writeTransactions(tenantId: Id, items: LoyaltyTransaction[]): void {
 }
 
 export class InsufficientPointsError extends Error {
-  constructor(public readonly available: number, public readonly requested: number) {
-    super(`Insufficient points: have ${available}, need ${requested}`);
+  constructor(
+    public readonly available: number,
+    public readonly requested: number,
+  ) {
+    // Public message intentionally generic — does NOT embed available/requested
+    // (financial data shouldn't leak into HTTP error bodies). Caller-side has
+    // structured fields for client-formatted messaging.
+    super('Insufficient points');
     this.name = 'InsufficientPointsError';
   }
 }
 
-function getOrCreateAccount(tenantId: Id, patientId: Id): LoyaltyAccount {
-  const all = readAccounts(tenantId);
-  const found = all.find((a) => a.patientId === patientId);
-  if (found) return found;
-  const now = new Date().toISOString();
-  const next: LoyaltyAccount = {
+function buildNewAccount(tenantId: Id, patientId: Id, now: string): LoyaltyAccount {
+  return {
     id: crypto.randomUUID(),
     tenantId,
     patientId,
@@ -46,8 +48,6 @@ function getOrCreateAccount(tenantId: Id, patientId: Id): LoyaltyAccount {
     createdAt: now,
     updatedAt: now,
   };
-  writeAccounts(tenantId, [...all, next]);
-  return next;
 }
 
 export const loyaltyRepo = {
@@ -75,10 +75,17 @@ export const loyaltyRepo = {
     points: number,
     receiptId?: Id,
   ): { account: LoyaltyAccount; transaction: LoyaltyTransaction } {
-    const account = getOrCreateAccount(tenantId, patientId);
-    if (account.balance < points) throw new InsufficientPointsError(account.balance, points);
+    // Pre-check is redundant — applyDelta will throw InsufficientPointsError
+    // if newBalance < 0. Removed pre-check to keep single read-modify-write.
     return this.applyDelta(tenantId, patientId, 'redeem', -points, receiptId);
   },
+  /**
+   * Single read-modify-write per key. The previous implementation read accounts
+   * twice (once for the balance check, once after a write inside
+   * `getOrCreateAccount`) which created a TOCTOU window where two concurrent
+   * earns on the same patient could both see balance=0 and the second write
+   * clobbered the first. Mirrors the A2 `courseRepo.decrement` pattern.
+   */
   applyDelta(
     tenantId: Id,
     patientId: Id,
@@ -87,25 +94,26 @@ export const loyaltyRepo = {
     receiptId?: Id,
     reason?: string,
   ): { account: LoyaltyAccount; transaction: LoyaltyTransaction } {
-    const accounts = readAccounts(tenantId);
-    let account = accounts.find((a) => a.patientId === patientId);
-    if (!account) {
-      account = getOrCreateAccount(tenantId, patientId);
-    }
-    const newBalance = account.balance + delta;
-    if (newBalance < 0) throw new InsufficientPointsError(account.balance, -delta);
     const now = new Date().toISOString();
+    const accounts = readAccounts(tenantId);
+    const idx = accounts.findIndex((a) => a.patientId === patientId);
+    const baseAccount = idx >= 0 ? accounts[idx]! : buildNewAccount(tenantId, patientId, now);
+
+    const newBalance = baseAccount.balance + delta;
+    if (newBalance < 0) throw new InsufficientPointsError(baseAccount.balance, -delta);
+
     const updatedAccount: LoyaltyAccount = {
-      ...account,
+      ...baseAccount,
       balance: newBalance,
-      lifetimeEarned: delta > 0 ? account.lifetimeEarned + delta : account.lifetimeEarned,
+      lifetimeEarned:
+        delta > 0 ? baseAccount.lifetimeEarned + delta : baseAccount.lifetimeEarned,
       updatedAt: now,
     };
     const transaction: LoyaltyTransaction = {
       id: crypto.randomUUID(),
       tenantId,
       patientId,
-      accountId: account.id,
+      accountId: updatedAccount.id,
       type,
       amount: delta,
       balanceAfter: newBalance,
@@ -113,13 +121,10 @@ export const loyaltyRepo = {
       reason,
       createdAt: now,
     };
-    const refreshedAccounts = readAccounts(tenantId);
-    const idx = refreshedAccounts.findIndex((a) => a.id === account!.id);
+
     writeAccounts(
       tenantId,
-      idx >= 0
-        ? refreshedAccounts.map((a, i) => (i === idx ? updatedAccount : a))
-        : [...refreshedAccounts, updatedAccount],
+      idx >= 0 ? accounts.map((a, i) => (i === idx ? updatedAccount : a)) : [...accounts, updatedAccount],
     );
     writeTransactions(tenantId, [...readTransactions(tenantId), transaction]);
     return { account: updatedAccount, transaction };
