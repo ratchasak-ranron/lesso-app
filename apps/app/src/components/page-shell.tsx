@@ -5,11 +5,13 @@ import { TopBar } from './top-bar';
 import { FeedbackButton } from './feedback-button';
 import { BottomTabBar } from './bottom-tab-bar';
 
-const IS_DEV = import.meta.env.DEV;
-
-// Lazy-load dev toolbar so the mock-server bundle only ships in DEV.
-// Vite dead-code-eliminates the dynamic import when `IS_DEV` is `false`.
-const DevToolbar = IS_DEV
+// Show DevToolbar whenever mocks are enabled (DEV always; PROD only when
+// VITE_ENABLE_MOCKS=true). Lazy-load so the mock-server bundle is excluded
+// when mocks are off. Vite dead-code-eliminates the dynamic import when
+// `SHOW_DEV_TOOLBAR` is `false` at build time.
+const SHOW_DEV_TOOLBAR =
+  import.meta.env.DEV || import.meta.env.VITE_ENABLE_MOCKS === 'true';
+const DevToolbar = SHOW_DEV_TOOLBAR
   ? lazy(() => import('./dev-toolbar').then((m) => ({ default: m.DevToolbar })))
   : null;
 
@@ -44,7 +46,7 @@ export function PageShell({ children, title }: PageShellProps) {
       </div>
       <BottomTabBar />
       <FeedbackButton />
-      {IS_DEV && DevToolbar ? (
+      {SHOW_DEV_TOOLBAR && DevToolbar ? (
         <Suspense fallback={null}>
           <DevToolbar />
         </Suspense>
