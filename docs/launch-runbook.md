@@ -75,7 +75,8 @@ Token used to push must have `workflow` scope. Verify via `gh auth status`.
 - [ ] Share `/en/pricing` to Twitter/LINE — preview shows `pricing-en.png`, NOT default
 - [ ] iOS "Add to Home Screen" → uses 180×180 apple-touch-icon
 - [ ] Android Chrome → install prompt (manifest valid)
-- [ ] DevTools → no CSP errors
+- [ ] PWA install on `/th` opens to `/en` (manifest `start_url`); known limitation, defer per-locale manifests post-launch if Thai users complain
+- [ ] DevTools → no CSP errors (verify `manifest-src 'self'` covers `manifest.webmanifest` fetch in Firefox)
 - [ ] DevTools → Plausible script loads + custom events fire on interaction
 
 ## 8. Post-launch (first 14 days)

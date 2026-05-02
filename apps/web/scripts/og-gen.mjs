@@ -10,7 +10,7 @@
 // regenerates fresh OG images on the next deploy. Vercel cache invalidates
 // automatically because the source dict bytes changed.
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import satori from 'satori';
@@ -20,42 +20,54 @@ import { ogTemplate, iconTemplate } from './og-template.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
-// Read fonts directly from `apps/web/node_modules/@fontsource/*` symlinks.
-// Pinned filenames; bump when @fontsource version changes.
-const fonts = [
+// Hardcoded paths into `apps/web/node_modules/@fontsource/*` (pnpm symlinks).
+// Companion safeguard: `package.json` pins each `@fontsource/*` to an exact
+// version (no `^`). A minor `@fontsource` bump can rename internal `files/`
+// entries — without exact pinning, Vercel `prebuild` would break silently
+// on the next install. Existence assertion below fails loudly if the layout
+// changes despite pinning, so the failure surfaces at gen time, not deploy.
+const FONT_SPECS = [
   {
     name: 'Inter',
-    data: readFileSync(
-      resolve(ROOT, 'node_modules/@fontsource/inter/files/inter-latin-700-normal.woff'),
-    ),
+    path: resolve(ROOT, 'node_modules/@fontsource/inter/files/inter-latin-700-normal.woff'),
     weight: 700,
-    style: 'normal',
   },
   {
     name: 'Playfair Display',
-    data: readFileSync(
-      resolve(
-        ROOT,
-        'node_modules/@fontsource/playfair-display/files/playfair-display-latin-700-normal.woff',
-      ),
+    path: resolve(
+      ROOT,
+      'node_modules/@fontsource/playfair-display/files/playfair-display-latin-700-normal.woff',
     ),
     weight: 700,
-    style: 'normal',
   },
   {
     // Thai-glyph fallback for `th` locale OG images. Without this, Thai
-    // strings render as tofu boxes.
+    // strings render as tofu boxes. Listed last so Satori only picks it
+    // up for glyphs that Inter + Playfair don't cover.
     name: 'Noto Sans Thai',
-    data: readFileSync(
-      resolve(
-        ROOT,
-        'node_modules/@fontsource/noto-sans-thai/files/noto-sans-thai-thai-700-normal.woff',
-      ),
+    path: resolve(
+      ROOT,
+      'node_modules/@fontsource/noto-sans-thai/files/noto-sans-thai-thai-700-normal.woff',
     ),
     weight: 700,
-    style: 'normal',
   },
 ];
+
+for (const spec of FONT_SPECS) {
+  if (!existsSync(spec.path)) {
+    throw new Error(
+      `[og-gen] font missing: ${spec.path}\n` +
+        `  → @fontsource layout likely changed; pin a known-good version in package.json or update the path.`,
+    );
+  }
+}
+
+const fonts = FONT_SPECS.map((spec) => ({
+  name: spec.name,
+  data: readFileSync(spec.path),
+  weight: spec.weight,
+  style: 'normal',
+}));
 
 // Locale dicts loaded as JSON (Node 22+ supports `with { type: 'json' }`).
 const enLocale = JSON.parse(readFileSync(resolve(ROOT, 'src/locales/en.json'), 'utf8'));

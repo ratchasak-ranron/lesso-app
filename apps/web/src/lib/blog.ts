@@ -11,7 +11,9 @@
 export interface BlogPost {
   slug: string;
   title: string;
-  description: string;
+  /** Short summary surfaced on the index. Optional in frontmatter; the
+   *  loader passes through `undefined` when the post omits it. */
+  description?: string;
   publishedAt: string;
   locale: 'en' | 'th';
 }
@@ -31,7 +33,7 @@ export function getPosts(locale: 'en' | 'th'): BlogPost[] {
     all.push({
       slug: fm.slug,
       title: fm.title,
-      description: fm.description ?? '',
+      description: fm.description,
       publishedAt: fm.publishedAt,
       locale: fm.locale,
     });

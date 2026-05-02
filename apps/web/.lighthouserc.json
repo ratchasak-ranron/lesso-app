@@ -11,7 +11,7 @@
         "http://localhost:4173/th/pricing",
         "http://localhost:4173/en/pilot"
       ],
-      "numberOfRuns": 1
+      "numberOfRuns": 3
     },
     "assert": {
       "assertions": {

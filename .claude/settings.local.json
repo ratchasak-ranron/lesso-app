@@ -8,7 +8,10 @@
       "Bash(mkdir -p /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/completed)",
       "Bash(mv /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/app-ui-redesign.plan.md /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/completed/)",
       "Bash(mv /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/brand-redesign.plan.md /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/completed/)",
-      "Bash(mv /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/b2-core-pages.plan.md /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/completed/)"
+      "Bash(mv /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/b2-core-pages.plan.md /Users/ratchasak/Workspace/lesso/lesso-app/.claude/PRPs/plans/completed/)",
+      "Bash(mkdir -p .claude/PRPs/plans/completed)",
+      "Bash(mv .claude/PRPs/plans/b3-waitlist-legal.plan.md .claude/PRPs/plans/completed/b3-waitlist-legal.plan.md)",
+      "Bash(mv .claude/PRPs/plans/b4-polish-launch.plan.md .claude/PRPs/plans/completed/)"
     ]
   }
 }

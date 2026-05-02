@@ -22,11 +22,13 @@ export function BlogIndexPage() {
         sub={t('blog.intro.sub')}
       />
       {posts.length === 0 ? (
-        <Section id="blog-empty">
+        // PageIntro already provides the page h1; emit a plain div instead
+        // of <Section> so we don't ship an unlabelled <section> landmark.
+        <div className="mx-auto max-w-5xl px-6 pb-16 md:pb-24">
           <p className="max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
             {t('blog.empty')}
           </p>
-        </Section>
+        </div>
       ) : (
         <Section id="blog-posts" heading={t('blog.intro.heading')}>
           <ul className="space-y-6">
