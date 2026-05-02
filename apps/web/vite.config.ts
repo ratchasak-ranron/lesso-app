@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-object-injection -- locale is a constant union literal */
+/* eslint-disable security/detect-object-injection -- locale + pageKey are constant union literals */
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import mdx from '@mdx-js/rollup';
@@ -19,10 +19,10 @@ const OG_LOCALE: Record<Locale, string> = { en: 'en_US', th: 'th_TH' };
 
 /**
  * Page registry. `meta.<pageKey>.title` and `meta.<pageKey>.description`
- * keys must exist in every locale JSON. New B2 pages add a row here +
- * matching keys in en/th.json — no other code change required.
+ * keys must exist in every locale JSON. Adding a B3 page only requires
+ * extending this map + matching keys in en/th.json.
  */
-type PageKey = 'home' | 'notFound';
+type PageKey = 'home' | 'pricing' | 'features' | 'about' | 'notFound';
 
 interface PageEntry {
   pageKey: PageKey;
@@ -32,23 +32,21 @@ interface PageEntry {
   index: boolean;
 }
 
+const SUBPATH_TO_PAGE: Readonly<Record<string, { pageKey: PageKey; relPath: string }>> = {
+  '/pricing': { pageKey: 'pricing', relPath: '/pricing' },
+  '/features': { pageKey: 'features', relPath: '/features' },
+  '/about': { pageKey: 'about', relPath: '/about' },
+};
+
 function pageForRoute(route: string): PageEntry {
-  // route is the rendered path — `/en`, `/th`, `/en/whatever`, ...
   const stripped = route.replace(/^\/(en|th)/, '') || '/';
   if (stripped === '/' || stripped === '') {
     return { pageKey: 'home', relPath: '/', index: true };
   }
+  const known = SUBPATH_TO_PAGE[stripped];
+  if (known) return { ...known, index: true };
   // Wildcard or unknown subpath — treat as 404.
   return { pageKey: 'notFound', relPath: '/404', index: false };
-}
-
-function lookup(dict: unknown, key: string): string | undefined {
-  let cur: unknown = dict;
-  for (const part of key.split('.')) {
-    if (typeof cur !== 'object' || cur === null) return undefined;
-    cur = (cur as Record<string, unknown>)[part];
-  }
-  return typeof cur === 'string' ? cur : undefined;
 }
 
 interface SeoData {
@@ -58,7 +56,7 @@ interface SeoData {
   alternates: Array<{ hreflang: string; href: string }>;
   ogLocale: string;
   ogImage: string;
-  jsonLd: Record<string, unknown>;
+  jsonLdBlocks: Array<Record<string, unknown>>;
   index: boolean;
 }
 
@@ -66,8 +64,9 @@ function buildSeo(route: string): SeoData {
   const locale = localeFromPath(route);
   const dict = DICTS[locale];
   const { pageKey, relPath, index } = pageForRoute(route);
-  const title = lookup(dict, `meta.${pageKey}.title`) ?? siteConfig.name;
-  const description = lookup(dict, `meta.${pageKey}.description`) ?? siteConfig.tagline;
+  const meta = (dict.meta as Record<string, { title: string; description: string }>)[pageKey];
+  const title = meta?.title ?? siteConfig.name;
+  const description = meta?.description ?? siteConfig.tagline;
   const fullTitle = title === siteConfig.name ? siteConfig.name : `${title} · ${siteConfig.name}`;
   const canonical = `${siteConfig.hostname}/${locale}${relPath}`;
   const alternates = index
@@ -82,14 +81,9 @@ function buildSeo(route: string): SeoData {
         },
       ]
     : [];
-  return {
-    fullTitle,
-    description,
-    canonical,
-    alternates,
-    ogLocale: OG_LOCALE[locale],
-    ogImage: `${siteConfig.hostname}/og/default.png`,
-    jsonLd: {
+
+  const jsonLdBlocks: Array<Record<string, unknown>> = [
+    {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: siteConfig.name,
@@ -97,6 +91,51 @@ function buildSeo(route: string): SeoData {
       slogan: siteConfig.tagline,
       inLanguage: [...siteConfig.locales],
     },
+  ];
+
+  // Pricing → Product schema (one offer per tier).
+  if (pageKey === 'pricing') {
+    jsonLdBlocks.push({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: siteConfig.name,
+      description: siteConfig.description[locale],
+      brand: { '@type': 'Brand', name: siteConfig.name },
+      offers: dict.pricing.tiers.map((tier) => ({
+        '@type': 'Offer',
+        name: tier.name,
+        description: tier.description,
+        price: tier.price.replace(/,/g, ''),
+        priceCurrency: 'THB',
+        availability: 'https://schema.org/InStock',
+        url: `${siteConfig.hostname}/${locale}/pricing#${tier.id}`,
+      })),
+    });
+  }
+
+  // Home + Pricing → FAQPage schema.
+  const faqItems =
+    pageKey === 'home' ? dict.home.faq.items : pageKey === 'pricing' ? dict.pricing.faq.items : null;
+  if (faqItems) {
+    jsonLdBlocks.push({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqItems.map((it) => ({
+        '@type': 'Question',
+        name: it.q,
+        acceptedAnswer: { '@type': 'Answer', text: it.a },
+      })),
+    });
+  }
+
+  return {
+    fullTitle,
+    description,
+    canonical,
+    alternates,
+    ogLocale: OG_LOCALE[locale],
+    ogImage: `${siteConfig.hostname}/og/default.png`,
+    jsonLdBlocks,
     index,
   };
 }
@@ -129,18 +168,13 @@ function renderSeoTags(seo: SeoData): string {
     `<meta property="og:image" content="${escapeHtml(seo.ogImage)}" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
     seo.index ? '' : `<meta name="robots" content="noindex" />`,
-    `<script type="application/ld+json">${JSON.stringify(seo.jsonLd)}</script>`,
+    ...seo.jsonLdBlocks.map(
+      (block) => `<script type="application/ld+json">${JSON.stringify(block)}</script>`,
+    ),
   ].filter(Boolean);
   return lines.join('\n    ');
 }
 
-/**
- * Set `<html lang="...">` defensively. Three cases the regex must cover:
- *   1. Template ships `<html lang="en">` — replace the value.
- *   2. Template ships `<html>` (lang attr lost in a future refactor) —
- *      inject the attr.
- *   3. Capture group must keep any other attrs intact (`<html data-x>`).
- */
 function setHtmlLang(html: string, locale: Locale): string {
   return html.replace(/<html\b([^>]*)>/i, (_match, attrs: string) => {
     const cleaned = attrs.replace(/\s+lang="[^"]*"/i, '');
@@ -148,9 +182,14 @@ function setHtmlLang(html: string, locale: Locale): string {
   });
 }
 
+const PRERENDER_PATHS: ReadonlyArray<string> = siteConfig.locales.flatMap((l) => [
+  `/${l}`,
+  `/${l}/pricing`,
+  `/${l}/features`,
+  `/${l}/about`,
+]);
+
 export default defineConfig({
-  // Order matters: `mdx()` must come before `react()` so JSX inside `.mdx`
-  // is transformed correctly.
   plugins: [
     mdx({
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
@@ -162,10 +201,7 @@ export default defineConfig({
         languages: [...siteConfig.locales],
         defaultLanguage: siteConfig.defaultLocale,
       },
-      dynamicRoutes: [
-        ...siteConfig.locales.map((l) => `/${l}`),
-        ...siteConfig.locales.map((l) => `/${l}/`),
-      ],
+      dynamicRoutes: [...PRERENDER_PATHS],
     }),
   ],
   resolve: {
@@ -192,16 +228,11 @@ export default defineConfig({
   // prerendered HTML. The route registry above maps each rendered path to
   // a `pageKey` whose translations live in `src/locales/<lang>.json`.
   ssgOptions: {
-    // Limit prerender to the locale roots only. The wildcard 404 route +
-    // `/` index would otherwise emit `dist/index.html` as a duplicate of
-    // `dist/en.html` (same canonical) — duplicate-content SEO issue.
-    includedRoutes: () => siteConfig.locales.map((l) => `/${l}`),
+    includedRoutes: () => [...PRERENDER_PATHS],
     onPageRendered: (route, html) => {
       const locale = localeFromPath(route);
       const seo = buildSeo(route);
       const tags = renderSeoTags(seo);
-      // Use a case-sensitive `<title>` regex — HTML parsers treat the tag
-      // name case-sensitively.
       return setHtmlLang(html, locale)
         .replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(seo.fullTitle)}</title>`)
         .replace('</head>', `    ${tags}\n  </head>`);

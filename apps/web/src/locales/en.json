@@ -8,8 +8,13 @@
     "pricing": "Pricing",
     "features": "Features",
     "about": "About",
+    "menu": "Open menu",
     "switchTo": "Switch to {{lang}}",
     "primary": "Primary navigation"
+  },
+  "common": {
+    "skipToMain": "Skip to main content",
+    "close": "Close"
   },
   "home": {
     "eyebrow": "Premium care · Nature distilled",
@@ -21,7 +26,272 @@
       "pdpa": "PDPA compliant",
       "thaiFirst": "Thai-first",
       "noLockIn": "No lock-in"
+    },
+    "problemSolution": {
+      "eyebrow": "Why Lesso",
+      "heading": "Built for clinics, not generic SaaS.",
+      "problemHeading": "What clinic owners told us",
+      "problems": [
+        "Patient records live in Excel + LINE chats — no single source of truth.",
+        "Course tracking is manual: receipts, sticker tally, sometimes guesswork.",
+        "Multi-branch reporting takes hours every Monday.",
+        "PDPA compliance is a binder, not a workflow."
+      ],
+      "solutionHeading": "What Lesso does",
+      "solutions": [
+        "One patient record across appointments, courses, receipts, and consents.",
+        "Course balance tracked per session, with audit trail.",
+        "Live multi-branch revenue + commission breakdown.",
+        "PDPA consent capture + audit log baked in — not bolted on."
+      ]
+    },
+    "features": {
+      "eyebrow": "Features",
+      "heading": "What's in the box",
+      "items": [
+        {
+          "id": "course",
+          "title": "Course tracking",
+          "body": "Sell a 5-session course; track every redemption with audit trail. No more sticker books."
+        },
+        {
+          "id": "branches",
+          "title": "Multi-branch ready",
+          "body": "Switch branches in one click; reports roll up automatically. No spreadsheets."
+        },
+        {
+          "id": "line",
+          "title": "LINE-native",
+          "body": "Recall messages drafted from real visit history. Copy → paste into LINE OA."
+        },
+        {
+          "id": "ai",
+          "title": "AI assist",
+          "body": "Visit summaries + recall drafts in Thai or English. Always reviewed before send."
+        }
+      ]
+    },
+    "socialProof": {
+      "eyebrow": "First clinics",
+      "heading": "Pilot partners onboarding now",
+      "body": "Five pilot clinics signing on through Q3 2026. Real names + photos land here once we go live."
+    },
+    "pricingTeaser": {
+      "eyebrow": "Pricing",
+      "heading": "Simple per-clinic plans",
+      "body": "Three tiers, monthly billing, no lock-in. Pilot clinics get the first 30 days free.",
+      "cta": "See pricing"
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "heading": "What everyone asks",
+      "items": [
+        {
+          "id": "who",
+          "q": "Who is Lesso for?",
+          "a": "Solo to mid-size aesthetic clinics in Thailand running 1–4 branches. Not for hospitals."
+        },
+        {
+          "id": "data",
+          "q": "Where does my data live?",
+          "a": "On Supabase (Singapore region) under PDPA terms. You can export everything as CSV anytime."
+        },
+        {
+          "id": "line",
+          "q": "Does it integrate with LINE?",
+          "a": "Pilot ships with copy-to-LINE drafts. LINE Official Account API direct-send lands in 2026 H2."
+        },
+        {
+          "id": "ai",
+          "q": "Is the AI safe for medical context?",
+          "a": "All AI output is draft-only and must be reviewed by clinic staff before patient contact. We never send AI text directly."
+        },
+        {
+          "id": "training",
+          "q": "Does it need staff training?",
+          "a": "Day-one onboarding is 30 minutes. We pair every pilot clinic with a Lesso operator for the first two weeks."
+        },
+        {
+          "id": "lock",
+          "q": "Am I locked in?",
+          "a": "No annual contracts. Cancel anytime; CSV export is one click."
+        }
+      ]
     }
+  },
+  "pricing": {
+    "intro": {
+      "eyebrow": "Pricing",
+      "heading": "One clinic. One price. No surprises.",
+      "sub": "Per-branch billing, monthly. Pilot clinics get 30 days free, then the Clinic tier rate."
+    },
+    "pilotBanner": {
+      "eyebrow": "Pilot offer",
+      "heading": "First 30 days free for pilot clinics",
+      "body": "Through Q3 2026 we onboard at most five clinics. After 30 days you continue on the Clinic tier or cancel — no questions asked."
+    },
+    "tiersHeading": "Choose your tier",
+    "tiers": [
+      {
+        "id": "solo",
+        "name": "Solo",
+        "price": "1,490",
+        "period": "per month",
+        "description": "One practitioner, one location.",
+        "bullets": [
+          "Up to 1 user",
+          "Patient records + appointments",
+          "Course tracking",
+          "PDPA consent + audit log",
+          "Email support"
+        ],
+        "cta": "Start with Solo",
+        "featured": false
+      },
+      {
+        "id": "clinic",
+        "name": "Clinic",
+        "price": "2,990",
+        "period": "per month",
+        "description": "Single-branch clinics with up to 5 staff.",
+        "bullets": [
+          "Up to 5 users",
+          "Everything in Solo",
+          "Inventory + stock alerts",
+          "Loyalty points + receipts",
+          "AI assist (visit summary + recall)",
+          "Priority email support"
+        ],
+        "cta": "Start the pilot",
+        "featured": true
+      },
+      {
+        "id": "group",
+        "name": "Group",
+        "price": "5,990",
+        "period": "per branch · month",
+        "description": "Multi-branch clinics with consolidated reporting.",
+        "bullets": [
+          "Unlimited users per branch",
+          "Everything in Clinic",
+          "Multi-branch reports",
+          "Commission tracking",
+          "Dedicated onboarding",
+          "Phone + LINE support"
+        ],
+        "cta": "Talk to us",
+        "featured": false
+      }
+    ],
+    "currency": "THB",
+    "faq": {
+      "heading": "Pricing questions",
+      "items": [
+        {
+          "id": "billing",
+          "q": "How does billing work?",
+          "a": "Monthly invoice via bank transfer or PromptPay. Annual billing on request — same rate, prepaid."
+        },
+        {
+          "id": "trial",
+          "q": "Is there a free trial?",
+          "a": "Yes — pilot clinics get 30 days free on the Clinic tier. After 30 days you continue paying or cancel."
+        },
+        {
+          "id": "upgrade",
+          "q": "Can I upgrade or downgrade?",
+          "a": "Anytime. Pro-rated on the next invoice."
+        },
+        {
+          "id": "extra",
+          "q": "What if I add a branch mid-month?",
+          "a": "We pro-rate the new branch from the day you add it; existing branches keep their cycle."
+        },
+        {
+          "id": "refund",
+          "q": "Refunds?",
+          "a": "30-day money-back inside the pilot window. After that we do not refund partial months but you can cancel anytime."
+        }
+      ]
+    }
+  },
+  "features": {
+    "intro": {
+      "eyebrow": "Features",
+      "heading": "Built around the daily routine.",
+      "sub": "Five workflows your clinic does every day. Lesso makes them faster, safer, and more honest."
+    },
+    "sections": [
+      {
+        "id": "course",
+        "eyebrow": "Course tracking",
+        "heading": "Sessions tracked, not guessed.",
+        "body": "Sell a course; the balance lives in Lesso. Every redemption is one tap, one audit-log line, one less argument with the front desk."
+      },
+      {
+        "id": "branches",
+        "eyebrow": "Multi-branch",
+        "heading": "Switch branches in one click.",
+        "body": "All your branches share the same patient ID. Reports roll up automatically — no Monday-morning Excel ritual."
+      },
+      {
+        "id": "line",
+        "eyebrow": "LINE-native",
+        "heading": "Recalls in the language your patients reply to.",
+        "body": "Lesso drafts the message from real visit history. You review, copy, paste into LINE OA. Direct-send via the LINE API ships in H2."
+      },
+      {
+        "id": "ai",
+        "eyebrow": "AI assist",
+        "heading": "Drafts, not decisions.",
+        "body": "Visit summary + recall drafts in Thai or English. Every draft is review-first; we never auto-send."
+      },
+      {
+        "id": "pdpa",
+        "eyebrow": "PDPA",
+        "heading": "Consent in the workflow, not a binder.",
+        "body": "Capture consent once, scoped per purpose, exportable per patient. Audit log is tamper-evident and never deletes."
+      }
+    ]
+  },
+  "about": {
+    "intro": {
+      "eyebrow": "About",
+      "heading": "Built by an operator. For operators.",
+      "sub": "Lesso is a small team that has run aesthetic clinics — not a generic SaaS shop pivoting in."
+    },
+    "founder": {
+      "name": "Ratchasak",
+      "role": "Founder",
+      "bio": "Ten years building software for healthcare and beauty businesses in Thailand. Lesso started after watching three clinics burn weekends on spreadsheets that shipped no value to patients."
+    },
+    "missionEyebrow": "Mission",
+    "mission": "Less of the work that does not matter. More of the care that does.",
+    "verticalFocusEyebrow": "Why aesthetic clinics",
+    "verticalFocusHeading": "We pick a vertical and go deep.",
+    "verticalFocus": [
+      {
+        "id": "courses",
+        "title": "Courses are the unit of value",
+        "body": "Aesthetic services sell as courses. Generic CRMs treat each visit as a one-off. We treat the course as first-class."
+      },
+      {
+        "id": "consent",
+        "title": "Consent is non-negotiable",
+        "body": "PDPA + cross-border data rules apply differently to medical aesthetic. Our defaults assume the strict path."
+      },
+      {
+        "id": "language",
+        "title": "Thai-first, not Thai-localized",
+        "body": "Every screen reads in Thai before it reads in English. Recall drafts use Thai grammar a clinic patient actually replies to."
+      }
+    ]
+  },
+  "finalCta": {
+    "eyebrow": "Ready",
+    "heading": "Get the first 30 days free.",
+    "body": "Five pilot slots through Q3 2026. We pair you with a Lesso operator for the first two weeks.",
+    "cta": "Join the pilot — free 30 days"
   },
   "footer": {
     "copyright": "© {{year}} Lesso. All rights reserved."
@@ -30,6 +300,18 @@
     "home": {
       "title": "Lesso",
       "description": "Aesthetic clinic backoffice for Thai clinics — patient records, course tracking, multi-branch reports, PDPA-compliant out of the box."
+    },
+    "pricing": {
+      "title": "Pricing",
+      "description": "Three simple per-clinic tiers. Pilot clinics get the first 30 days free on the Clinic tier."
+    },
+    "features": {
+      "title": "Features",
+      "description": "Course tracking, multi-branch reports, LINE-native recall messages, AI draft assistance, PDPA consent + audit log."
+    },
+    "about": {
+      "title": "About",
+      "description": "Lesso is built by an operator who has run aesthetic clinics in Thailand. Vertical-focused. Thai-first."
     },
     "notFound": {
       "title": "404 — not found",
