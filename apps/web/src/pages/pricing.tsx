@@ -47,6 +47,7 @@ export function PricingPage() {
               bullets={tier.bullets}
               cta={tier.cta}
               featured={tier.featured}
+              featuredBadge={dict.pricing.featuredBadge}
             />
           ))}
         </div>

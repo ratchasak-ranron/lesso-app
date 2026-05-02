@@ -1,14 +1,10 @@
-/* eslint-disable security/detect-object-injection -- locale is a constant union and DICTS keys match */
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import type { Locale } from './site-config';
 import { localeFromPath } from './locale-utils';
-import { DICTS, makeT, type TFunction } from './i18n-dict';
-import type en from '@/locales/en.json';
+import { DICTS, makeT, type Dict, type TFunction } from './i18n-dict';
 
-export type { TFunction } from './i18n-dict';
-
-export type Dict = typeof en;
+export type { TFunction, Dict } from './i18n-dict';
 
 export interface ResolvedLocale {
   locale: Locale;
@@ -36,7 +32,8 @@ export function useResolvedLocale(): ResolvedLocale {
   const { pathname } = useLocation();
   const locale = localeFromPath(pathname);
   const t = useMemo<TFunction>(() => makeT(locale), [locale]);
-  const dict = DICTS[locale] as unknown as Dict;
+  // eslint-disable-next-line security/detect-object-injection -- locale is the constant union 'en' | 'th'
+  const dict = DICTS[locale];
   return { locale, t, dict };
 }
 

@@ -20,12 +20,15 @@ const ICONS: Record<string, LucideIcon> = {
   pdpa: ShieldCheck,
 };
 
-function Illustration({ Icon, label }: { Icon: LucideIcon; label: string }) {
+// Decorative-only placeholder until real illustrations land in B4. The
+// surrounding `FeatureSection` already names the block via its h2, so the
+// illustration adds no semantic value — `aria-hidden` stops screen readers
+// from announcing the heading twice.
+function Illustration({ Icon }: { Icon: LucideIcon }) {
   return (
     <div
       className="flex aspect-[4/3] w-full max-w-md items-center justify-center rounded-card bg-muted shadow-card"
-      role="img"
-      aria-label={label}
+      aria-hidden="true"
     >
       <Icon className="size-20 text-primary/50" aria-hidden="true" strokeWidth={1.25} />
     </div>
@@ -58,7 +61,7 @@ export function FeaturesPage() {
             eyebrow={section.eyebrow}
             heading={section.heading}
             body={section.body}
-            illustration={<Illustration Icon={Icon} label={section.heading} />}
+            illustration={<Illustration Icon={Icon} />}
             align={idx % 2 === 0 ? 'right' : 'left'}
           />
         );

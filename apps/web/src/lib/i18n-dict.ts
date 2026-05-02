@@ -3,7 +3,14 @@ import en from '@/locales/en.json';
 import th from '@/locales/th.json';
 import type { Locale } from './site-config';
 
-export const DICTS = { en, th } as const;
+export type Dict = typeof en;
+
+/**
+ * Both locales share the same structural shape. Typing as `Record<Locale, Dict>`
+ * lets TS catch divergence at compile time if one locale forgets a key the
+ * other defines (no more silent drift behind a `as unknown as Dict` cast).
+ */
+export const DICTS: Record<Locale, Dict> = { en, th };
 
 const HTML_ESCAPES: Readonly<Record<string, string>> = {
   '&': '&amp;',

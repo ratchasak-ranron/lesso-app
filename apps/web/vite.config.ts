@@ -64,7 +64,9 @@ function buildSeo(route: string): SeoData {
   const locale = localeFromPath(route);
   const dict = DICTS[locale];
   const { pageKey, relPath, index } = pageForRoute(route);
-  const meta = (dict.meta as Record<string, { title: string; description: string }>)[pageKey];
+  // `dict.meta` is shape-checked against `PageKey` at compile time — every
+  // `PageKey` requires a matching `meta.<pageKey>` entry. No cast needed.
+  const meta = dict.meta[pageKey];
   const title = meta?.title ?? siteConfig.name;
   const description = meta?.description ?? siteConfig.tagline;
   const fullTitle = title === siteConfig.name ? siteConfig.name : `${title} · ${siteConfig.name}`;
@@ -101,15 +103,27 @@ function buildSeo(route: string): SeoData {
       name: siteConfig.name,
       description: siteConfig.description[locale],
       brand: { '@type': 'Brand', name: siteConfig.name },
-      offers: dict.pricing.tiers.map((tier) => ({
-        '@type': 'Offer',
-        name: tier.name,
-        description: tier.description,
-        price: tier.price.replace(/,/g, ''),
-        priceCurrency: 'THB',
-        availability: 'https://schema.org/InStock',
-        url: `${siteConfig.hostname}/${locale}/pricing#${tier.id}`,
-      })),
+      offers: dict.pricing.tiers.map((tier) => {
+        // schema.org/Offer.price expects a numeric string. Strip thousand
+        // separators (comma in en, none in th) and assert the result parses
+        // — fail loud at build time so a typo in the locale dict never
+        // emits malformed JSON-LD silently.
+        const numeric = tier.price.replace(/,/g, '');
+        if (!Number.isFinite(Number(numeric))) {
+          throw new Error(
+            `[buildSeo] tier "${tier.id}" (${locale}) has non-numeric price "${tier.price}"`,
+          );
+        }
+        return {
+          '@type': 'Offer',
+          name: tier.name,
+          description: tier.description,
+          price: numeric,
+          priceCurrency: 'THB',
+          availability: 'https://schema.org/InStock',
+          url: `${siteConfig.hostname}/${locale}/pricing#${tier.id}`,
+        };
+      }),
     });
   }
 
@@ -169,7 +183,10 @@ function renderSeoTags(seo: SeoData): string {
     `<meta name="twitter:card" content="summary_large_image" />`,
     seo.index ? '' : `<meta name="robots" content="noindex" />`,
     ...seo.jsonLdBlocks.map(
-      (block) => `<script type="application/ld+json">${JSON.stringify(block)}</script>`,
+      // Escape `</script>` substrings so any future locale string with that
+      // sequence cannot prematurely close the inline LD+JSON tag.
+      (block) =>
+        `<script type="application/ld+json">${JSON.stringify(block).replace(/<\/script>/gi, '<\\/script>')}</script>`,
     ),
   ].filter(Boolean);
   return lines.join('\n    ');

@@ -23,26 +23,30 @@ export function AboutPage() {
         sub={t('about.intro.sub')}
       />
 
-      <Section id="about-founder" eyebrow="" heading="">
-        <Card className="grid gap-8 p-6 md:grid-cols-[160px_1fr] md:gap-10 md:p-10">
-          <div
-            className="flex aspect-square w-40 items-center justify-center rounded-card bg-muted"
-            role="img"
-            aria-label={t('about.founder.name')}
-          >
-            <User className="size-16 text-primary/50" aria-hidden="true" strokeWidth={1.25} />
-          </div>
-          <div>
-            <p className="font-heading text-2xl font-semibold text-foreground">
-              {t('about.founder.name')}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">{t('about.founder.role')}</p>
-            <p className="mt-4 text-base leading-relaxed text-foreground">
-              {t('about.founder.bio')}
-            </p>
-          </div>
-        </Card>
-      </Section>
+      {/* Founder + mission rendered as plain bordered blocks (no `<Section>`
+          wrapper) — they have no eyebrow/heading, and `<Section>` would emit
+          an empty h2 + dangling `aria-labelledby`. */}
+      <div className="border-t border-border bg-background">
+        <div className="mx-auto max-w-5xl px-6 py-16 md:py-24">
+          <Card className="grid gap-8 p-6 md:grid-cols-[160px_1fr] md:gap-10 md:p-10">
+            <div
+              className="flex aspect-square w-40 items-center justify-center rounded-card bg-muted"
+              aria-hidden="true"
+            >
+              <User className="size-16 text-primary/50" aria-hidden="true" strokeWidth={1.25} />
+            </div>
+            <div>
+              <h2 className="font-heading text-2xl font-semibold text-foreground">
+                {t('about.founder.name')}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">{t('about.founder.role')}</p>
+              <p className="mt-4 text-base leading-relaxed text-foreground">
+                {t('about.founder.bio')}
+              </p>
+            </div>
+          </Card>
+        </div>
+      </div>
 
       <Section
         id="about-mission"
@@ -64,7 +68,7 @@ export function AboutPage() {
         <div className="grid gap-6 md:grid-cols-3">
           {dict.about.verticalFocus.map((item) => (
             <Card key={item.id} className="p-6">
-              <p className="font-heading text-lg font-semibold text-foreground">{item.title}</p>
+              <h3 className="font-heading text-lg font-semibold text-foreground">{item.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
             </Card>
           ))}

@@ -12,6 +12,8 @@ export interface TierCardProps {
   bullets: string[];
   cta: string;
   featured?: boolean;
+  /** Localised label for the featured-tier badge — pass via the locale dict. */
+  featuredBadge?: string;
 }
 
 export function TierCard({
@@ -23,6 +25,7 @@ export function TierCard({
   bullets,
   cta,
   featured = false,
+  featuredBadge,
 }: TierCardProps) {
   return (
     <Card
@@ -33,9 +36,9 @@ export function TierCard({
     >
       <div className="flex items-start justify-between gap-3">
         <h3 className="font-heading text-2xl font-semibold text-foreground">{name}</h3>
-        {featured ? (
+        {featured && featuredBadge ? (
           <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-wide text-primary">
-            Pilot
+            {featuredBadge}
           </span>
         ) : null}
       </div>
@@ -59,10 +62,13 @@ export function TierCard({
         ))}
       </ul>
       <div className="mt-8 flex-1" />
+      {/* Disabled until B3 wires the pilot signup form — matches FinalCta +
+          EditorialHero pattern. Better than a button that does nothing. */}
       <Button
         size="lg"
         variant={featured ? 'default' : 'outline'}
         className={cn('w-full', featured ? 'shadow-card' : '')}
+        disabled
       >
         {cta}
       </Button>

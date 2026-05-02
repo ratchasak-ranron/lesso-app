@@ -5,6 +5,7 @@ import { PageIntro } from './page-intro';
 import { Faq } from './faq';
 import { TierCard } from './tier-card';
 import { FinalCta } from './final-cta';
+import { FeatureSection } from './feature-section';
 
 describe('Section', () => {
   it('renders eyebrow + h2 + sub when provided', () => {
@@ -53,7 +54,7 @@ describe('Faq', () => {
 });
 
 describe('TierCard', () => {
-  it('renders name, price, bullets, cta', () => {
+  it('renders name, price, bullets, cta + featured badge + disabled CTA', () => {
     render(
       <TierCard
         name="Clinic"
@@ -64,13 +65,49 @@ describe('TierCard', () => {
         bullets={['Up to 5 users', 'AI assist']}
         cta="Start"
         featured
+        featuredBadge="Pilot"
       />,
     );
     expect(screen.getByRole('heading', { level: 3, name: 'Clinic' })).toBeInTheDocument();
     expect(screen.getByText('2,990')).toBeInTheDocument();
     expect(screen.getByText('THB')).toBeInTheDocument();
     expect(screen.getByText('Up to 5 users')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Start' })).toBeInTheDocument();
+    expect(screen.getByText('Pilot')).toBeInTheDocument();
+    // Disabled until B3 wires the pilot signup form.
+    expect(screen.getByRole('button', { name: 'Start' })).toBeDisabled();
+  });
+
+  it('omits the featured badge on non-featured tiers', () => {
+    render(
+      <TierCard
+        name="Solo"
+        price="1,490"
+        period="per month"
+        currency="THB"
+        description="Solo practitioner"
+        bullets={['One user']}
+        cta="Start"
+        featuredBadge="Pilot"
+      />,
+    );
+    expect(screen.queryByText('Pilot')).toBeNull();
+  });
+});
+
+describe('FeatureSection', () => {
+  it('alternates illustration column order via align prop', () => {
+    render(
+      <FeatureSection
+        id="x"
+        eyebrow="E"
+        heading="H"
+        body="B"
+        illustration={<div data-testid="illus" />}
+        align="left"
+      />,
+    );
+    const illus = screen.getByTestId('illus').parentElement;
+    expect(illus?.className).toContain('md:order-1');
   });
 });
 

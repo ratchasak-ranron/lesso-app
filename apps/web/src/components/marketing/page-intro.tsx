@@ -1,7 +1,10 @@
+import { cn } from '@/lib/utils';
+
 interface PageIntroProps {
   eyebrow: string;
   heading: string;
   sub: string;
+  className?: string;
 }
 
 /**
@@ -9,9 +12,9 @@ interface PageIntroProps {
  * but smaller (h1 instead of hero-scale, terracotta rule below). Each
  * non-Home page renders this once at the top.
  */
-export function PageIntro({ eyebrow, heading, sub }: PageIntroProps) {
+export function PageIntro({ eyebrow, heading, sub, className }: PageIntroProps) {
   return (
-    <section className="bg-background">
+    <section className={cn('bg-background', className)}>
       <div className="mx-auto max-w-4xl px-6 pt-16 pb-12 md:pt-24 md:pb-16">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-secondary">{eyebrow}</p>
         <h1 className="mt-4 font-heading text-4xl font-semibold leading-tight tracking-tight text-foreground md:text-6xl">

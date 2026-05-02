@@ -1,3 +1,6 @@
+// NOTE: byte-similar to `apps/app/src/components/ui/sheet.tsx` except the
+// close-button copy reads from `useResolvedLocale` (web) vs `useTranslation`
+// (app). Keep the two in sync until promoted to a shared package.
 import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cva, type VariantProps } from 'class-variance-authority';

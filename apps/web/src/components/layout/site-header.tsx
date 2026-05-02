@@ -92,7 +92,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                   {siteConfig.name}
                 </SheetTitle>
               </SheetHeader>
-              <nav className="flex flex-col gap-1 p-3" aria-label={t('nav.primary')}>
+              <nav className="flex flex-col gap-1 p-3" aria-label={t('nav.primaryMobile')}>
                 {NAV_KEYS.map((key) => {
                   const href = pathFor(locale, key);
                   const active = isActive(pathname, href, key);

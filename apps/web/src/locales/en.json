@@ -1,7 +1,6 @@
 {
   "app": {
-    "name": "Lesso",
-    "tagline": "Less cost. More care."
+    "name": "Lesso"
   },
   "nav": {
     "home": "Home",
@@ -10,7 +9,8 @@
     "about": "About",
     "menu": "Open menu",
     "switchTo": "Switch to {{lang}}",
-    "primary": "Primary navigation"
+    "primary": "Primary navigation",
+    "primaryMobile": "Mobile primary navigation"
   },
   "common": {
     "skipToMain": "Skip to main content",
@@ -131,6 +131,7 @@
       "body": "Through Q3 2026 we onboard at most five clinics. After 30 days you continue on the Clinic tier or cancel — no questions asked."
     },
     "tiersHeading": "Choose your tier",
+    "featuredBadge": "Pilot",
     "tiers": [
       {
         "id": "solo",

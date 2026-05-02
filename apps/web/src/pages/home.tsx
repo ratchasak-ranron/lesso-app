@@ -8,13 +8,11 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { PageSeo } from '@/components/seo/page-seo';
-import { JsonLd } from '@/components/seo/json-ld';
 import { EditorialHero } from '@/components/layout/editorial-hero';
 import { Section } from '@/components/marketing/section';
 import { Faq } from '@/components/marketing/faq';
 import { FinalCta } from '@/components/marketing/final-cta';
 import { Card } from '@/components/ui/card';
-import { siteConfig } from '@/lib/site-config';
 import { useResolvedLocale } from '@/lib/use-locale';
 
 const HOME_FEATURE_ICONS: Record<string, LucideIcon> = {
@@ -31,21 +29,14 @@ export function HomePage() {
 
   return (
     <>
+      {/* Organization + FAQPage JSON-LD are injected per-route by
+          `vite.config.ts → ssgOptions.onPageRendered`. No `<JsonLd>` here
+          (it would emit a duplicate Organization block in the prerendered HTML). */}
       <PageSeo
-        title={siteConfig.name}
+        title={t('meta.home.title')}
         description={t('meta.home.description')}
         path="/"
         locale={locale}
-      />
-      <JsonLd
-        data={{
-          '@context': 'https://schema.org',
-          '@type': 'Organization',
-          name: siteConfig.name,
-          url: siteConfig.hostname,
-          slogan: siteConfig.tagline,
-          inLanguage: siteConfig.locales,
-        }}
       />
       <EditorialHero />
 
@@ -61,8 +52,8 @@ export function HomePage() {
               {t('home.problemSolution.problemHeading')}
             </p>
             <ul className="mt-4 space-y-3 text-base leading-relaxed text-muted-foreground" role="list">
-              {dict.home.problemSolution.problems.map((p, i) => (
-                <li key={i} className="flex gap-3">
+              {dict.home.problemSolution.problems.map((p) => (
+                <li key={p} className="flex gap-3">
                   <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-muted-foreground" />
                   <span>{p}</span>
                 </li>
@@ -74,8 +65,8 @@ export function HomePage() {
               {t('home.problemSolution.solutionHeading')}
             </p>
             <ul className="mt-4 space-y-3 text-base leading-relaxed text-foreground" role="list">
-              {dict.home.problemSolution.solutions.map((s, i) => (
-                <li key={i} className="flex gap-3">
+              {dict.home.problemSolution.solutions.map((s) => (
+                <li key={s} className="flex gap-3">
                   <Check className="mt-1 size-4 shrink-0 text-success" aria-hidden="true" />
                   <span>{s}</span>
                 </li>
