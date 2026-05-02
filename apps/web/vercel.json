@@ -5,6 +5,8 @@
   "outputDirectory": "dist",
   "ignoreCommand": "cd ../.. && npx turbo-ignore @reinly/web",
   "framework": "vite",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "redirects": [
     { "source": "/", "destination": "/en", "permanent": true }
   ],
