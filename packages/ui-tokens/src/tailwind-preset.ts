@@ -70,13 +70,17 @@ export const reinlyPreset = {
         popover: 'var(--shadow-popover)',
       },
       fontFamily: {
-        // Inter for Latin body. Noto Sans Thai handles Thai chars via the
-        // automatic glyph-fallback chain (most browsers do per-glyph fallback).
-        sans: ['Inter', 'Noto Sans Thai', 'system-ui', 'sans-serif'],
-        // Playfair Display for headings — italic accent reserved for the
-        // marketing hero. Noto Sans Thai sits in the chain so Thai
-        // headings get a sans fallback (Playfair has no Thai glyphs).
-        heading: ['Playfair Display', 'Noto Sans Thai', 'Georgia', 'serif'],
+        // Inter for Latin body. IBM Plex Sans Thai Looped handles Thai
+        // chars via automatic per-glyph fallback (most browsers do this).
+        // Looped Thai glyphs match the readability conventions Thai
+        // clinic users expect — Western-style loopless sans (Noto Sans
+        // Thai) reads cold/foreign in this context.
+        sans: ['Inter', 'IBM Plex Sans Thai Looped', 'system-ui', 'sans-serif'],
+        // Playfair Display for headings — italic accent reserved for
+        // the marketing hero. Noto Serif Thai sits in the chain so Thai
+        // headings get a serif fallback that matches the editorial feel
+        // (Playfair Display has no Thai glyphs).
+        heading: ['Playfair Display', 'Noto Serif Thai', 'Georgia', 'serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
     },
