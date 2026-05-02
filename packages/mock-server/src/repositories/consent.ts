@@ -4,10 +4,10 @@ import {
   type ConsentCaptureInput,
   type ConsentRecord,
   type Id,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from '../storage';
 
-const KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:consent-records`;
+const KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:consent-records`;
 
 function readAll(tenantId: Id): ConsentRecord[] {
   return storage.read(KEY(tenantId), z.array(ConsentRecordSchema)) ?? [];

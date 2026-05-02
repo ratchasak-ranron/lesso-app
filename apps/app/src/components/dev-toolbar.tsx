@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { ChevronDown, ChevronUp, Wrench } from 'lucide-react';
-import { getBranches, getTenants, getUsers, resetData } from '@lesso/mock-server';
+import { getBranches, getTenants, getUsers, resetData } from '@reinly/mock-server';
 import { Button } from '@/components/ui/button';
 import { Select, type SelectOption } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';

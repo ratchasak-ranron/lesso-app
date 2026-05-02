@@ -7,11 +7,11 @@ import {
   type Id,
   type LineItem,
   type Receipt,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from '../storage';
 import { inRange } from './_utils';
 
-const KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:commissions`;
+const KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:commissions`;
 
 function readAll(tenantId: Id): CommissionEntry[] {
   return storage.read(KEY(tenantId), z.array(CommissionEntrySchema)) ?? [];

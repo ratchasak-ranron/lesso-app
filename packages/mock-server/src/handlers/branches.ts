@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import type { Id } from '@lesso/domain';
+import type { Id } from '@reinly/domain';
 import { resolveContext } from '../context';
 import { aggregateByBranch } from '../repositories/_aggregators';
 import { getBranches, getUsers } from '../seed';

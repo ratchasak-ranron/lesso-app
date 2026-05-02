@@ -1,4 +1,4 @@
-import { createApiClient } from '@lesso/api-client';
+import { createApiClient } from '@reinly/api-client';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL ?? '/v1';
 

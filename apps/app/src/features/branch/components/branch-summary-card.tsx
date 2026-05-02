@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle, Building2, Stethoscope } from 'lucide-react';
-import type { BranchSummary } from '@lesso/api-client';
+import type { BranchSummary } from '@reinly/api-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency, formatNumber } from '@/lib/format';

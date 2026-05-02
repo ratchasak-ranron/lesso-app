@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { IdSchema, type Id } from '@lesso/domain';
+import { IdSchema, type Id } from '@reinly/domain';
 import { storage } from './storage';
 
-export const DEV_TOOLBAR_KEY = 'lesso:dev-toolbar';
+export const DEV_TOOLBAR_KEY = 'reinly:dev-toolbar';
 const EXPECTED_VERSION = 1;
 
 const DevToolbarPersistedSchema = z.object({
@@ -46,8 +46,8 @@ function headerOrNull(value: string | null): Id | null {
 export function resolveContext(request: Request): TenantContext {
   const fallback = getTenantContext();
   return {
-    tenantId: headerOrNull(request.headers.get('X-Lesso-Tenant')) ?? fallback.tenantId,
-    branchId: headerOrNull(request.headers.get('X-Lesso-Branch')) ?? fallback.branchId,
-    userId: headerOrNull(request.headers.get('X-Lesso-User')) ?? fallback.userId,
+    tenantId: headerOrNull(request.headers.get('X-Reinly-Tenant')) ?? fallback.tenantId,
+    branchId: headerOrNull(request.headers.get('X-Reinly-Branch')) ?? fallback.branchId,
+    userId: headerOrNull(request.headers.get('X-Reinly-User')) ?? fallback.userId,
   };
 }

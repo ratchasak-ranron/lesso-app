@@ -6,11 +6,11 @@ import {
   type Id,
   type LoyaltyAccount,
   type LoyaltyTransaction,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from '../storage';
 
-const ACCOUNTS_KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:loyalty-accounts`;
-const TRANSACTIONS_KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:loyalty-transactions`;
+const ACCOUNTS_KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:loyalty-accounts`;
+const TRANSACTIONS_KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:loyalty-transactions`;
 
 function readAccounts(tenantId: Id): LoyaltyAccount[] {
   return storage.read(ACCOUNTS_KEY(tenantId), z.array(LoyaltyAccountSchema)) ?? [];

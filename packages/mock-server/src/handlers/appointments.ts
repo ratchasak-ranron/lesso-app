@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { AppointmentCreateSchema, AppointmentUpdateSchema, type Id } from '@lesso/domain';
+import { AppointmentCreateSchema, AppointmentUpdateSchema, type Id } from '@reinly/domain';
 import { resolveContext } from '../context';
 import { appointmentRepo, type AppointmentFilter } from '../repositories/appointment';
 import {

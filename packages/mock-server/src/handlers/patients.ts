@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { PatientCreateSchema, PatientUpdateSchema, type Id } from '@lesso/domain';
+import { PatientCreateSchema, PatientUpdateSchema, type Id } from '@reinly/domain';
 import { resolveContext } from '../context';
 import { auditRepo } from '../repositories/audit';
 import { patientRepo } from '../repositories/patient';

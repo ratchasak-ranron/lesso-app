@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle, Package } from 'lucide-react';
-import { isLowStock, type InventoryItem } from '@lesso/domain';
+import { isLowStock, type InventoryItem } from '@reinly/domain';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { Id } from '@lesso/domain';
+import type { Id } from '@reinly/domain';
 import { DEV_TOOLBAR_KEY, DEV_TOOLBAR_VERSION } from '@/lib/persist-keys';
 
 interface DevToolbarPersistedState {

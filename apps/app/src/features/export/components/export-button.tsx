@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Download } from 'lucide-react';
-import type { Appointment, Course, Patient, Receipt } from '@lesso/domain';
+import type { Appointment, Course, Patient, Receipt } from '@reinly/domain';
 import { apiClient } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { useCtx } from '@/features/_shared/use-ctx';

@@ -6,7 +6,7 @@
 
 ---
 
-**Project:** Lesso Backoffice
+**Project:** Reinly Backoffice — DEPRECATED. Use `design-system/reinly-brand/MASTER.md` as the canonical source.
 **Generated:** 2026-05-01 23:58:25
 **Category:** Healthcare App
 

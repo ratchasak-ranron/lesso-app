@@ -7,11 +7,11 @@ import {
   type InventoryItemCreateInput,
   type InventoryMovement,
   type InventoryMovementCreateInput,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from '../storage';
 
-const ITEMS_KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:inventory-items`;
-const MOVEMENTS_KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:inventory-movements`;
+const ITEMS_KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:inventory-items`;
+const MOVEMENTS_KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:inventory-movements`;
 
 function readItems(tenantId: Id): InventoryItem[] {
   return storage.read(ITEMS_KEY(tenantId), z.array(InventoryItemSchema)) ?? [];

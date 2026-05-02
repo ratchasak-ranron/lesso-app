@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ApiError, type LoyaltyRedeemInput } from '@lesso/api-client';
-import type { Id, LoyaltyAccount, LoyaltyTransaction } from '@lesso/domain';
+import { ApiError, type LoyaltyRedeemInput } from '@reinly/api-client';
+import type { Id, LoyaltyAccount, LoyaltyTransaction } from '@reinly/domain';
 import { apiClient } from '@/lib/api';
 import { useCtx } from '@/features/_shared/use-ctx';
 

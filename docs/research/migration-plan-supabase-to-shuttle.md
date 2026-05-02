@@ -67,7 +67,7 @@ export interface ApiClient {
 export const apiClient: ApiClient = createSupabaseAdapter(supabase)
 
 // Future swap:
-// export const apiClient: ApiClient = createRestAdapter('https://api.lesso.app')
+// export const apiClient: ApiClient = createRestAdapter('https://api.getreinly.com')
 ```
 
 Components import `apiClient`, never `supabase`. Migration = swap factory + adapter.
@@ -82,7 +82,7 @@ Components import `apiClient`, never `supabase`. Migration = swap factory + adap
 ### Phase B — Stand Up Shuttle (~1 week)
 
 ```bash
-cargo shuttle init lesso-api
+cargo shuttle init reinly-api
 ```
 
 Tech stack:

@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { IdSchema } from '@lesso/domain';
+import { IdSchema } from '@reinly/domain';
 
-export const DEV_TOOLBAR_KEY = 'lesso:dev-toolbar';
+export const DEV_TOOLBAR_KEY = 'reinly:dev-toolbar';
 export const DEV_TOOLBAR_VERSION = 1;
 
 /**

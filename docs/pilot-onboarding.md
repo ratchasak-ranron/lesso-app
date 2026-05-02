@@ -1,11 +1,11 @@
-# Lesso Pilot Onboarding
+# Reinly Pilot Onboarding
 
 > Audience: pilot clinic staff (front desk + clinician).
 > Read time: ~15 minutes.
 
 ## What this pilot is
 
-Lesso is a Thai aesthetic-clinic backoffice. The MVP runs entirely client-side
+Reinly is a Thai aesthetic-clinic backoffice. The MVP runs entirely client-side
 against a mock server: every save lives in your browser's localStorage.
 Nothing leaves the device until the Supabase backend lands in phase A7.
 
@@ -20,7 +20,7 @@ What that means for you:
 
 ## Day-1 setup
 
-1. Open the app at `https://app.lesso.clinic` in Chrome / Edge / Safari.
+1. Open the app at `https://app.getreinly.com` in Chrome / Edge / Safari.
 2. The Dev Toolbar auto-seeds a demo tenant with two branches and ~10 demo
    patients. Use those for the first walkthrough — do not enter real
    patients yet.

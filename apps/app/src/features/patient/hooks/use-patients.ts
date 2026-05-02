@@ -4,7 +4,7 @@ import type {
   Patient,
   PatientCreateInput,
   PatientUpdateInput,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { apiClient } from '@/lib/api';
 import { useCtx } from '@/features/_shared/use-ctx';
 

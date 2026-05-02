@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import type { DimensionBucket, ReportDimension } from '@lesso/api-client';
-import type { DoctorCommissionSummary, Id, InventoryItem, Receipt } from '@lesso/domain';
+import type { DimensionBucket, ReportDimension } from '@reinly/api-client';
+import type { DoctorCommissionSummary, Id, InventoryItem, Receipt } from '@reinly/domain';
 import { apiClient } from '@/lib/api';
 import { useCtx } from '@/features/_shared/use-ctx';
 

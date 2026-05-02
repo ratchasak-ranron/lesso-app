@@ -1,9 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd ../.. && pnpm turbo build --filter=@lesso/app",
+  "buildCommand": "cd ../.. && pnpm turbo build --filter=@reinly/app",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "outputDirectory": "dist",
-  "ignoreCommand": "cd ../.. && npx turbo-ignore @lesso/app",
+  "ignoreCommand": "cd ../.. && npx turbo-ignore @reinly/app",
   "framework": "vite",
   "rewrites": [
     { "source": "/mockServiceWorker.js", "destination": "/404.html" }

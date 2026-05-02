@@ -1,4 +1,4 @@
-# Lesso Launch Runbook
+# Reinly Launch Runbook
 
 Run AFTER B4 merges to `main`. Sequenced checklist; sections 1–6 are gating
 (skip none); sections 7–8 are post-launch monitoring.
@@ -11,15 +11,15 @@ Run AFTER B4 merges to `main`. Sequenced checklist; sections 1–6 are gating
 
 ## 1. DNS cutover (Vercel)
 
-- [ ] In Vercel project `lesso-web`: **Settings → Domains**
-- [ ] Add `lesso.clinic` (apex/root) — Vercel returns A record `76.76.21.21`
-- [ ] Add `www.lesso.clinic` — set as redirect to `lesso.clinic`
+- [ ] In Vercel project `reinly-web`: **Settings → Domains**
+- [ ] Add `getreinly.com` (apex/root) — Vercel returns A record `76.76.21.21`
+- [ ] Add `www.getreinly.com` — set as redirect to `getreinly.com`
 - [ ] At the domain registrar (Namecheap / Cloudflare / etc.), update DNS:
   - `A` record `@` → `76.76.21.21`
   - `CNAME` record `www` → `cname.vercel-dns.com`
 - [ ] Wait ~5 min for HTTPS issuance (auto via Let's Encrypt)
-- [ ] Confirm `https://lesso.clinic` resolves and `https://www.lesso.clinic` 301s
-- [ ] No code change — `siteConfig.hostname` is already `https://lesso.clinic`
+- [ ] Confirm `https://getreinly.com` resolves and `https://www.getreinly.com` 301s
+- [ ] No code change — `siteConfig.hostname` is already `https://getreinly.com`
 
 ## 2. Promote deferred CI workflows
 
@@ -33,9 +33,9 @@ Token used to push must have `workflow` scope. Verify via `gh auth status`.
 ## 3. Search Console (Google)
 
 - [ ] Visit https://search.google.com/search-console
-- [ ] Add property `https://lesso.clinic` (Domain property recommended over URL)
+- [ ] Add property `https://getreinly.com` (Domain property recommended over URL)
 - [ ] Verify via DNS TXT record (paste returned token into registrar)
-- [ ] Submit sitemap: `https://lesso.clinic/sitemap.xml`
+- [ ] Submit sitemap: `https://getreinly.com/sitemap.xml`
 - [ ] Confirm 8 indexable URLs surface within 7 days
 - [ ] **Manual check**: privacy + terms appear in sitemap but should NOT appear in search results (noindex meta — Google honors)
 
@@ -48,18 +48,18 @@ Token used to push must have `workflow` scope. Verify via `gh auth status`.
 
 ## 5. Plausible Analytics
 
-- [ ] Confirm `lesso.clinic` is registered on plausible.io
+- [ ] Confirm `getreinly.com` is registered on plausible.io
 - [ ] Set Vercel env var: **Settings → Environment Variables → Production**
-  - `VITE_PLAUSIBLE_DOMAIN=lesso.clinic`
-  - `VITE_WAITLIST_TO=hello@lesso.clinic` (or chosen founder address)
+  - `VITE_PLAUSIBLE_DOMAIN=getreinly.com`
+  - `VITE_WAITLIST_TO=hello@getreinly.com` (or chosen founder address)
 - [ ] Trigger a deploy (push to `main` or click "Redeploy")
 - [ ] Open the live site, click hero CTA → confirm `cta_click` event fires in Plausible dashboard
 - [ ] Submit a test pilot signup → confirm `pilot_submit` event fires + mailto opens with pre-filled body
 
 ## 6. Lighthouse spot-check
 
-- [ ] `pnpm --filter @lesso/web run lhci:web` against the deployed Vercel URL
-  (override URLs in `.lighthouserc.json` to point at `https://lesso.clinic` for prod check)
+- [ ] `pnpm --filter @reinly/web run lhci:web` against the deployed Vercel URL
+  (override URLs in `.lighthouserc.json` to point at `https://getreinly.com` for prod check)
 - [ ] Expect ≥0.95 across all 4 categories on `/en`, `/en/pricing`, `/en/pilot`
 - [ ] If `best-practices` dips: inspect CSP headers + image sizes
 - [ ] If `performance` dips: check OG image meta tags aren't blocking render
@@ -67,7 +67,7 @@ Token used to push must have `workflow` scope. Verify via `gh auth status`.
 
 ## 7. Smoke tests
 
-- [ ] `https://lesso.clinic` → redirects to `/en`
+- [ ] `https://getreinly.com` → redirects to `/en`
 - [ ] `/en` renders, hero CTA → `/en/pilot`
 - [ ] `/en/pilot` form opens mail client with pre-filled body
 - [ ] `/en/privacy` shows DRAFT banner

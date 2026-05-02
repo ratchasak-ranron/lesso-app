@@ -33,7 +33,7 @@ import type {
   WalkInCreateInput,
   WalkInStatus,
   WalkInUpdateInput,
-} from '@lesso/domain';
+} from '@reinly/domain';
 
 export interface RequestContext {
   tenantId: Id | null;

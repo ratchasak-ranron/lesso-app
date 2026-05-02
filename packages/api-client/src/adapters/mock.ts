@@ -45,7 +45,7 @@ import {
   type WalkIn,
   type WalkInCreateInput,
   type WalkInUpdateInput,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { ApiError } from '../errors';
 import type {
   ApiClient,
@@ -95,9 +95,9 @@ const ApiErrorBodySchema = z.object({
 function contextHeaders(ctx?: RequestContext): HeadersInit {
   if (!ctx) return {};
   const headers: Record<string, string> = {};
-  if (ctx.tenantId) headers['X-Lesso-Tenant'] = ctx.tenantId;
-  if (ctx.branchId) headers['X-Lesso-Branch'] = ctx.branchId;
-  if (ctx.userId) headers['X-Lesso-User'] = ctx.userId;
+  if (ctx.tenantId) headers['X-Reinly-Tenant'] = ctx.tenantId;
+  if (ctx.branchId) headers['X-Reinly-Branch'] = ctx.branchId;
+  if (ctx.userId) headers['X-Reinly-User'] = ctx.userId;
   return headers;
 }
 

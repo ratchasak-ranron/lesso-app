@@ -10,10 +10,12 @@
 // - hex colours intentional here (build-time, isolated from runtime tokens)
 
 const BRAND = {
-  cream: '#FAF7F2',
-  teal: '#134E4A',
-  terracotta: '#A45A3D',
-  ink: '#1A1A1A',
+  bone: '#F5F2EC',
+  cream: '#FAF7F1',
+  slate: '#1F2328',
+  sage: '#5A7060',
+  clay: '#A85F3F',
+  mist: '#A89E84',
 };
 
 export function ogTemplate({ title, eyebrow }) {
@@ -26,8 +28,8 @@ export function ogTemplate({ title, eyebrow }) {
         width: '1200px',
         height: '630px',
         padding: '80px',
-        background: BRAND.cream,
-        borderLeft: `12px solid ${BRAND.teal}`,
+        background: BRAND.bone,
+        borderLeft: `12px solid ${BRAND.slate}`,
         fontFamily: 'Inter',
       },
       children: [
@@ -37,7 +39,7 @@ export function ogTemplate({ title, eyebrow }) {
             style: {
               display: 'flex',
               fontSize: 28,
-              color: BRAND.terracotta,
+              color: BRAND.sage,
               textTransform: 'uppercase',
               letterSpacing: '0.2em',
               marginBottom: '40px',
@@ -52,7 +54,7 @@ export function ogTemplate({ title, eyebrow }) {
               display: 'flex',
               fontSize: 96,
               fontFamily: 'Playfair Display',
-              color: BRAND.ink,
+              color: BRAND.slate,
               lineHeight: 1.05,
               fontWeight: 700,
               flex: 1,
@@ -66,10 +68,10 @@ export function ogTemplate({ title, eyebrow }) {
             style: {
               display: 'flex',
               fontSize: 32,
-              color: BRAND.teal,
+              color: BRAND.slate,
               fontWeight: 600,
             },
-            children: 'Lesso · lesso.clinic',
+            children: 'Reinly · getreinly.com',
           },
         },
       ],
@@ -87,14 +89,14 @@ export function iconTemplate({ size }) {
         justifyContent: 'center',
         width: `${size}px`,
         height: `${size}px`,
-        background: BRAND.teal,
-        color: BRAND.cream,
+        background: BRAND.slate,
+        color: BRAND.bone,
         fontFamily: 'Playfair Display',
         fontSize: Math.round(size * 0.55),
         fontWeight: 700,
         lineHeight: 1,
       },
-      children: 'L',
+      children: 'r',
     },
   };
 }

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { BranchSummary } from '@lesso/api-client';
+import type { BranchSummary } from '@reinly/api-client';
 import { apiClient } from '@/lib/api';
 import { useCtx } from '@/features/_shared/use-ctx';
 

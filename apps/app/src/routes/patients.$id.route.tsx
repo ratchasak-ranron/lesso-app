@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
-import { IdSchema } from '@lesso/domain';
+import { IdSchema } from '@reinly/domain';
 import { PatientDetailPage } from './patients.$id';
 
 export function PatientDetailRouteComponent() {

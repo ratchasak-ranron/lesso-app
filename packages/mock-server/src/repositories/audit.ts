@@ -5,11 +5,11 @@ import {
   type AuditLog,
   type AuditLogCreateInput,
   type Id,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from '../storage';
 import { inRange } from './_utils';
 
-const KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:audit-log`;
+const KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:audit-log`;
 
 function readAll(tenantId: Id): AuditLog[] {
   return storage.read(KEY(tenantId), z.array(AuditLogSchema)) ?? [];

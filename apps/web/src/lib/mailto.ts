@@ -30,7 +30,7 @@ export function buildWaitlistMailto(to: string, data: WaitlistInput): string {
   if (data.lineId) lines.push(`LINE ID:  ${data.lineId}`);
   lines.push(`Locale:   ${data.locale}`, '');
   if (data.message) lines.push('Message:', data.message, '');
-  lines.push('— Sent from lesso.clinic/pilot');
+  lines.push('— Sent from getreinly.com/pilot');
 
   const body = lines.join('\r\n');
   const url = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(

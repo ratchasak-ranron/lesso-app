@@ -19,7 +19,7 @@ i18n
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
-      lookupLocalStorage: 'lesso:lang',
+      lookupLocalStorage: 'reinly:lang',
     },
   })
   .catch((err: unknown) => {

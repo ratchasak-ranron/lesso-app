@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { Appointment, Id, WalkIn } from '@lesso/domain';
+import type { Appointment, Id, WalkIn } from '@reinly/domain';
 import { useTodaysAppointments } from '@/features/appointment';
 import { useTodaysWalkIns } from '@/features/walk-in';
 import { useInventoryItems } from '@/features/inventory';

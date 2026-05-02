@@ -4,12 +4,12 @@ import {
   type Id,
   type Receipt,
   type ReceiptCreateInput,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from '../storage';
 import { inRange } from './_utils';
 
-const KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:receipts`;
-const COUNTER_KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:receipts:counter`;
+const KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:receipts`;
+const COUNTER_KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:receipts:counter`;
 
 function readAll(tenantId: Id): Receipt[] {
   return storage.read(KEY(tenantId), z.array(ReceiptSchema)) ?? [];

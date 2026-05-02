@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Activity, AlertTriangle, Coins, Stethoscope, Users } from 'lucide-react';
-import type { ReportDimension } from '@lesso/api-client';
+import type { ReportDimension } from '@reinly/api-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select } from '@/components/ui/select';

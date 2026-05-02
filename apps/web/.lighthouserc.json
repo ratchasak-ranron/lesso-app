@@ -1,7 +1,7 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "pnpm --filter @lesso/web preview",
+      "startServerCommand": "pnpm --filter @reinly/web preview",
       "startServerReadyPattern": "Local.*http://localhost",
       "startServerReadyTimeout": 30000,
       "url": [

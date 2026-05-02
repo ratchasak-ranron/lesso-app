@@ -5,7 +5,7 @@ import { Section } from '@/components/marketing/section';
 import { PilotForm } from '@/components/marketing/pilot-form';
 import { useResolvedLocale } from '@/lib/use-locale';
 
-const FALLBACK_TO = 'hello@lesso.clinic';
+const FALLBACK_TO = 'hello@getreinly.com';
 
 export function PilotPage() {
   const { locale, t } = useResolvedLocale();

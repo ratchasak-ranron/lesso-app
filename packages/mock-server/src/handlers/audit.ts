@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { AuditActionSchema, AuditLogCreateSchema } from '@lesso/domain';
+import { AuditActionSchema, AuditLogCreateSchema } from '@reinly/domain';
 import { resolveContext } from '../context';
 import { auditRepo, type AuditFilter } from '../repositories/audit';
 import { getUsers } from '../seed';

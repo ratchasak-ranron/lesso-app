@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: Lesso Backoffice API
+  title: Reinly Backoffice API
   version: 0.0.0
   description: |
-    Lesso aesthetic clinic backoffice API. OpenAPI spec is the source of truth.
+    Reinly aesthetic clinic backoffice API. OpenAPI spec is the source of truth.
     Both MSW mock handlers and the future Supabase adapter conform to this spec.
 servers:
   - url: /v1

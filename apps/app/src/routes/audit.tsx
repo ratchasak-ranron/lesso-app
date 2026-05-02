@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AuditActionSchema, type AuditAction } from '@lesso/domain';
+import { AuditActionSchema, type AuditAction } from '@reinly/domain';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';

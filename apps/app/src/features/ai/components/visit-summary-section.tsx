@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Patient } from '@lesso/domain';
+import type { Patient } from '@reinly/domain';
 import { useAppointments } from '@/features/appointment';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLocale } from '@/lib/use-locale';

@@ -12,7 +12,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
  */
 function excludeMswWorkerFromBuild(): Plugin {
   return {
-    name: 'lesso:exclude-msw-worker',
+    name: 'reinly:exclude-msw-worker',
     apply: 'build',
     async closeBundle() {
       const target = resolve(__dirname, 'dist/mockServiceWorker.js');

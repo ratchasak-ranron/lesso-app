@@ -5,10 +5,10 @@ import {
   type AppointmentCreateInput,
   type AppointmentUpdateInput,
   type Id,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from '../storage';
 
-const KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:appointments`;
+const KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:appointments`;
 
 function readAll(tenantId: Id): Appointment[] {
   return storage.read(KEY(tenantId), z.array(AppointmentSchema)) ?? [];

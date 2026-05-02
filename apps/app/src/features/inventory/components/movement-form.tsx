@@ -1,6 +1,6 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { InventoryItem, InventoryMovementType } from '@lesso/domain';
+import type { InventoryItem, InventoryMovementType } from '@reinly/domain';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

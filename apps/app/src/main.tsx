@@ -6,7 +6,7 @@ import './styles/globals.css';
 async function enableMocking(): Promise<void> {
   if (!import.meta.env.DEV) return;
   if (import.meta.env.VITE_ENABLE_MOCKS !== 'true') return;
-  const { worker, seedIfEmpty } = await import('@lesso/mock-server');
+  const { worker, seedIfEmpty } = await import('@reinly/mock-server');
   seedIfEmpty();
   await worker.start({ onUnhandledRequest: 'bypass' });
 }

@@ -1,14 +1,14 @@
-# Lesso — Aesthetic Clinic Backoffice
+# Reinly — Clinic software, distilled.
 
 Single monorepo, two apps:
 
-- `apps/app` — Backoffice prototype (Vite + React 18 SPA) → `app.lesso.clinic`
-- `apps/web` — Marketing site (Vite + `vite-react-ssg`) → `lesso.clinic` _(Phase B1, not yet scaffolded)_
+- `apps/app` — Backoffice prototype (Vite + React 18 SPA) → `app.getreinly.com`
+- `apps/web` — Marketing site (Vite + `vite-react-ssg`) → `getreinly.com`
 
 Shared `packages/*` provide the API spec, typed client, mock server, domain schemas, and design tokens.
 
 > Full product spec: [`.claude/PRPs/prds/aesthetic-clinic-backoffice-mvp.prd.md`](.claude/PRPs/prds/aesthetic-clinic-backoffice-mvp.prd.md)
-> Active phase plan: [`.claude/PRPs/plans/a1-foundation.plan.md`](.claude/PRPs/plans/a1-foundation.plan.md)
+> Brand: [`docs/marketing/reinly.md`](docs/marketing/reinly.md)
 
 ## Prerequisites
 
@@ -21,10 +21,10 @@ Shared `packages/*` provide the API spec, typed client, mock server, domain sche
 pnpm install
 
 # First-time only: generate the MSW worker into apps/app/public/
-pnpm --filter @lesso/app exec msw init public/ --save
+pnpm --filter @reinly/app exec msw init public/ --save
 
 # Run the backoffice
-pnpm --filter @lesso/app dev
+pnpm --filter @reinly/app dev
 # → http://localhost:5173
 ```
 
@@ -43,24 +43,24 @@ pnpm --filter @lesso/app dev
 Filter to one workspace:
 
 ```bash
-pnpm turbo dev --filter=@lesso/app
-pnpm turbo build --filter=@lesso/app
+pnpm turbo dev --filter=@reinly/app
+pnpm turbo build --filter=@reinly/app
 ```
 
 ## Repo layout
 
 ```
-lesso-app/
+reinly/
 ├── apps/
 │   ├── app/        # Backoffice (Vite + React)
-│   └── web/        # Marketing site (Phase B1)
+│   └── web/        # Marketing site
 ├── packages/
 │   ├── api-spec/   # OpenAPI YAML — source of truth
 │   ├── api-client/ # Typed client + Mock/Supabase adapters
 │   ├── domain/     # Zod schemas + shared TS types
 │   ├── mock-server/# MSW handlers + localStorage persistence
 │   └── ui-tokens/  # Design tokens (CSS vars + Tailwind preset)
-└── docs/           # Research, migration plans
+└── docs/           # Research, migration plans, brand
 ```
 
 ## Environment

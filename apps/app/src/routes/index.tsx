@@ -7,7 +7,7 @@ import {
   Plus,
   Users,
 } from 'lucide-react';
-import type { Patient } from '@lesso/domain';
+import type { Patient } from '@reinly/domain';
 import { Button } from '@/components/ui/button';
 import { KpiTile } from '@/components/ui/kpi-tile';
 import { PageHeader } from '@/components/page-header';

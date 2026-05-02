@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PilotForm } from './pilot-form';
 
-function renderForm(onSubmitted = vi.fn(), to = 'hello@lesso.clinic') {
+function renderForm(onSubmitted = vi.fn(), to = 'hello@getreinly.com') {
   return render(
     <MemoryRouter initialEntries={['/en/pilot']}>
       <PilotForm to={to} onSubmitted={onSubmitted} />
@@ -60,7 +60,7 @@ describe('PilotForm', () => {
     await user.click(screen.getByRole('button', { name: 'Open my email' }));
 
     await waitFor(() => expect(onSubmitted).toHaveBeenCalledTimes(1));
-    expect(window.location.href).toMatch(/^mailto:hello%40lesso\.clinic\?subject=/);
+    expect(window.location.href).toMatch(/^mailto:hello%40getreinly\.com\?subject=/);
     expect(decodeURIComponent(window.location.href)).toContain('Dr Somchai');
     expect(decodeURIComponent(window.location.href)).toContain('somchai@example.com');
   });

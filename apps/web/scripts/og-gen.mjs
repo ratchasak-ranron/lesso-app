@@ -1,4 +1,4 @@
-// Build-time OG + icon generator. Runs as `pnpm --filter @lesso/web run og:gen`,
+// Build-time OG + icon generator. Runs as `pnpm --filter @reinly/web run og:gen`,
 // auto-invoked via the `prebuild` lifecycle script before `vite-react-ssg build`.
 //
 // Outputs to `apps/web/public/`:

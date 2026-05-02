@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { z } from 'zod';
-import { IdSchema, type Id } from '@lesso/domain';
+import { IdSchema, type Id } from '@reinly/domain';
 import { resolveContext } from '../context';
 import { auditRepo } from '../repositories/audit';
 import { InsufficientPointsError, loyaltyRepo } from '../repositories/loyalty';

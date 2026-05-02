@@ -1,9 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd ../.. && pnpm turbo build --filter=@lesso/web",
+  "buildCommand": "cd ../.. && pnpm turbo build --filter=@reinly/web",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "outputDirectory": "dist",
-  "ignoreCommand": "cd ../.. && npx turbo-ignore @lesso/web",
+  "ignoreCommand": "cd ../.. && npx turbo-ignore @reinly/web",
   "framework": "vite",
   "redirects": [
     { "source": "/", "destination": "/en", "permanent": true }

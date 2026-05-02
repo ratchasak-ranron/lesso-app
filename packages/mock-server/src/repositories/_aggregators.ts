@@ -1,4 +1,4 @@
-import type { Branch, Id, Receipt } from '@lesso/domain';
+import type { Branch, Id, Receipt } from '@reinly/domain';
 import { commissionRepo } from './commission';
 import { inventoryRepo } from './inventory';
 import { receiptRepo } from './receipt';

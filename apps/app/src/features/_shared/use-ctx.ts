@@ -1,4 +1,4 @@
-import type { RequestContext } from '@lesso/api-client';
+import type { RequestContext } from '@reinly/api-client';
 import { useDevToolbar } from '@/store/dev-toolbar';
 
 /**

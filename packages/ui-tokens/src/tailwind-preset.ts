@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss';
 
-export const lessoPreset = {
+export const reinlyPreset = {
   darkMode: 'class',
   content: [],
   theme: {
@@ -51,6 +51,9 @@ export const lessoPreset = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        // Brand sage — surface-only fill (#9CAE9F). Use for decorative
+        // accents, divider tints, badges. Not text-safe on bone.
+        sage: '#9CAE9F',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -61,7 +64,7 @@ export const lessoPreset = {
         card: 'var(--radius-card)',
       },
       boxShadow: {
-        // Warm cream-tinted shadows so cards stay visible on the cream
+        // Bone-tinted shadows so cards stay visible on the warm bone/cream
         // background without the cool-grey "cold SaaS" look of `shadow-sm`.
         card: 'var(--shadow-card)',
         popover: 'var(--shadow-popover)',
@@ -80,4 +83,4 @@ export const lessoPreset = {
   },
 } satisfies Partial<Config>;
 
-export default lessoPreset;
+export default reinlyPreset;

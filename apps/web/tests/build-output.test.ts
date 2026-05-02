@@ -21,22 +21,22 @@ interface PageSpec {
 }
 
 const PAGES: ReadonlyArray<PageSpec> = [
-  { file: 'en.html', locale: 'en', canonical: 'https://lesso.clinic/en/', noindex: false },
-  { file: 'th.html', locale: 'th', canonical: 'https://lesso.clinic/th/', noindex: false },
-  { file: 'en/pricing.html', locale: 'en', canonical: 'https://lesso.clinic/en/pricing', noindex: false },
-  { file: 'th/pricing.html', locale: 'th', canonical: 'https://lesso.clinic/th/pricing', noindex: false },
-  { file: 'en/features.html', locale: 'en', canonical: 'https://lesso.clinic/en/features', noindex: false },
-  { file: 'th/features.html', locale: 'th', canonical: 'https://lesso.clinic/th/features', noindex: false },
-  { file: 'en/about.html', locale: 'en', canonical: 'https://lesso.clinic/en/about', noindex: false },
-  { file: 'th/about.html', locale: 'th', canonical: 'https://lesso.clinic/th/about', noindex: false },
-  { file: 'en/pilot.html', locale: 'en', canonical: 'https://lesso.clinic/en/pilot', noindex: false },
-  { file: 'th/pilot.html', locale: 'th', canonical: 'https://lesso.clinic/th/pilot', noindex: false },
-  { file: 'en/privacy.html', locale: 'en', canonical: 'https://lesso.clinic/en/privacy', noindex: true },
-  { file: 'th/privacy.html', locale: 'th', canonical: 'https://lesso.clinic/th/privacy', noindex: true },
-  { file: 'en/terms.html', locale: 'en', canonical: 'https://lesso.clinic/en/terms', noindex: true },
-  { file: 'th/terms.html', locale: 'th', canonical: 'https://lesso.clinic/th/terms', noindex: true },
-  { file: 'en/blog.html', locale: 'en', canonical: 'https://lesso.clinic/en/blog', noindex: false },
-  { file: 'th/blog.html', locale: 'th', canonical: 'https://lesso.clinic/th/blog', noindex: false },
+  { file: 'en.html', locale: 'en', canonical: 'https://getreinly.com/en/', noindex: false },
+  { file: 'th.html', locale: 'th', canonical: 'https://getreinly.com/th/', noindex: false },
+  { file: 'en/pricing.html', locale: 'en', canonical: 'https://getreinly.com/en/pricing', noindex: false },
+  { file: 'th/pricing.html', locale: 'th', canonical: 'https://getreinly.com/th/pricing', noindex: false },
+  { file: 'en/features.html', locale: 'en', canonical: 'https://getreinly.com/en/features', noindex: false },
+  { file: 'th/features.html', locale: 'th', canonical: 'https://getreinly.com/th/features', noindex: false },
+  { file: 'en/about.html', locale: 'en', canonical: 'https://getreinly.com/en/about', noindex: false },
+  { file: 'th/about.html', locale: 'th', canonical: 'https://getreinly.com/th/about', noindex: false },
+  { file: 'en/pilot.html', locale: 'en', canonical: 'https://getreinly.com/en/pilot', noindex: false },
+  { file: 'th/pilot.html', locale: 'th', canonical: 'https://getreinly.com/th/pilot', noindex: false },
+  { file: 'en/privacy.html', locale: 'en', canonical: 'https://getreinly.com/en/privacy', noindex: true },
+  { file: 'th/privacy.html', locale: 'th', canonical: 'https://getreinly.com/th/privacy', noindex: true },
+  { file: 'en/terms.html', locale: 'en', canonical: 'https://getreinly.com/en/terms', noindex: true },
+  { file: 'th/terms.html', locale: 'th', canonical: 'https://getreinly.com/th/terms', noindex: true },
+  { file: 'en/blog.html', locale: 'en', canonical: 'https://getreinly.com/en/blog', noindex: false },
+  { file: 'th/blog.html', locale: 'th', canonical: 'https://getreinly.com/th/blog', noindex: false },
 ];
 
 const INDEXED_PAGES = PAGES.filter((p) => !p.noindex);
@@ -61,8 +61,8 @@ describe('vite-react-ssg build output — B2 + B3 pages', () => {
   });
 
   it('home pages include the editorial hero copy', () => {
-    expect(read('en.html')).toContain('Less cost.');
-    expect(read('th.html')).toContain('ลดต้นทุน');
+    expect(read('en.html')).toContain('Clinic software,');
+    expect(read('th.html')).toContain('ซอฟต์แวร์คลินิก');
   });
 
   it('pricing pages include Product schema + tier price', () => {
@@ -112,8 +112,8 @@ describe('vite-react-ssg build output — B2 + B3 pages', () => {
     // `noindex` <meta> tag in the rendered HTML (asserted per-page above).
     const xml = read('sitemap.xml');
     for (const p of INDEXED_PAGES) {
-      const path = p.canonical.replace('https://lesso.clinic', '').replace(/\/$/, '');
-      expect(xml).toContain(`https://lesso.clinic${path || `/${p.locale}`}`);
+      const path = p.canonical.replace('https://getreinly.com', '').replace(/\/$/, '');
+      expect(xml).toContain(`https://getreinly.com${path || `/${p.locale}`}`);
     }
   });
 
@@ -158,7 +158,7 @@ describe('vite-react-ssg build output — B2 + B3 pages', () => {
   it('manifest.webmanifest is in dist root with required icons', () => {
     const manifest = JSON.parse(read('manifest.webmanifest'));
     expect(manifest.icons).toHaveLength(2);
-    expect(manifest.theme_color).toBe('#134E4A');
+    expect(manifest.theme_color).toBe('#F5F2EC');
     expect(manifest.display).toBe('standalone');
     const sizes = (manifest.icons as Array<{ sizes: string }>).map((i) => i.sizes);
     expect(sizes).toContain('192x192');
@@ -167,6 +167,6 @@ describe('vite-react-ssg build output — B2 + B3 pages', () => {
 
   it('emits robots.txt referencing the sitemap', () => {
     const robots = read('robots.txt');
-    expect(robots).toContain('Sitemap: https://lesso.clinic/sitemap.xml');
+    expect(robots).toContain('Sitemap: https://getreinly.com/sitemap.xml');
   });
 });

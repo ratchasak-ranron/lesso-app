@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Patient } from '@lesso/domain';
+import type { Patient } from '@reinly/domain';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { AppointmentList, useAppointments } from '@/features/appointment';
 import { usePatients } from '@/features/patient';

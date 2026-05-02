@@ -6,7 +6,7 @@ import {
   CourseUpdateSchema,
   IdSchema,
   type Id,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { resolveContext } from '../context';
 import { auditRepo } from '../repositories/audit';
 import {

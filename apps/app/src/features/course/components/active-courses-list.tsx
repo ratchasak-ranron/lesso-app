@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import type { Id } from '@lesso/domain';
+import type { Id } from '@reinly/domain';
 import { Skeleton } from '@/components/ui/skeleton';
 import { FormError } from '@/components/ui/form-feedback';
 import { useActiveCoursesForPatient } from '../hooks/use-courses';

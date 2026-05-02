@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { z } from 'zod';
-import { IdSchema } from '@lesso/domain';
+import { IdSchema } from '@reinly/domain';
 import { resolveContext } from '../context';
 import { generateVisitSummary } from '../ai/visit-summary';
 import { generateRecallMessage } from '../ai/recall-message';

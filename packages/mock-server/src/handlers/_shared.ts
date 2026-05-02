@@ -1,6 +1,6 @@
 import { HttpResponse } from 'msw';
 import { z } from 'zod';
-import { IdSchema, type Id } from '@lesso/domain';
+import { IdSchema, type Id } from '@reinly/domain';
 
 export function notFound(message: string) {
   return HttpResponse.json({ code: 'NOT_FOUND', message }, { status: 404 });

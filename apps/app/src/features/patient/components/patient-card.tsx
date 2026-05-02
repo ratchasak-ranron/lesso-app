@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle, Phone } from 'lucide-react';
-import type { Patient } from '@lesso/domain';
+import type { Patient } from '@reinly/domain';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { displayPhone } from '@/lib/format';

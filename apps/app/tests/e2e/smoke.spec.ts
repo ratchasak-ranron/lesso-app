@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Lesso bootstrap smoke', () => {
+test.describe('Reinly bootstrap smoke', () => {
   test('Home renders the greeting heading and the four KPI tiles', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 2 })).toBeVisible();

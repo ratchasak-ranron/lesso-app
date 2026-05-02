@@ -6,7 +6,7 @@ import type {
   SlotSuggestionRequest,
   SuggestedSlot,
   VisitSummaryRequest,
-} from '@lesso/api-client';
+} from '@reinly/api-client';
 import { apiClient } from '@/lib/api';
 import { useCtx } from '@/features/_shared/use-ctx';
 

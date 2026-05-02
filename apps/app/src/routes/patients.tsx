@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import type { Patient } from '@lesso/domain';
+import type { Patient } from '@reinly/domain';
 import {
   Dialog,
   DialogContent,

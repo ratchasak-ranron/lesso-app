@@ -6,8 +6,8 @@ import type {
   CourseStatus,
   CourseUpdateInput,
   Id,
-} from '@lesso/domain';
-import type { CourseDecrementInput } from '@lesso/api-client';
+} from '@reinly/domain';
+import type { CourseDecrementInput } from '@reinly/api-client';
 import { apiClient } from '@/lib/api';
 import { useCtx } from '@/features/_shared/use-ctx';
 

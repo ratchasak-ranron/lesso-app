@@ -1,14 +1,14 @@
 {
-  "name": "Lesso — Aesthetic clinic backoffice",
-  "short_name": "Lesso",
-  "description": "Aesthetic clinic backoffice for Thai clinics — patient records, course tracking, multi-branch reports, PDPA-compliant out of the box.",
+  "name": "Reinly — Clinic software, distilled.",
+  "short_name": "Reinly",
+  "description": "Clinic software, distilled — patient records, courses, billing, multi-branch reports. Fair price, no contracts.",
   "start_url": "/en",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "lang": "en",
-  "theme_color": "#134E4A",
-  "background_color": "#FAF7F2",
+  "theme_color": "#F5F2EC",
+  "background_color": "#F5F2EC",
   "icons": [
     {
       "src": "/icon-192.png",

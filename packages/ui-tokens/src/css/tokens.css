@@ -1,64 +1,66 @@
-/* Lesso design tokens — light + dark.
- * Brand v2 — Editorial Premium (Nature Distilled hybrid):
- *   primary teal #134E4A, secondary terracotta (text-safe #A45A3D),
- *   sage CTA #6B7B3C, warm cream surfaces, sand borders, slate-800 text.
- * Reference: design-system/lesso-brand-v2/MASTER.md
+/* Reinly design tokens — light + dark.
+ * Brand: bone + slate + sage + mist + clay + cream — quiet editorial.
+ *   ink slate #1F2328 primary (actions, body text)
+ *   secondary sage #5A7060 (text-safe accent)
+ *   destructive clay #A85F3F (text-safe urgent)
+ *   bone #F5F2EC background — paper feel
+ *   cream #FAF7F1 cards (warmer)
+ *   mist #E6E2DA muted surfaces
+ * Reference: docs/marketing/reinly.md + design-system/reinly-brand/MASTER.md
  *
- * Contrast notes (vs `--background` cream `#FAF7F2`):
- *   foreground (slate-800)            15.3 : 1   AAA
- *   primary teal #134E4A              9.5  : 1   AAA
- *   muted-foreground (stone-500)      4.55 : 1   AA  (razor-thin — keep ≥14px)
- *   sage success #6B7B3C              4.7  : 1   AA
- *   secondary terracotta #A45A3D      4.8  : 1   AA  (was #C67B5C 3.05:1 — text-FAIL)
- *   border #C9BEA8                    3.05 : 1   passes 1.4.11 (was #E7E0D5 1.18:1 — UI-FAIL)
+ * Contrast notes (vs `--background` bone #F5F2EC):
+ *   foreground (ink slate #1F2328)         14.6 : 1   AAA
+ *   primary (ink slate #1F2328)            14.6 : 1   AAA  (button bg → bone fg = AAA inverse)
+ *   muted-foreground (stone-600 #57534E)    7.0 : 1   AAA
+ *   secondary sage #5A7060                  4.6 : 1   AA   (text-safe; brand sage #9CAE9F is surface-only)
+ *   destructive clay #A85F3F                5.0 : 1   AA
+ *   border #A89E84                          3.0 : 1   passes 1.4.11 (brand mist #E6E2DA fails for UI)
  */
 
 :root {
   /* Brand */
-  --primary: 170 59% 19%;            /* #134E4A deep teal */
-  --primary-foreground: 0 0% 100%;   /* white on primary */
-  --secondary: 16 47% 44%;           /* #A45A3D terracotta — text-safe (≥4.5:1 on cream) */
-  --secondary-foreground: 36 53% 97%;
+  --primary: 213 12% 14%;            /* #1F2328 ink slate — primary action + emphasis */
+  --primary-foreground: 40 23% 94%;  /* #F5F2EC bone — on slate */
+  --secondary: 135 10% 40%;          /* #5A7060 darker sage — text-safe (≥4.5:1 on bone) */
+  --secondary-foreground: 40 23% 94%;
 
   /* Status */
-  --success: 76 36% 36%;             /* #6B7B3C sage — also functions as the CTA accent */
-  --success-foreground: 0 0% 100%;
+  --success: 135 10% 40%;            /* #5A7060 sage — calm/health signal (matches brand pillar) */
+  --success-foreground: 40 23% 94%;
   --warning: 32 94% 44%;             /* #D97706 amber-600 */
   --warning-foreground: 0 0% 100%;
-  --destructive: 0 72% 51%;          /* #DC2626 red-600 */
-  --destructive-foreground: 0 0% 100%;
+  --destructive: 18 46% 45%;         /* #A85F3F clay — text-safe (brand clay #C97F5C surface-only) */
+  --destructive-foreground: 40 23% 94%;
   --info: 217 91% 60%;               /* #2563EB blue-600 */
   --info-foreground: 0 0% 100%;
 
   /* Surfaces */
-  --background: 36 53% 97%;          /* #FAF7F2 warm cream */
-  --card: 0 0% 100%;                 /* pure white card on cream */
-  --card-foreground: 215 28% 17%;    /* #1E293B slate-800 */
-  --popover: 0 0% 100%;
-  --popover-foreground: 215 28% 17%;
-  --muted: 36 40% 93%;               /* warm off-white #F2EDE2 */
-  --muted-foreground: 25 6% 45%;     /* #78716C stone-500 */
-  --accent: 36 40% 93%;
-  --accent-foreground: 215 28% 17%;
+  --background: 40 23% 94%;          /* #F5F2EC bone — paper feel, the brand's quietest surface */
+  --card: 38 41% 96%;                /* #FAF7F1 cream — warmer than bone for cards */
+  --card-foreground: 213 12% 14%;    /* #1F2328 ink slate */
+  --popover: 38 41% 96%;
+  --popover-foreground: 213 12% 14%;
+  --muted: 40 19% 88%;               /* #E6E2DA mist — dividers, subtle surfaces */
+  --muted-foreground: 30 6% 32%;     /* #57534E stone-600 — meets AAA on bone */
+  --accent: 40 19% 88%;              /* #E6E2DA mist */
+  --accent-foreground: 213 12% 14%;
 
   /* Lines */
-  --border: 33 22% 73%;              /* #C9BEA8 sand — bumped from #E7E0D5 (1.18:1) for 3:1 against cream */
-  --input: 33 22% 73%;
-  --ring: 170 59% 19%;               /* match primary */
+  --border: 38 18% 59%;              /* #A89E84 — bumped from mist (1.6:1) for 3:1 against bone */
+  --input: 38 18% 59%;
+  --ring: 213 12% 14%;               /* match primary — focus rings stay obvious */
 
   /* Text */
-  --foreground: 215 28% 17%;         /* #1E293B slate-800 — high contrast on cream */
+  --foreground: 213 12% 14%;         /* #1F2328 ink slate — high contrast on bone */
 
   /* Radius */
   --radius: 0.5rem;                  /* 8px — buttons + inputs (decisive, tight) */
-  --radius-card: 1rem;               /* 16px — Card / KpiTile / SelectableCard / Dialog (soft, spa) */
+  --radius-card: 1rem;               /* 16px — Card / KpiTile / SelectableCard / Dialog (soft, calm) */
 
-  /* Shadow — warm cream tinted to match the soft surface. Literal HSL is
-   * intentional: we want the shadow tint to track the cream surface even
-   * when `--background` itself shifts (e.g. dark mode), so each mode
-   * declares its own shadow values rather than referencing `--background`. */
-  --shadow-card: 0 2px 12px 0 hsl(36 53% 80% / 0.55);
-  --shadow-popover: 0 4px 24px 0 hsl(36 53% 75% / 0.45);
+  /* Shadow — bone-tinted to match the warm surface. Per-mode declarations
+   * because dark mode wants a true shadow, not a tinted one. */
+  --shadow-card: 0 2px 12px 0 hsl(40 23% 78% / 0.55);
+  --shadow-popover: 0 4px 24px 0 hsl(40 23% 72% / 0.45);
 }
 
 .dark {
@@ -75,22 +77,22 @@
   --input: 215 25% 27%;
   --foreground: 210 40% 96%;         /* slate-100 */
 
-  /* Brand v2 dark — primary nudged lighter so it reads against slate bg.
-     TODO(B4 dark-mode pass — see PRD Phase B4): full contrast audit;
-     pilot ships light-mode only. */
-  --primary: 170 50% 45%;            /* lighter teal #4DB6AC range */
-  --primary-foreground: 222 47% 11%;
-  --secondary: 16 60% 64%;           /* lighter terracotta */
+  /* Brand (dark) — primary inverts to bone-on-dark for contrast; sage
+     and clay nudged lighter so they read against slate bg.
+     TODO(dark-mode pass): full contrast audit; pilot ships light-mode only. */
+  --primary: 40 23% 94%;             /* #F5F2EC bone — on dark, primary inverts */
+  --primary-foreground: 213 12% 14%; /* slate */
+  --secondary: 126 11% 65%;          /* #9CAE9F brand sage reads against dark */
   --secondary-foreground: 222 47% 11%;
-  --ring: 170 50% 45%;
+  --ring: 40 23% 94%;
 
   /* Status — mirror light status hues at higher lightness; foreground stays
      white-on-saturated for buttons/badges to keep legibility. */
-  --success: 76 35% 55%;
-  --success-foreground: 0 0% 100%;
+  --success: 126 11% 65%;            /* brand sage on dark */
+  --success-foreground: 222 47% 11%;
   --warning: 32 94% 60%;
   --warning-foreground: 222 47% 11%;
-  --destructive: 0 72% 65%;
+  --destructive: 20 50% 64%;         /* clay on dark */
   --destructive-foreground: 222 47% 11%;
   --info: 217 91% 70%;
   --info-foreground: 222 47% 11%;

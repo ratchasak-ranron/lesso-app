@@ -5,7 +5,7 @@ import type {
   WalkInCreateInput,
   WalkInStatus,
   WalkInUpdateInput,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { apiClient } from '@/lib/api';
 import { useCtx } from '@/features/_shared/use-ctx';
 

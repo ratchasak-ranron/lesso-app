@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { z } from 'zod';
-import type { Id } from '@lesso/domain';
+import type { Id } from '@reinly/domain';
 import { resolveContext } from '../context';
 import { aggregateByDimension, type ReportDimension } from '../repositories/_aggregators';
 import { getBranches, getUsers } from '../seed';

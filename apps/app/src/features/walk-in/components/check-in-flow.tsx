@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, CheckCircle2, Wallet } from 'lucide-react';
-import { sessionsRemaining, type Course, type Patient, type Receipt, type WalkIn } from '@lesso/domain';
+import { sessionsRemaining, type Course, type Patient, type Receipt, type WalkIn } from '@reinly/domain';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {

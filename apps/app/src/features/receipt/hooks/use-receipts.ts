@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { Id, Receipt, ReceiptCreateInput } from '@lesso/domain';
+import type { Id, Receipt, ReceiptCreateInput } from '@reinly/domain';
 import { apiClient } from '@/lib/api';
 import { useCtx } from '@/features/_shared/use-ctx';
 

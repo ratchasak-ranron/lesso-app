@@ -4,7 +4,7 @@ import type {
   ConsentRecord,
   ConsentWithdrawInput,
   Id,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { apiClient } from '@/lib/api';
 import { useCtx } from '@/features/_shared/use-ctx';
 

@@ -28,12 +28,12 @@ function decodeSubject(url: string): string {
 
 describe('buildWaitlistMailto', () => {
   it('starts with mailto:', () => {
-    expect(buildWaitlistMailto('hello@lesso.clinic', baseData)).toMatch(/^mailto:/);
+    expect(buildWaitlistMailto('hello@getreinly.com', baseData)).toMatch(/^mailto:/);
   });
 
   it('encodes the recipient', () => {
-    const url = buildWaitlistMailto('hello+pilot@lesso.clinic', baseData);
-    expect(url).toContain('mailto:hello%2Bpilot%40lesso.clinic');
+    const url = buildWaitlistMailto('hello+pilot@getreinly.com', baseData);
+    expect(url).toContain('mailto:hello%2Bpilot%40getreinly.com');
   });
 
   it('subject contains name and clinic', () => {

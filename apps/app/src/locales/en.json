@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "Lesso",
-    "tagline": "Less cost. More care."
+    "name": "Reinly",
+    "tagline": "Clinic software, distilled."
   },
   "nav": {
     "primary": "Primary navigation",
@@ -41,7 +41,7 @@
     "today": "Today"
   },
   "home": {
-    "greeting": "Hello, Lesso",
+    "greeting": "Hello, Reinly",
     "tenantBanner": "Clinic: {{tenant}} · Branch: {{branch}} · User: {{user}}",
     "todaysAppointments": "Today's appointments",
     "walkInQueue": "Walk-in queue",

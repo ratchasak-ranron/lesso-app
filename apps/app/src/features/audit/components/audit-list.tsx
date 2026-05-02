@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ShieldCheck } from 'lucide-react';
-import type { AuditLog } from '@lesso/domain';
+import type { AuditLog } from '@reinly/domain';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';

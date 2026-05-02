@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { UserPlus } from 'lucide-react';
-import type { Patient, WalkIn } from '@lesso/domain';
+import type { Patient, WalkIn } from '@reinly/domain';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

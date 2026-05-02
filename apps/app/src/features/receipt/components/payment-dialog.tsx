@@ -7,7 +7,7 @@ import {
   type Patient,
   type Receipt,
   type WalkIn,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import {
   Dialog,
   DialogContent,

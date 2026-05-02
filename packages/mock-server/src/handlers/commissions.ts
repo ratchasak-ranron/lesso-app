@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { CommissionStatusSchema, type Id } from '@lesso/domain';
+import { CommissionStatusSchema, type Id } from '@reinly/domain';
 import { resolveContext } from '../context';
 import { commissionRepo, type CommissionFilter } from '../repositories/commission';
 import { getUsers } from '../seed';

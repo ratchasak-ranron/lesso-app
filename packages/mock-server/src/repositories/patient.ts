@@ -5,10 +5,10 @@ import {
   type Patient,
   type PatientCreateInput,
   type PatientUpdateInput,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from '../storage';
 
-const KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:patients`;
+const KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:patients`;
 
 function readAll(tenantId: Id): Patient[] {
   return storage.read(KEY(tenantId), z.array(PatientSchema)) ?? [];

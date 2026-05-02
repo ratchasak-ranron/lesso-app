@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Coins } from 'lucide-react';
-import type { Patient } from '@lesso/domain';
+import type { Patient } from '@reinly/domain';
 import {
   Dialog,
   DialogContent,

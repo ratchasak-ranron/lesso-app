@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { ReceiptCreateSchema, type Id } from '@lesso/domain';
+import { ReceiptCreateSchema, type Id } from '@reinly/domain';
 import { resolveContext } from '../context';
 import { auditRepo } from '../repositories/audit';
 import { receiptRepo, type ReceiptFilter } from '../repositories/receipt';

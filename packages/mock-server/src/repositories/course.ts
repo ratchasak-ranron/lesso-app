@@ -7,11 +7,11 @@ import {
   type CourseSession,
   type CourseUpdateInput,
   type Id,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from '../storage';
 
-const COURSES_KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:courses`;
-const SESSIONS_KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:course-sessions`;
+const COURSES_KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:courses`;
+const SESSIONS_KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:course-sessions`;
 
 function readCourses(tenantId: Id): Course[] {
   return storage.read(COURSES_KEY(tenantId), z.array(CourseSchema)) ?? [];

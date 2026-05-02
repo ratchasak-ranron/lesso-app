@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createApiClient, ApiError } from '@lesso/api-client';
+import { createApiClient, ApiError } from '@reinly/api-client';
 
 describe('createApiClient', () => {
   it('returns mock client', () => {

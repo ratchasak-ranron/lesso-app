@@ -5,7 +5,7 @@ import {
   REQUIRED_CONSENT_SCOPES,
   type ConsentScope,
   type Patient,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import {
   Dialog,
   DialogContent,

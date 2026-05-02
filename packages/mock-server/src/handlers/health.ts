@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import type { Health } from '@lesso/domain';
-import { IdSchema } from '@lesso/domain';
+import type { Health } from '@reinly/domain';
+import { IdSchema } from '@reinly/domain';
 import { getTenantContext } from '../context';
 
 function headerOrNull(value: string | null): string | null {
@@ -14,9 +14,9 @@ export const healthHandlers = [
     // Prefer explicit headers from the api-client RequestContext.
     // Fall back to localStorage-backed dev-toolbar for legacy callers.
     const headerCtx = {
-      tenantId: headerOrNull(request.headers.get('X-Lesso-Tenant')),
-      branchId: headerOrNull(request.headers.get('X-Lesso-Branch')),
-      userId: headerOrNull(request.headers.get('X-Lesso-User')),
+      tenantId: headerOrNull(request.headers.get('X-Reinly-Tenant')),
+      branchId: headerOrNull(request.headers.get('X-Reinly-Branch')),
+      userId: headerOrNull(request.headers.get('X-Reinly-User')),
     };
     const fallback = getTenantContext();
     const ctx = {

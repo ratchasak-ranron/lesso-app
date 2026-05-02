@@ -5,10 +5,10 @@ import {
   type WalkIn,
   type WalkInCreateInput,
   type WalkInUpdateInput,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from '../storage';
 
-const KEY = (tenantId: Id) => `lesso:tenant:${tenantId}:walk-ins`;
+const KEY = (tenantId: Id) => `reinly:tenant:${tenantId}:walk-ins`;
 
 function readAll(tenantId: Id): WalkIn[] {
   return storage.read(KEY(tenantId), z.array(WalkInSchema)) ?? [];

@@ -18,14 +18,14 @@ import {
   type Receipt,
   type Tenant,
   type User,
-} from '@lesso/domain';
+} from '@reinly/domain';
 import { storage } from './storage';
 import { genFullName, genServiceName, genThaiPhone, makeRng } from './seed-fixtures';
 
-export const TENANTS_KEY = 'lesso:seed:tenants';
-export const BRANCHES_KEY = 'lesso:seed:branches';
-export const USERS_KEY = 'lesso:seed:users';
-export const SEED_VERSION_KEY = 'lesso:seed:version';
+export const TENANTS_KEY = 'reinly:seed:tenants';
+export const BRANCHES_KEY = 'reinly:seed:branches';
+export const USERS_KEY = 'reinly:seed:users';
+export const SEED_VERSION_KEY = 'reinly:seed:version';
 export const SEED_VERSION = 3;
 
 const SEED_KEYS = [TENANTS_KEY, BRANCHES_KEY, USERS_KEY, SEED_VERSION_KEY] as const;
@@ -89,13 +89,13 @@ const APPT_DAYS_BACK = 60;
 const APPT_DAYS_FORWARD = 7;
 
 function patientsKey(tenantId: Id): string {
-  return `lesso:tenant:${tenantId}:patients`;
+  return `reinly:tenant:${tenantId}:patients`;
 }
 function appointmentsKey(tenantId: Id): string {
-  return `lesso:tenant:${tenantId}:appointments`;
+  return `reinly:tenant:${tenantId}:appointments`;
 }
 function coursesKey(tenantId: Id): string {
-  return `lesso:tenant:${tenantId}:courses`;
+  return `reinly:tenant:${tenantId}:courses`;
 }
 
 function generatePatientsForTenant(tenant: Tenant, seedBase: number): Patient[] {
@@ -388,23 +388,23 @@ export function seedIfEmpty(): void {
     const doctorIds = doctorIdsByTenant.get(tenant.id) ?? [];
     if (doctorIds.length > 0) {
       const derivatives = generateReceiptDerivatives(tenant.id, appts, doctorIds, seedBase);
-      storage.write(`lesso:tenant:${tenant.id}:receipts`, derivatives.receipts);
-      storage.write(`lesso:tenant:${tenant.id}:commissions`, derivatives.commissions);
+      storage.write(`reinly:tenant:${tenant.id}:receipts`, derivatives.receipts);
+      storage.write(`reinly:tenant:${tenant.id}:commissions`, derivatives.commissions);
       storage.write(
-        `lesso:tenant:${tenant.id}:loyalty-accounts`,
+        `reinly:tenant:${tenant.id}:loyalty-accounts`,
         derivatives.loyaltyAccounts,
       );
       storage.write(
-        `lesso:tenant:${tenant.id}:loyalty-transactions`,
+        `reinly:tenant:${tenant.id}:loyalty-transactions`,
         derivatives.loyaltyTransactions,
       );
-      storage.write(`lesso:tenant:${tenant.id}:receipts:counter`, {
+      storage.write(`reinly:tenant:${tenant.id}:receipts:counter`, {
         value: derivatives.receipts.length,
       });
     }
 
     storage.write(
-      `lesso:tenant:${tenant.id}:inventory-items`,
+      `reinly:tenant:${tenant.id}:inventory-items`,
       generateInventoryForTenant(tenant.id, SEED_BRANCHES),
     );
   });
@@ -426,7 +426,7 @@ export function getUsers(): User[] {
 
 /**
  * Clear all seed + tenant-scoped data. Preserves user state in
- * `lesso:dev-toolbar`, `lesso:lang`, etc.
+ * `reinly:dev-toolbar`, `reinly:lang`, etc.
  */
 export function resetData(): void {
   SEED_KEYS.forEach((key) => storage.remove(key));
@@ -434,14 +434,14 @@ export function resetData(): void {
     storage.remove(patientsKey(t.id));
     storage.remove(appointmentsKey(t.id));
     storage.remove(coursesKey(t.id));
-    storage.remove(`lesso:tenant:${t.id}:walk-ins`);
-    storage.remove(`lesso:tenant:${t.id}:course-sessions`);
-    storage.remove(`lesso:tenant:${t.id}:receipts`);
-    storage.remove(`lesso:tenant:${t.id}:receipts:counter`);
-    storage.remove(`lesso:tenant:${t.id}:commissions`);
-    storage.remove(`lesso:tenant:${t.id}:loyalty-accounts`);
-    storage.remove(`lesso:tenant:${t.id}:loyalty-transactions`);
-    storage.remove(`lesso:tenant:${t.id}:inventory-items`);
-    storage.remove(`lesso:tenant:${t.id}:inventory-movements`);
+    storage.remove(`reinly:tenant:${t.id}:walk-ins`);
+    storage.remove(`reinly:tenant:${t.id}:course-sessions`);
+    storage.remove(`reinly:tenant:${t.id}:receipts`);
+    storage.remove(`reinly:tenant:${t.id}:receipts:counter`);
+    storage.remove(`reinly:tenant:${t.id}:commissions`);
+    storage.remove(`reinly:tenant:${t.id}:loyalty-accounts`);
+    storage.remove(`reinly:tenant:${t.id}:loyalty-transactions`);
+    storage.remove(`reinly:tenant:${t.id}:inventory-items`);
+    storage.remove(`reinly:tenant:${t.id}:inventory-movements`);
   });
 }

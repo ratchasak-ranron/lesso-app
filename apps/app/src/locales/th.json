@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "Lesso",
-    "tagline": "บริหารคลินิก น้อยกว่า แต่ดีกว่า"
+    "name": "Reinly",
+    "tagline": "ซอฟต์แวร์คลินิกที่กลั่นมาแล้ว"
   },
   "nav": {
     "primary": "เมนูหลัก",
@@ -41,7 +41,7 @@
     "today": "วันนี้"
   },
   "home": {
-    "greeting": "สวัสดี Lesso",
+    "greeting": "สวัสดี Reinly",
     "tenantBanner": "คลินิก: {{tenant}} · สาขา: {{branch}} · ผู้ใช้: {{user}}",
     "todaysAppointments": "นัดวันนี้",
     "walkInQueue": "คิว Walk-in",

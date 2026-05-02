@@ -16,12 +16,12 @@ describe('EditorialHero', () => {
     renderAt('/en');
 
     // Eyebrow paragraph (uppercase + tracking)
-    expect(screen.getByText('Premium care · Nature distilled')).toBeInTheDocument();
+    expect(screen.getByText('Less, on purpose')).toBeInTheDocument();
 
     // H1 contains both lines (the second wrapped in italic span)
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent('Less cost.');
-    expect(heading).toHaveTextContent('More care.');
+    expect(heading).toHaveTextContent('Clinic software,');
+    expect(heading).toHaveTextContent('distilled.');
     expect(heading.querySelector('span.italic')).not.toBeNull();
 
     // Decorative HR rule with aria-hidden
@@ -43,9 +43,9 @@ describe('EditorialHero', () => {
   it('renders Thai content when route locale is th', () => {
     renderAt('/th');
 
-    expect(screen.getByText(/ดูแลระดับพรีเมียม/)).toBeInTheDocument();
+    expect(screen.getByText(/เรียบง่ายโดยตั้งใจ/)).toBeInTheDocument();
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent('ลดต้นทุน');
-    expect(heading).toHaveTextContent('เพิ่มคุณภาพการดูแล');
+    expect(heading).toHaveTextContent('ซอฟต์แวร์คลินิก');
+    expect(heading).toHaveTextContent('ที่กลั่นมาแล้ว');
   });
 });

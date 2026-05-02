@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { InventoryItem } from '@lesso/domain';
+import type { InventoryItem } from '@reinly/domain';
 import {
   Dialog,
   DialogContent,

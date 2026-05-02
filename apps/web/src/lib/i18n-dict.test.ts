@@ -5,8 +5,8 @@ describe('makeT (en)', () => {
   const t = makeT('en');
 
   it('returns translated string for a known key', () => {
-    expect(t('home.heroLine1')).toBe('Less cost.');
-    expect(t('home.heroLine2')).toBe('More care.');
+    expect(t('home.heroLine1')).toBe('Clinic software,');
+    expect(t('home.heroLine2')).toBe('distilled.');
   });
 
   it('returns the key itself when key is missing', () => {
@@ -24,15 +24,15 @@ describe('makeT (en)', () => {
   });
 
   it('drops the placeholder when the matching var is missing', () => {
-    expect(t('footer.copyright', {})).toBe('©  Lesso. All rights reserved.');
-    expect(t('footer.copyright', { other: 'x' })).toBe('©  Lesso. All rights reserved.');
+    expect(t('footer.copyright', {})).toBe('©  Reinly. All rights reserved.');
+    expect(t('footer.copyright', { other: 'x' })).toBe('©  Reinly. All rights reserved.');
   });
 });
 
 describe('makeT (th)', () => {
   it('returns Thai translation for a known key', () => {
     const t = makeT('th');
-    expect(t('home.heroLine1')).toBe('ลดต้นทุน');
-    expect(t('home.heroLine2')).toBe('เพิ่มคุณภาพการดูแล');
+    expect(t('home.heroLine1')).toBe('ซอฟต์แวร์คลินิก');
+    expect(t('home.heroLine2')).toBe('ที่กลั่นมาแล้ว');
   });
 });

@@ -1,5 +1,5 @@
-@import '@lesso/ui-tokens/css/fonts.css';
-@import '@lesso/ui-tokens/css/tokens.css';
+@import '@reinly/ui-tokens/css/fonts.css';
+@import '@reinly/ui-tokens/css/tokens.css';
 
 @tailwind base;
 @tailwind components;

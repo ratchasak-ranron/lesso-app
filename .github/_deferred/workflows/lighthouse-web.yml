@@ -29,7 +29,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build apps/web
-        run: pnpm --filter @lesso/web build
+        run: pnpm --filter @reinly/web build
 
       - name: Lighthouse CI
         uses: treosh/lighthouse-ci-action@v12

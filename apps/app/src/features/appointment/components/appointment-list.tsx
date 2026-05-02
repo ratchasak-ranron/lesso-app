@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Calendar as CalendarIcon, AlertCircle } from 'lucide-react';
-import type { Appointment, Patient } from '@lesso/domain';
+import type { Appointment, Patient } from '@reinly/domain';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
