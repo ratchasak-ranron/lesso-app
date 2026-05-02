@@ -7,6 +7,7 @@ import { AboutPage } from './about';
 import { PilotPage } from './pilot';
 import { PrivacyPage } from './privacy';
 import { TermsPage } from './terms';
+import { BlogIndexPage } from './blog';
 
 function renderPage(Component: React.ComponentType, pathname: string) {
   return render(
@@ -113,5 +114,20 @@ describe('TermsPage', () => {
     for (const id of ['acceptance', 'pilot', 'use', 'ip', 'liability', 'termination']) {
       expect(container.querySelector(`#${CSS.escape(`${id}-heading`)}`)).not.toBeNull();
     }
+  });
+});
+
+describe('BlogIndexPage', () => {
+  it('renders intro + empty-state copy when no posts exist (en)', () => {
+    renderPage(BlogIndexPage, '/en/blog');
+    expect(
+      screen.getByRole('heading', { level: 1, name: /Notes from the operator/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/First post lands when the pilot does/)).toBeInTheDocument();
+  });
+
+  it('renders Thai copy at /th/blog', () => {
+    renderPage(BlogIndexPage, '/th/blog');
+    expect(screen.getByText(/บันทึกจาก operator/)).toBeInTheDocument();
   });
 });

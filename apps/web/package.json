@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "og:gen": "node scripts/og-gen.mjs",
+    "prebuild": "pnpm run og:gen",
     "build": "vite-react-ssg build",
     "preview": "vite preview",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:build": "pnpm build && vitest run tests/build-output.test.ts"
+    "test:build": "pnpm build && vitest run tests/build-output.test.ts",
+    "lhci:web": "lhci autorun"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -32,7 +35,12 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/noto-sans-thai": "^5.2.8",
+    "@fontsource/playfair-display": "^5.2.8",
+    "@lhci/cli": "^0.15.1",
     "@mdx-js/rollup": "^3.0.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",
@@ -45,6 +53,7 @@
     "postcss": "^8.4.47",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.0.0",
+    "satori": "^0.26.0",
     "tailwindcss": "^3.4.14",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.6.3",

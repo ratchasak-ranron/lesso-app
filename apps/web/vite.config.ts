@@ -30,6 +30,7 @@ type PageKey =
   | 'pilot'
   | 'privacy'
   | 'terms'
+  | 'blog'
   | 'notFound';
 
 interface PageEntry {
@@ -47,10 +48,22 @@ const SUBPATH_TO_PAGE: Readonly<Record<string, { pageKey: PageKey; relPath: stri
   '/pilot': { pageKey: 'pilot', relPath: '/pilot' },
   '/privacy': { pageKey: 'privacy', relPath: '/privacy' },
   '/terms': { pageKey: 'terms', relPath: '/terms' },
+  '/blog': { pageKey: 'blog', relPath: '/blog' },
 };
 
 // Pages excluded from search indexing (DRAFT legal copy not lawyer-reviewed).
 const NOINDEX_PAGES: ReadonlySet<PageKey> = new Set(['privacy', 'terms']);
+
+// Pages with bespoke OG art emitted by `scripts/og-gen.mjs` at prebuild time.
+// Keys must match filenames in `public/og/<key>-<locale>.png`. Pages not in
+// this set fall back to `og/default.png` (legal pages, future blog scaffold).
+const PER_PAGE_OG: ReadonlySet<PageKey> = new Set([
+  'home',
+  'pricing',
+  'features',
+  'about',
+  'pilot',
+]);
 
 function pageForRoute(route: string): PageEntry {
   const stripped = route.replace(/^\/(en|th)/, '') || '/';
@@ -156,13 +169,17 @@ function buildSeo(route: string): SeoData {
     });
   }
 
+  const ogImage = PER_PAGE_OG.has(pageKey)
+    ? `${siteConfig.hostname}/og/${pageKey}-${locale}.png`
+    : `${siteConfig.hostname}/og/default.png`;
+
   return {
     fullTitle,
     description,
     canonical,
     alternates,
     ogLocale: OG_LOCALE[locale],
-    ogImage: `${siteConfig.hostname}/og/default.png`,
+    ogImage,
     jsonLdBlocks,
     index,
   };
@@ -221,6 +238,7 @@ const PRERENDER_PATHS: ReadonlyArray<string> = siteConfig.locales.flatMap((l) =>
   `/${l}/pilot`,
   `/${l}/privacy`,
   `/${l}/terms`,
+  `/${l}/blog`,
 ]);
 
 // Sitemap routes — exclude DRAFT legal pages (already noindex; no value

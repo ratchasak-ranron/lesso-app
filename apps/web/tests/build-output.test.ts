@@ -35,6 +35,8 @@ const PAGES: ReadonlyArray<PageSpec> = [
   { file: 'th/privacy.html', locale: 'th', canonical: 'https://lesso.clinic/th/privacy', noindex: true },
   { file: 'en/terms.html', locale: 'en', canonical: 'https://lesso.clinic/en/terms', noindex: true },
   { file: 'th/terms.html', locale: 'th', canonical: 'https://lesso.clinic/th/terms', noindex: true },
+  { file: 'en/blog.html', locale: 'en', canonical: 'https://lesso.clinic/en/blog', noindex: false },
+  { file: 'th/blog.html', locale: 'th', canonical: 'https://lesso.clinic/th/blog', noindex: false },
 ];
 
 const INDEXED_PAGES = PAGES.filter((p) => !p.noindex);
@@ -120,6 +122,47 @@ describe('vite-react-ssg build output — B2 + B3 pages', () => {
     for (const file of ['en.html', 'en/pilot.html']) {
       expect(read(file)).toContain('plausible.io/js/script.tagged-events.js');
     }
+  });
+
+  it('per-page OG image is referenced for indexed core pages', () => {
+    const cases: ReadonlyArray<{ file: string; og: string }> = [
+      { file: 'en.html', og: 'home-en.png' },
+      { file: 'th.html', og: 'home-th.png' },
+      { file: 'en/pricing.html', og: 'pricing-en.png' },
+      { file: 'th/pricing.html', og: 'pricing-th.png' },
+      { file: 'en/features.html', og: 'features-en.png' },
+      { file: 'en/about.html', og: 'about-en.png' },
+      { file: 'en/pilot.html', og: 'pilot-en.png' },
+      { file: 'th/pilot.html', og: 'pilot-th.png' },
+    ];
+    for (const c of cases) {
+      expect(read(c.file)).toContain(`og/${c.og}`);
+    }
+  });
+
+  it('legal + blog pages keep the default OG image', () => {
+    for (const file of ['en/privacy.html', 'th/terms.html', 'en/blog.html']) {
+      expect(read(file)).toContain('og/default.png');
+    }
+  });
+
+  it('emits manifest + apple-touch-icon link in every prerendered HTML', () => {
+    for (const file of ['en.html', 'en/pricing.html', 'en/pilot.html']) {
+      const html = read(file);
+      expect(html).toContain('rel="manifest" href="/manifest.webmanifest"');
+      expect(html).toContain('rel="apple-touch-icon" href="/apple-touch-icon.png"');
+      expect(html).toContain('apple-mobile-web-app-capable');
+    }
+  });
+
+  it('manifest.webmanifest is in dist root with required icons', () => {
+    const manifest = JSON.parse(read('manifest.webmanifest'));
+    expect(manifest.icons).toHaveLength(2);
+    expect(manifest.theme_color).toBe('#134E4A');
+    expect(manifest.display).toBe('standalone');
+    const sizes = (manifest.icons as Array<{ sizes: string }>).map((i) => i.sizes);
+    expect(sizes).toContain('192x192');
+    expect(sizes).toContain('512x512');
   });
 
   it('emits robots.txt referencing the sitemap', () => {

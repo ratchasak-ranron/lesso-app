@@ -67,4 +67,16 @@ export default tseslint.config(
       'security/detect-object-injection': 'off',
     },
   },
+  {
+    // Build-time Node scripts: read repo-controlled paths + locale dicts.
+    // No user input reaches these — fs/object-injection rules are noise.
+    files: ['apps/*/scripts/**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: { console: 'readonly', process: 'readonly' },
+    },
+    rules: {
+      'security/detect-non-literal-fs-filename': 'off',
+      'security/detect-object-injection': 'off',
+    },
+  },
 );

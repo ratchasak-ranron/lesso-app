@@ -699,7 +699,7 @@ Two work tracks, one monorepo: **A = `apps/app` (backoffice)**, **B = `apps/web`
 | B1 | Marketing Foundation | `apps/web` scaffold (Vite + `vite-react-ssg`), shadcn, `react-i18next`, MDX, Helmet SEO, sitemap, Vercel project B | complete | with A1 | - | [plan](../plans/completed/b1-marketing-foundation.plan.md) · [report](../reports/b1-marketing-foundation-report.md) |
 | B2 | Core Pages | Home, Pricing, Features, About — th/en, JSON-LD, build-time OG images | complete | with A2/A3 | B1 | [plan](../plans/completed/b2-core-pages.plan.md) · [report](../reports/b2-core-pages-report.md) |
 | B3 | Waitlist + Legal | Pilot signup form (mailto prototype), Privacy, Terms, Plausible (API/Resend/Notion deferred) | complete | with A3/A4 | B2 | [plan](../plans/completed/b3-waitlist-legal.plan.md) · [report](../reports/b3-waitlist-legal-report.md) |
-| B4 | Polish + Launch | Lighthouse CI gates (≥95), blog scaffold (0–3 posts), `lesso.clinic` go-live | pending | - | B3, A6 | - |
+| B4 | Polish + Launch | Lighthouse CI gates (≥95), blog scaffold, per-page OG images, PWA manifest, ErrorBoundary, runbook | complete | - | B3, A6 | [plan](../plans/completed/b4-polish-launch.plan.md) · [report](../reports/b4-polish-launch-report.md) |
 
 ### Phase Details
 

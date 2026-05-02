@@ -329,6 +329,10 @@
       "title": "Terms",
       "description": "Lesso terms of service — DRAFT pending legal review."
     },
+    "blog": {
+      "title": "Notes from the operator",
+      "description": "Updates from the Lesso team — what we're building and why."
+    },
     "notFound": {
       "title": "404 — not found",
       "description": "We couldn't find that page."
@@ -458,6 +462,19 @@
         "body": "You may cancel at any time. We may suspend or terminate access for breach of these Terms with 7 days written notice, except in cases of legal compulsion or imminent harm, where we may suspend immediately. On termination, your data is exportable as CSV for 30 days, then deleted."
       }
     ]
+  },
+  "blog": {
+    "intro": {
+      "eyebrow": "Notes",
+      "heading": "Notes from the operator.",
+      "sub": "Stories, decisions, and updates from the Lesso team. Light frequency — we ship, then we write."
+    },
+    "empty": "First post lands when the pilot does. Check back soon — or follow along via the LINE OA at @lesso."
+  },
+  "error": {
+    "heading": "Sorry.",
+    "body": "Something went wrong rendering this page.",
+    "cta": "Back to home"
   },
   "notFound": {
     "heading": "404",

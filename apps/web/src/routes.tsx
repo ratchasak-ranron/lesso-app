@@ -7,6 +7,7 @@ import { AboutPage } from '@/pages/about';
 import { PilotPage } from '@/pages/pilot';
 import { PrivacyPage } from '@/pages/privacy';
 import { TermsPage } from '@/pages/terms';
+import { BlogIndexPage } from '@/pages/blog';
 import { NotFoundPage } from '@/pages/not-found';
 import { siteConfig } from '@/lib/site-config';
 
@@ -28,6 +29,7 @@ const localeRoutes: RouteObject[] = siteConfig.locales.map((locale) => ({
     { path: 'pilot', element: <PilotPage /> },
     { path: 'privacy', element: <PrivacyPage /> },
     { path: 'terms', element: <TermsPage /> },
+    { path: 'blog', element: <BlogIndexPage /> },
     { path: '*', element: <NotFoundPage /> },
   ],
 }));
