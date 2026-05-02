@@ -17,7 +17,10 @@ describe('vite-react-ssg build output', () => {
   it('prerenders /en.html with English content + correct html lang', () => {
     const html = read('en.html');
     expect(html).toMatch(/<html[^>]+lang="en"/);
-    expect(html).toContain('Hello, Lesso');
+    // EditorialHero copy
+    expect(html).toContain('Less cost.');
+    expect(html).toContain('More care.');
+    expect(html).toContain('Premium care');
     // hreflang alternates link both locales
     expect(html).toMatch(/rel="alternate"[^>]+hreflang="th"/);
     expect(html).toMatch(/rel="alternate"[^>]+hreflang="en"/);
@@ -29,7 +32,8 @@ describe('vite-react-ssg build output', () => {
   it('prerenders /th.html with Thai content + th lang attr', () => {
     const html = read('th.html');
     expect(html).toMatch(/<html[^>]+lang="th"/);
-    expect(html).toContain('สวัสดี Lesso');
+    expect(html).toContain('ลดต้นทุน');
+    expect(html).toContain('เพิ่มคุณภาพการดูแล');
   });
 
   it('emits sitemap.xml with both locales', () => {

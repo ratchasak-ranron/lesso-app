@@ -12,9 +12,17 @@
     "primary": "Primary navigation"
   },
   "home": {
-    "heroHeading": "Hello, Lesso",
-    "heroSubheading": "Less cost. More care.",
-    "pilotComingSoonCta": "Pilot — coming soon"
+    "eyebrow": "Premium care · Nature distilled",
+    "heroLine1": "Less cost.",
+    "heroLine2": "More care.",
+    "heroHeading": "Less cost. More care.",
+    "heroSubheading": "Aesthetic clinic backoffice that frees you from spreadsheets, paper schedules, and copy-paste line messages — so you focus on the work that matters.",
+    "pilotComingSoonCta": "Join the pilot — free 30 days",
+    "trust": {
+      "pdpa": "PDPA compliant",
+      "thaiFirst": "Thai-first",
+      "noLockIn": "No lock-in"
+    }
   },
   "footer": {
     "copyright": "© {{year}} Lesso. All rights reserved."
@@ -22,7 +30,7 @@
   "meta": {
     "home": {
       "title": "Lesso",
-      "description": "Aesthetic clinic backoffice that lowers cost and raises care."
+      "description": "Aesthetic clinic backoffice for Thai clinics — patient records, course tracking, multi-branch reports, PDPA-compliant out of the box."
     },
     "notFound": {
       "title": "404 — not found",

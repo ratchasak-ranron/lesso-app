@@ -23,7 +23,7 @@ export const SelectableCard = forwardRef<HTMLButtonElement, SelectableCardProps>
         aria-label={ariaLabel}
         aria-pressed={selected}
         className={cn(
-          'group relative w-full cursor-pointer rounded-xl border border-border bg-card text-card-foreground text-left transition-colors',
+          'group relative w-full cursor-pointer rounded-card border border-border bg-card text-card-foreground text-left transition-colors',
           'min-h-[44px]',
           'hover:border-primary/40 hover:bg-muted/40',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',

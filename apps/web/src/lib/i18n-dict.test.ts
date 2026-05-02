@@ -5,7 +5,8 @@ describe('makeT (en)', () => {
   const t = makeT('en');
 
   it('returns translated string for a known key', () => {
-    expect(t('home.heroHeading')).toBe('Hello, Lesso');
+    expect(t('home.heroLine1')).toBe('Less cost.');
+    expect(t('home.heroLine2')).toBe('More care.');
   });
 
   it('returns the key itself when key is missing', () => {
@@ -31,6 +32,7 @@ describe('makeT (en)', () => {
 describe('makeT (th)', () => {
   it('returns Thai translation for a known key', () => {
     const t = makeT('th');
-    expect(t('home.heroHeading')).toBe('สวัสดี Lesso');
+    expect(t('home.heroLine1')).toBe('ลดต้นทุน');
+    expect(t('home.heroLine2')).toBe('เพิ่มคุณภาพการดูแล');
   });
 });

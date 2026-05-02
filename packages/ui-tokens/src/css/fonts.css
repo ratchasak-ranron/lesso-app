@@ -1,4 +1,8 @@
-/* Lesso typography — Figtree (heading) + Noto Sans + Noto Sans Thai (body) + JetBrains Mono.
- * Reference: PRD §Design System §3 Typography.
+/* Lesso typography — Brand v2 Editorial Premium.
+ *   Heading: Playfair Display (incl. italic for hero accent)
+ *   Body:    Inter — Latin pages
+ *   Body:    Noto Sans Thai — Thai pages (auto-fallback chain)
+ *   Mono:    JetBrains Mono — receipts + ID values
+ * Reference: design-system/lesso-brand-v2/MASTER.md
  */
-@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@500;600;700&family=Noto+Sans:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;700&family=JetBrains+Mono:wght@400&display=swap');

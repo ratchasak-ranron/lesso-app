@@ -56,10 +56,24 @@ export const lessoPreset = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        // 16 px — used by surface containers (Card / KpiTile / SelectableCard
+        // / Dialog / EmptyState). Buttons + inputs keep `lg` (8 px).
+        card: 'var(--radius-card)',
+      },
+      boxShadow: {
+        // Warm cream-tinted shadows so cards stay visible on the cream
+        // background without the cool-grey "cold SaaS" look of `shadow-sm`.
+        card: 'var(--shadow-card)',
+        popover: 'var(--shadow-popover)',
       },
       fontFamily: {
-        sans: ['Noto Sans', 'Noto Sans Thai', 'system-ui', 'sans-serif'],
-        heading: ['Figtree', 'Noto Sans Thai', 'system-ui', 'sans-serif'],
+        // Inter for Latin body. Noto Sans Thai handles Thai chars via the
+        // automatic glyph-fallback chain (most browsers do per-glyph fallback).
+        sans: ['Inter', 'Noto Sans Thai', 'system-ui', 'sans-serif'],
+        // Playfair Display for headings — italic accent reserved for the
+        // marketing hero. Noto Sans Thai sits in the chain so Thai
+        // headings get a sans fallback (Playfair has no Thai glyphs).
+        heading: ['Playfair Display', 'Noto Sans Thai', 'Georgia', 'serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
     },
