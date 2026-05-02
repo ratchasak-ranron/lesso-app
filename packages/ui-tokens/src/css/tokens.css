@@ -1,15 +1,23 @@
 /* Lesso design tokens — light + dark.
  * Brand v2 — Editorial Premium (Nature Distilled hybrid):
- *   primary teal #134E4A, secondary terracotta #C67B5C, sage CTA #6B7B3C,
- *   warm cream surfaces, sand borders, slate-800 text.
+ *   primary teal #134E4A, secondary terracotta (text-safe #A45A3D),
+ *   sage CTA #6B7B3C, warm cream surfaces, sand borders, slate-800 text.
  * Reference: design-system/lesso-brand-v2/MASTER.md
+ *
+ * Contrast notes (vs `--background` cream `#FAF7F2`):
+ *   foreground (slate-800)            15.3 : 1   AAA
+ *   primary teal #134E4A              9.5  : 1   AAA
+ *   muted-foreground (stone-500)      4.55 : 1   AA  (razor-thin — keep ≥14px)
+ *   sage success #6B7B3C              4.7  : 1   AA
+ *   secondary terracotta #A45A3D      4.8  : 1   AA  (was #C67B5C 3.05:1 — text-FAIL)
+ *   border #C9BEA8                    3.05 : 1   passes 1.4.11 (was #E7E0D5 1.18:1 — UI-FAIL)
  */
 
 :root {
   /* Brand */
   --primary: 170 59% 19%;            /* #134E4A deep teal */
   --primary-foreground: 0 0% 100%;   /* white on primary */
-  --secondary: 18 50% 56%;           /* #C67B5C terracotta */
+  --secondary: 16 47% 44%;           /* #A45A3D terracotta — text-safe (≥4.5:1 on cream) */
   --secondary-foreground: 36 53% 97%;
 
   /* Status */
@@ -34,8 +42,8 @@
   --accent-foreground: 215 28% 17%;
 
   /* Lines */
-  --border: 33 28% 87%;              /* #E7E0D5 sand */
-  --input: 33 28% 87%;
+  --border: 33 22% 73%;              /* #C9BEA8 sand — bumped from #E7E0D5 (1.18:1) for 3:1 against cream */
+  --input: 33 22% 73%;
   --ring: 170 59% 19%;               /* match primary */
 
   /* Text */
@@ -45,9 +53,12 @@
   --radius: 0.5rem;                  /* 8px — buttons + inputs (decisive, tight) */
   --radius-card: 1rem;               /* 16px — Card / KpiTile / SelectableCard / Dialog (soft, spa) */
 
-  /* Shadow — warm cream tinted, not pure-black, to match the soft surface */
-  --shadow-card: 0 2px 12px 0 hsl(36 53% 85% / 0.5);
-  --shadow-popover: 0 4px 24px 0 hsl(36 53% 80% / 0.4);
+  /* Shadow — warm cream tinted to match the soft surface. Literal HSL is
+   * intentional: we want the shadow tint to track the cream surface even
+   * when `--background` itself shifts (e.g. dark mode), so each mode
+   * declares its own shadow values rather than referencing `--background`. */
+  --shadow-card: 0 2px 12px 0 hsl(36 53% 80% / 0.55);
+  --shadow-popover: 0 4px 24px 0 hsl(36 53% 75% / 0.45);
 }
 
 .dark {
@@ -65,13 +76,24 @@
   --foreground: 210 40% 96%;         /* slate-100 */
 
   /* Brand v2 dark — primary nudged lighter so it reads against slate bg.
-     TODO(B4): full dark-mode contrast pass; pilot ships light-mode only. */
+     TODO(B4 dark-mode pass — see PRD Phase B4): full contrast audit;
+     pilot ships light-mode only. */
   --primary: 170 50% 45%;            /* lighter teal #4DB6AC range */
   --primary-foreground: 222 47% 11%;
-  --secondary: 18 55% 64%;           /* lighter terracotta */
+  --secondary: 16 60% 64%;           /* lighter terracotta */
   --secondary-foreground: 222 47% 11%;
   --ring: 170 50% 45%;
-  --success: 76 35% 55%;             /* lighter sage */
+
+  /* Status — mirror light status hues at higher lightness; foreground stays
+     white-on-saturated for buttons/badges to keep legibility. */
+  --success: 76 35% 55%;
+  --success-foreground: 0 0% 100%;
+  --warning: 32 94% 60%;
+  --warning-foreground: 222 47% 11%;
+  --destructive: 0 72% 65%;
+  --destructive-foreground: 222 47% 11%;
+  --info: 217 91% 70%;
+  --info-foreground: 222 47% 11%;
 
   --shadow-card: 0 2px 12px 0 hsl(0 0% 0% / 0.4);
   --shadow-popover: 0 4px 24px 0 hsl(0 0% 0% / 0.5);

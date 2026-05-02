@@ -53,7 +53,7 @@ export function DevToolbar() {
     <aside
       aria-label={t('devToolbar.title')}
       className={cn(
-        'fixed inset-x-0 bottom-14 sm:bottom-0 z-50 border-t border-border bg-card text-card-foreground shadow-lg',
+        'fixed inset-x-0 bottom-14 sm:bottom-0 z-50 border-t border-border bg-card text-card-foreground shadow-popover',
         'transition-transform',
         collapsed ? 'translate-y-[calc(100%-2.75rem)]' : 'translate-y-0',
       )}

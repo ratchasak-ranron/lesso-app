@@ -1,8 +1,14 @@
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useResolvedLocale } from '@/lib/use-locale';
+import en from '@/locales/en.json';
 
-const TRUST_KEYS = ['home.trust.pdpa', 'home.trust.thaiFirst', 'home.trust.noLockIn'] as const;
+// Trust-strip keys derived once at module load from the canonical `home.trust`
+// shape in en.json. Adding a fourth bullet only requires editing both locale
+// JSONs — the array adapts automatically.
+const TRUST_KEYS = (Object.keys(en.home.trust) as Array<keyof typeof en.home.trust>).map(
+  (k) => `home.trust.${k}` as const,
+);
 
 /**
  * Editorial premium hero — left-anchored, italic-accent serif headline,
@@ -35,7 +41,8 @@ export function EditorialHero() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <Button size="lg" className="shadow-card" disabled aria-disabled="true">
+          {/* `disabled` already implies `aria-disabled`; no need to set both. */}
+          <Button size="lg" className="shadow-card" disabled>
             {t('home.pilotComingSoonCta')}
           </Button>
         </div>
