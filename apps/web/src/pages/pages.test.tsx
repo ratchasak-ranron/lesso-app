@@ -4,6 +4,9 @@ import { describe, it, expect } from 'vitest';
 import { PricingPage } from './pricing';
 import { FeaturesPage } from './features';
 import { AboutPage } from './about';
+import { PilotPage } from './pilot';
+import { PrivacyPage } from './privacy';
+import { TermsPage } from './terms';
 
 function renderPage(Component: React.ComponentType, pathname: string) {
   return render(
@@ -14,21 +17,18 @@ function renderPage(Component: React.ComponentType, pathname: string) {
 }
 
 describe('PricingPage', () => {
-  it('renders 3 tiers + featured Clinic badge + disabled CTAs (en)', () => {
+  it('renders 3 tiers + featured Clinic badge + tier CTAs link to /pilot (en)', () => {
     renderPage(PricingPage, '/en/pricing');
     expect(screen.getByRole('heading', { level: 3, name: 'Solo' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: 'Clinic' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: 'Group' })).toBeInTheDocument();
     // Featured Clinic tier shows the localised "Pilot" badge.
     expect(screen.getByText('Pilot')).toBeInTheDocument();
-    // All tier CTAs are disabled until B3 wires the pilot form.
-    const tierButtons = screen
-      .getAllByRole('button')
-      .filter((b) => /Solo|Clinic|pilot|Group|Talk/i.test(b.textContent ?? ''));
-    expect(tierButtons.length).toBeGreaterThanOrEqual(3);
-    for (const b of tierButtons) {
-      expect(b).toBeDisabled();
-    }
+    // After B3, tier CTAs are links to /{locale}/pilot.
+    const pilotLinks = screen
+      .getAllByRole('link')
+      .filter((a) => a.getAttribute('href') === '/en/pilot');
+    expect(pilotLinks.length).toBeGreaterThanOrEqual(3);
   });
 
   it('renders Thai pricing copy when route locale is th', () => {
@@ -74,6 +74,44 @@ describe('AboutPage', () => {
       expect(id).toBeTruthy();
       const target = id ? container.querySelector(`#${CSS.escape(id)}`) : null;
       expect(target?.textContent?.trim().length ?? 0).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('PilotPage', () => {
+  it('renders form with all fields (en)', () => {
+    renderPage(PilotPage, '/en/pilot');
+    expect(screen.getByLabelText('Full name')).toBeInTheDocument();
+    expect(screen.getByLabelText('Email')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Open my email' })).toBeInTheDocument();
+    // Privacy + Terms links inline in the form section.
+    const links = screen.getAllByRole('link');
+    expect(links.some((a) => a.getAttribute('href') === '/en/privacy')).toBe(true);
+    expect(links.some((a) => a.getAttribute('href') === '/en/terms')).toBe(true);
+  });
+
+  it('renders Thai copy at /th/pilot', () => {
+    renderPage(PilotPage, '/th/pilot');
+    expect(screen.getByText(/รุ่น Q3 2026/)).toBeInTheDocument();
+  });
+});
+
+describe('PrivacyPage', () => {
+  it('renders DRAFT banner + 8 sections (en)', () => {
+    const { container } = renderPage(PrivacyPage, '/en/privacy');
+    expect(screen.getByRole('note')).toHaveTextContent('DRAFT');
+    for (const id of ['scope', 'data', 'purpose', 'sharing', 'retention', 'rights', 'transfers', 'contact']) {
+      expect(container.querySelector(`#${CSS.escape(`${id}-heading`)}`)).not.toBeNull();
+    }
+  });
+});
+
+describe('TermsPage', () => {
+  it('renders DRAFT banner + 6 sections (en)', () => {
+    const { container } = renderPage(TermsPage, '/en/terms');
+    expect(screen.getByRole('note')).toHaveTextContent('DRAFT');
+    for (const id of ['acceptance', 'pilot', 'use', 'ip', 'liability', 'termination']) {
+      expect(container.querySelector(`#${CSS.escape(`${id}-heading`)}`)).not.toBeNull();
     }
   });
 });

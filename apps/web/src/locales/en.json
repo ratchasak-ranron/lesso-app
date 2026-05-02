@@ -295,7 +295,10 @@
     "cta": "Join the pilot — free 30 days"
   },
   "footer": {
-    "copyright": "© {{year}} Lesso. All rights reserved."
+    "copyright": "© {{year}} Lesso. All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "legalNav": "Legal links"
   },
   "meta": {
     "home": {
@@ -314,10 +317,147 @@
       "title": "About",
       "description": "Lesso is built by an operator who has run aesthetic clinics in Thailand. Vertical-focused. Thai-first."
     },
+    "pilot": {
+      "title": "Join the pilot",
+      "description": "Apply for the Lesso pilot — first 30 days free for the Q3 2026 cohort."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "Lesso privacy policy — DRAFT pending legal review."
+    },
+    "terms": {
+      "title": "Terms",
+      "description": "Lesso terms of service — DRAFT pending legal review."
+    },
     "notFound": {
       "title": "404 — not found",
       "description": "We couldn't find that page."
     }
+  },
+  "pilot": {
+    "intro": {
+      "eyebrow": "Pilot",
+      "heading": "Apply for the Q3 2026 cohort.",
+      "sub": "We onboard at most five clinics. After the 30-day pilot you continue on the Clinic tier or cancel — no questions asked. Your details are sent to the founder via your email client; no data hits our servers."
+    },
+    "form": {
+      "fullName": "Full name",
+      "clinic": "Clinic name",
+      "email": "Email",
+      "branches": "Number of branches",
+      "phone": "Phone",
+      "lineId": "LINE ID (optional)",
+      "message": "Anything we should know? (optional)",
+      "consent": "I agree to the Privacy policy and Terms.",
+      "submit": "Open my email",
+      "submitting": "Opening…"
+    },
+    "errors": {
+      "fullNameRequired": "Please enter your name.",
+      "fullNameTooLong": "Name is too long.",
+      "clinicRequired": "Please enter your clinic name.",
+      "clinicTooLong": "Clinic name is too long.",
+      "emailInvalid": "Please enter a valid email.",
+      "emailTooLong": "Email is too long.",
+      "branchesInvalid": "Branches must be 1–50.",
+      "phoneInvalid": "Please enter a valid phone number.",
+      "lineIdTooLong": "LINE ID is too long.",
+      "messageTooLong": "Message must be under 1500 characters.",
+      "consentRequired": "You must agree to continue."
+    },
+    "success": {
+      "heading": "Your email is on the way.",
+      "body": "We've opened your mail client with your details pre-filled. Just hit send and we'll be in touch within 2 working days.",
+      "fallback": "If your mail client didn't open, email us directly at {{email}}."
+    },
+    "legalPrefix": "By submitting you agree to our",
+    "privacyLinkText": "Privacy policy",
+    "and": "and",
+    "termsLinkText": "Terms of service"
+  },
+  "privacy": {
+    "eyebrow": "Legal",
+    "draftLabel": "DRAFT — pending legal review.",
+    "lastUpdated": "Last updated: 2026-05-02",
+    "sections": [
+      {
+        "id": "scope",
+        "heading": "Scope",
+        "body": "This policy describes how Lesso processes personal data submitted via the marketing site (lesso.clinic), the pilot signup form, and the pilot product. It applies to clinic owners, clinic staff, and patients whose data is entered into Lesso by clinic staff."
+      },
+      {
+        "id": "data",
+        "heading": "Data we collect",
+        "body": "Marketing site: name, clinic name, email, number of branches, phone, LINE ID, and any free-text message you send via the pilot form. Product (pilot only): patient records (name, phone, LINE ID, visit notes, consent timestamps), staff accounts, and audit logs of every change."
+      },
+      {
+        "id": "purpose",
+        "heading": "Purpose of processing",
+        "body": "Pilot signup: contacting you about the pilot, scheduling onboarding, and answering pre-sales questions. Product: providing the backoffice service, generating the audit log, and supporting PDPA subject-rights requests."
+      },
+      {
+        "id": "sharing",
+        "heading": "Sharing with third parties",
+        "body": "We do not sell or rent personal data. We share with sub-processors strictly needed to operate the service: cloud hosting (Vercel), database (Supabase, Singapore region), email delivery (Resend), and analytics (Plausible — cookieless, aggregate only)."
+      },
+      {
+        "id": "retention",
+        "heading": "Retention",
+        "body": "Pilot signup records: kept for 24 months from submission, then deleted. Product data: kept for the duration of the active subscription plus 90 days for billing reconciliation, then exported and deleted on request. Audit logs: kept for 7 years for medical-aesthetic record-keeping requirements."
+      },
+      {
+        "id": "rights",
+        "heading": "Your rights under PDPA",
+        "body": "You may request access, correction, deletion, restriction, portability, or objection at any time. Requests are honored within 30 days. We will verify your identity before acting on any request that affects another data subject."
+      },
+      {
+        "id": "transfers",
+        "heading": "Cross-border transfers",
+        "body": "Patient data is stored on Supabase in the Singapore region under PDPA cross-border transfer terms. Backups are encrypted and remain within ASEAN data centers. We do not transfer data to the EU, US, or other jurisdictions without explicit consent."
+      },
+      {
+        "id": "contact",
+        "heading": "Contact",
+        "body": "Email: privacy@lesso.clinic. We aim to respond within 5 working days. For complaints, the relevant authority is the Personal Data Protection Committee of Thailand (PDPC)."
+      }
+    ]
+  },
+  "terms": {
+    "eyebrow": "Legal",
+    "draftLabel": "DRAFT — pending legal review.",
+    "lastUpdated": "Last updated: 2026-05-02",
+    "sections": [
+      {
+        "id": "acceptance",
+        "heading": "Acceptance",
+        "body": "By accessing lesso.clinic or signing up for the Lesso pilot, you agree to these Terms. If you do not agree, do not use the service."
+      },
+      {
+        "id": "pilot",
+        "heading": "Pilot definition",
+        "body": "The Lesso pilot is a 30-day free trial of the Clinic tier offered to up to five clinics in the Q3 2026 cohort. After 30 days you may continue on the Clinic tier (paid) or cancel at no cost. Pilot participants receive dedicated onboarding from a Lesso operator."
+      },
+      {
+        "id": "use",
+        "heading": "Use restrictions",
+        "body": "You may not: (a) use Lesso to process data of patients who have not given consent under PDPA; (b) reverse-engineer the service; (c) resell or sublicense access; (d) use Lesso for any purpose other than aesthetic clinic operations."
+      },
+      {
+        "id": "ip",
+        "heading": "Intellectual property",
+        "body": "You retain all rights to data you enter into Lesso. We retain all rights to the Lesso software, brand, and product design. Trademarks (Lesso name, logo) may not be used without written permission."
+      },
+      {
+        "id": "liability",
+        "heading": "Limitation of liability",
+        "body": "Lesso is provided as-is during the pilot. We are not liable for indirect or consequential damages. AI-assisted output (visit summaries, recall drafts) is draft-only and must be reviewed by clinic staff before patient contact; we are not liable for patient outcomes resulting from unreviewed AI output."
+      },
+      {
+        "id": "termination",
+        "heading": "Termination",
+        "body": "You may cancel at any time. We may suspend or terminate access for breach of these Terms with 7 days written notice, except in cases of legal compulsion or imminent harm, where we may suspend immediately. On termination, your data is exportable as CSV for 30 days, then deleted."
+      }
+    ]
   },
   "notFound": {
     "heading": "404",

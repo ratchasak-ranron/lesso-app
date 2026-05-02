@@ -1,6 +1,7 @@
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useResolvedLocale } from '@/lib/use-locale';
+import { track } from '@/lib/analytics';
 import en from '@/locales/en.json';
 
 // Trust-strip keys derived once at module load from the canonical `home.trust`
@@ -16,7 +17,8 @@ const TRUST_KEYS = (Object.keys(en.home.trust) as Array<keyof typeof en.home.tru
  * Pulls all copy from `useResolvedLocale.t`; no inline strings.
  */
 export function EditorialHero() {
-  const { t } = useResolvedLocale();
+  const { locale, t } = useResolvedLocale();
+  const pilotHref = `/${locale}/pilot`;
 
   return (
     <section className="relative overflow-hidden bg-background">
@@ -41,9 +43,13 @@ export function EditorialHero() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          {/* `disabled` already implies `aria-disabled`; no need to set both. */}
-          <Button size="lg" className="shadow-card" disabled>
-            {t('home.pilotComingSoonCta')}
+          <Button size="lg" className="shadow-card" asChild>
+            <a
+              href={pilotHref}
+              onClick={() => track('cta_click', { source: 'hero', locale })}
+            >
+              {t('home.pilotComingSoonCta')}
+            </a>
           </Button>
         </div>
 

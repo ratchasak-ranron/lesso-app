@@ -1,6 +1,7 @@
 import { Check } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
 export interface TierCardProps {
@@ -14,6 +15,12 @@ export interface TierCardProps {
   featured?: boolean;
   /** Localised label for the featured-tier badge — pass via the locale dict. */
   featuredBadge?: string;
+  /** Optional CTA href. When set, the CTA renders as a link instead of a
+   *  disabled button. Pilot CTAs land on `/{locale}/pilot`. */
+  href?: string;
+  /** Tag forwarded to Plausible for cta_click attribution. */
+  analyticsSource?: string;
+  locale?: string;
 }
 
 export function TierCard({
@@ -26,6 +33,9 @@ export function TierCard({
   cta,
   featured = false,
   featuredBadge,
+  href,
+  analyticsSource,
+  locale,
 }: TierCardProps) {
   return (
     <Card
@@ -51,8 +61,12 @@ export function TierCard({
       </div>
       <p className="text-sm text-muted-foreground">{period}</p>
       <ul className="mt-6 space-y-2 text-sm" role="list">
-        {bullets.map((b) => (
-          <li key={b} className="flex items-start gap-2">
+        {bullets.map((b, i) => (
+          // Composite key — bullets are translated free-text strings and
+          // duplicates can occur across tiers ("Email support" appears in
+          // both Solo and Clinic). `${name}-${i}` is stable per render
+          // since `name` is the tier id and order is fixed.
+          <li key={`${name}-${i}`} className="flex items-start gap-2">
             <Check
               className="mt-0.5 size-4 shrink-0 text-success"
               aria-hidden="true"
@@ -62,16 +76,35 @@ export function TierCard({
         ))}
       </ul>
       <div className="mt-8 flex-1" />
-      {/* Disabled until B3 wires the pilot signup form — matches FinalCta +
-          EditorialHero pattern. Better than a button that does nothing. */}
-      <Button
-        size="lg"
-        variant={featured ? 'default' : 'outline'}
-        className={cn('w-full', featured ? 'shadow-card' : '')}
-        disabled
-      >
-        {cta}
-      </Button>
+      {href ? (
+        <Button
+          size="lg"
+          variant={featured ? 'default' : 'outline'}
+          className={cn('w-full', featured ? 'shadow-card' : '')}
+          asChild
+        >
+          <a
+            href={href}
+            onClick={() =>
+              track('cta_click', {
+                source: analyticsSource ?? `tier-${name}`,
+                locale: locale ?? 'unknown',
+              })
+            }
+          >
+            {cta}
+          </a>
+        </Button>
+      ) : (
+        <Button
+          size="lg"
+          variant={featured ? 'default' : 'outline'}
+          className={cn('w-full', featured ? 'shadow-card' : '')}
+          disabled
+        >
+          {cta}
+        </Button>
+      )}
     </Card>
   );
 }

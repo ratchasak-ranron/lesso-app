@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
@@ -30,17 +31,26 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+    VariantProps<typeof buttonVariants> {
+  /** Render the styled element as the child component (e.g. an `<a>`).
+   *  Mirrors shadcn's pattern — keeps button styling in one place when
+   *  callers need anchor semantics. With `asChild`, `type` is omitted
+   *  because anchors don't accept it. */
+  asChild?: boolean;
+}
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, type = 'button', ...props }, ref) => (
-    <button
-      type={type}
-      className={cn(buttonVariants({ variant, size, className }))}
-      ref={ref}
-      {...props}
-    />
-  ),
+  ({ className, variant, size, type = 'button', asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button';
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...(asChild ? {} : { type })}
+        {...props}
+      />
+    );
+  },
 );
 Button.displayName = 'Button';
 

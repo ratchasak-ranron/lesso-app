@@ -112,9 +112,35 @@ describe('FeatureSection', () => {
 });
 
 describe('FinalCta', () => {
-  it('renders heading + disabled CTA', () => {
+  it('renders heading + disabled CTA when href omitted', () => {
     render(<FinalCta eyebrow="E" heading="H" body="B" cta="C" />);
     expect(screen.getByRole('heading', { level: 2, name: 'H' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'C' })).toBeDisabled();
+  });
+
+  it('renders link CTA when href provided', () => {
+    render(<FinalCta eyebrow="E" heading="H" body="B" cta="Apply" href="/en/pilot" locale="en" />);
+    const link = screen.getByRole('link', { name: 'Apply' });
+    expect(link).toHaveAttribute('href', '/en/pilot');
+  });
+});
+
+describe('TierCard with href', () => {
+  it('renders link CTA + still disables when href omitted', () => {
+    render(
+      <TierCard
+        name="Solo"
+        price="1,490"
+        period="per month"
+        currency="THB"
+        description="Solo"
+        bullets={['One']}
+        cta="Apply"
+        href="/en/pilot"
+        locale="en"
+      />,
+    );
+    const link = screen.getByRole('link', { name: 'Apply' });
+    expect(link).toHaveAttribute('href', '/en/pilot');
   });
 });

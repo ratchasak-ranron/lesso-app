@@ -80,6 +80,9 @@ export function AboutPage() {
         heading={t('finalCta.heading')}
         body={t('finalCta.body')}
         cta={t('finalCta.cta')}
+        href={`/${locale}/pilot`}
+        analyticsSource="about-final"
+        locale={locale}
       />
     </>
   );

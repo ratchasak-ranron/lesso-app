@@ -48,6 +48,9 @@ export function PricingPage() {
               cta={tier.cta}
               featured={tier.featured}
               featuredBadge={dict.pricing.featuredBadge}
+              href={`/${locale}/pilot`}
+              analyticsSource={`tier-${tier.id}`}
+              locale={locale}
             />
           ))}
         </div>
@@ -62,6 +65,9 @@ export function PricingPage() {
         heading={t('finalCta.heading')}
         body={t('finalCta.body')}
         cta={t('finalCta.cta')}
+        href={`/${locale}/pilot`}
+        analyticsSource="pricing-final"
+        locale={locale}
       />
     </>
   );

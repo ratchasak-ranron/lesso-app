@@ -165,6 +165,9 @@ export function HomePage() {
         heading={t('finalCta.heading')}
         body={t('finalCta.body')}
         cta={t('finalCta.cta')}
+        href={`/${locale}/pilot`}
+        analyticsSource="home-final"
+        locale={locale}
       />
     </>
   );

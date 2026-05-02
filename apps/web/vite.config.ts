@@ -22,7 +22,15 @@ const OG_LOCALE: Record<Locale, string> = { en: 'en_US', th: 'th_TH' };
  * keys must exist in every locale JSON. Adding a B3 page only requires
  * extending this map + matching keys in en/th.json.
  */
-type PageKey = 'home' | 'pricing' | 'features' | 'about' | 'notFound';
+type PageKey =
+  | 'home'
+  | 'pricing'
+  | 'features'
+  | 'about'
+  | 'pilot'
+  | 'privacy'
+  | 'terms'
+  | 'notFound';
 
 interface PageEntry {
   pageKey: PageKey;
@@ -36,7 +44,13 @@ const SUBPATH_TO_PAGE: Readonly<Record<string, { pageKey: PageKey; relPath: stri
   '/pricing': { pageKey: 'pricing', relPath: '/pricing' },
   '/features': { pageKey: 'features', relPath: '/features' },
   '/about': { pageKey: 'about', relPath: '/about' },
+  '/pilot': { pageKey: 'pilot', relPath: '/pilot' },
+  '/privacy': { pageKey: 'privacy', relPath: '/privacy' },
+  '/terms': { pageKey: 'terms', relPath: '/terms' },
 };
+
+// Pages excluded from search indexing (DRAFT legal copy not lawyer-reviewed).
+const NOINDEX_PAGES: ReadonlySet<PageKey> = new Set(['privacy', 'terms']);
 
 function pageForRoute(route: string): PageEntry {
   const stripped = route.replace(/^\/(en|th)/, '') || '/';
@@ -44,7 +58,7 @@ function pageForRoute(route: string): PageEntry {
     return { pageKey: 'home', relPath: '/', index: true };
   }
   const known = SUBPATH_TO_PAGE[stripped];
-  if (known) return { ...known, index: true };
+  if (known) return { ...known, index: !NOINDEX_PAGES.has(known.pageKey) };
   // Wildcard or unknown subpath — treat as 404.
   return { pageKey: 'notFound', relPath: '/404', index: false };
 }
@@ -204,7 +218,27 @@ const PRERENDER_PATHS: ReadonlyArray<string> = siteConfig.locales.flatMap((l) =>
   `/${l}/pricing`,
   `/${l}/features`,
   `/${l}/about`,
+  `/${l}/pilot`,
+  `/${l}/privacy`,
+  `/${l}/terms`,
 ]);
+
+// Sitemap routes — exclude DRAFT legal pages (already noindex; no value
+// indexing them). Pilot is intentionally indexable (lead-gen page).
+const SITEMAP_PATHS: ReadonlyArray<string> = PRERENDER_PATHS.filter(
+  (p) => !p.endsWith('/privacy') && !p.endsWith('/terms'),
+);
+
+/** Plausible script tag, rendered only when `VITE_PLAUSIBLE_DOMAIN` is set.
+ *  `script.tagged-events.js` (NOT `script.js`) is required to expose
+ *  `window.plausible(eventName, ...)` for our custom events.
+ *  `defer` is mandatory — without it, `window.plausible` may be undefined
+ *  when inline JS tries to fire events. */
+function renderPlausibleTag(): string {
+  const domain = process.env.VITE_PLAUSIBLE_DOMAIN;
+  if (!domain) return '';
+  return `<script defer data-domain="${escapeHtml(domain)}" src="https://plausible.io/js/script.tagged-events.js"></script>`;
+}
 
 export default defineConfig({
   plugins: [
@@ -218,7 +252,7 @@ export default defineConfig({
         languages: [...siteConfig.locales],
         defaultLanguage: siteConfig.defaultLocale,
       },
-      dynamicRoutes: [...PRERENDER_PATHS],
+      dynamicRoutes: [...SITEMAP_PATHS],
     }),
   ],
   resolve: {
@@ -250,9 +284,11 @@ export default defineConfig({
       const locale = localeFromPath(route);
       const seo = buildSeo(route);
       const tags = renderSeoTags(seo);
+      const plausible = renderPlausibleTag();
+      const insertion = plausible ? `    ${tags}\n    ${plausible}\n  </head>` : `    ${tags}\n  </head>`;
       return setHtmlLang(html, locale)
         .replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(seo.fullTitle)}</title>`)
-        .replace('</head>', `    ${tags}\n  </head>`);
+        .replace('</head>', insertion);
     },
   },
 } as Parameters<typeof defineConfig>[0]);

@@ -28,9 +28,9 @@ describe('EditorialHero', () => {
     const hr = document.querySelector('hr[aria-hidden="true"]');
     expect(hr).not.toBeNull();
 
-    // CTA button — disabled, uses translated label
-    const cta = screen.getByRole('button', { name: /Join the pilot/i });
-    expect(cta).toBeDisabled();
+    // CTA — link to /{locale}/pilot, uses translated label.
+    const cta = screen.getByRole('link', { name: /Join the pilot/i });
+    expect(cta).toHaveAttribute('href', '/en/pilot');
 
     // Trust strip — 3 list items
     const items = screen.getAllByRole('listitem');
