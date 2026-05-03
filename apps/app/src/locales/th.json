@@ -322,7 +322,30 @@
       "in": "รับเข้า",
       "out": "เบิกออก",
       "adjust": "ปรับปรุง"
-    }
+    },
+    "stats": {
+      "totalItems": "รายการทั้งหมด",
+      "lowStock": "สต็อกต่ำ",
+      "outOfStock": "หมดสต็อก",
+      "units": "หน่วยรวม"
+    },
+    "filter": {
+      "all": "ทั้งหมด",
+      "low": "สต็อกต่ำ",
+      "out": "หมด",
+      "ok": "ปกติ"
+    },
+    "empty": {
+      "list": "ยังไม่มีสินค้า",
+      "filter": "ไม่พบรายการในเงื่อนไขนี้"
+    },
+    "searchPlaceholder": "ค้นหาชื่อสินค้าหรือ SKU...",
+    "status": {
+      "ok": "ปกติ",
+      "low": "ต่ำ",
+      "out": "หมด"
+    },
+    "recordMovement": "บันทึก"
   },
   "audit": {
     "title": "Audit Log",

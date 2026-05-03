@@ -322,7 +322,30 @@
       "in": "Stock in",
       "out": "Stock out",
       "adjust": "Adjust"
-    }
+    },
+    "stats": {
+      "totalItems": "Total items",
+      "lowStock": "Low stock",
+      "outOfStock": "Out of stock",
+      "units": "Total units"
+    },
+    "filter": {
+      "all": "All",
+      "low": "Low",
+      "out": "Out",
+      "ok": "OK"
+    },
+    "empty": {
+      "list": "No items yet",
+      "filter": "No items match"
+    },
+    "searchPlaceholder": "Search name or SKU…",
+    "status": {
+      "ok": "OK",
+      "low": "Low",
+      "out": "Out"
+    },
+    "recordMovement": "Move"
   },
   "audit": {
     "title": "Audit Log",
