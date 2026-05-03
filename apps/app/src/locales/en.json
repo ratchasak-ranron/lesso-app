@@ -158,7 +158,19 @@
       "cancelled": "Cancelled"
     },
     "noAppointments": "No appointments yet",
-    "reschedule": "Reschedule"
+    "reschedule": "Reschedule",
+    "stats": {
+      "booked": "Booked",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "noShow": "No-show / cancelled"
+    },
+    "filter": {
+      "all": "All"
+    },
+    "empty": {
+      "day": "No appointments on this day"
+    }
   },
   "course": {
     "title": "Courses",

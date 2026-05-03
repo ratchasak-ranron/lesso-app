@@ -158,7 +158,19 @@
       "cancelled": "ยกเลิก"
     },
     "noAppointments": "ยังไม่มีนัด",
-    "reschedule": "เปลี่ยนเวลา"
+    "reschedule": "เปลี่ยนเวลา",
+    "stats": {
+      "booked": "นัดทั้งหมด",
+      "confirmed": "ยืนยันแล้ว",
+      "completed": "เสร็จแล้ว",
+      "noShow": "ไม่มา / ยกเลิก"
+    },
+    "filter": {
+      "all": "ทั้งหมด"
+    },
+    "empty": {
+      "day": "ไม่มีนัดในวันนี้"
+    }
   },
   "course": {
     "title": "คอร์ส",
