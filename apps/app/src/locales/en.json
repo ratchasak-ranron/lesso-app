@@ -13,7 +13,8 @@
     "branches": "Branches",
     "reports": "Reports",
     "audit": "Audit Log",
-    "menu": "Open menu"
+    "menu": "Open menu",
+    "consent": "PDPA"
   },
   "common": {
     "loading": "Loading...",
@@ -368,6 +369,19 @@
     },
     "errors": {
       "atLeastOneScope": "Select at least one scope"
+    },
+    "subtitle": "Manage consent records and export by patient request",
+    "stats": {
+      "total": "Total",
+      "valid": "Valid",
+      "expiring": "Expiring soon",
+      "missing": "Missing/expired"
+    },
+    "filter": {
+      "all": "All",
+      "valid": "Valid",
+      "expiring": "Expiring",
+      "missing": "Missing"
     }
   },
   "export": {

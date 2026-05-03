@@ -10,7 +10,6 @@ import {
   CreditCard,
   Package,
   Plus,
-  ShieldCheck,
   UserPlus,
   Users,
   type LucideIcon,
@@ -44,14 +43,6 @@ function HomePage() {
     (patients.data ?? []).forEach((p) => map.set(p.id, p));
     return map;
   }, [patients.data]);
-
-  const consentExpiring = useMemo(
-    () =>
-      (patients.data ?? []).filter(
-        (p) => p.consentStatus === 'expiring_soon' || p.consentStatus === 'expired',
-      ).length,
-    [patients.data],
-  );
 
   return (
     <TenantGate>
@@ -112,7 +103,6 @@ function HomePage() {
             <AlertsBand
               lowStock={dashboard.kpis.lowStockAlerts}
               lowStockNames={(lowStock.data ?? []).slice(0, 3).map((i) => i.name)}
-              consentExpiring={consentExpiring}
             />
           </div>
         </div>
@@ -491,18 +481,19 @@ function ActionButton({ onClick, icon, label, accent }: ActionInner & { onClick:
 }
 
 /* -------------------------------------------------------------------------- */
-/*  AlertsBand — conditional rollup (low-stock + consent-expiring)            */
+/*  AlertsBand — conditional rollup (low-stock only; PDPA lives on its own    */
+/*  /consent route and is intentionally not surfaced on the operator's main   */
+/*  Today flow).                                                              */
 /* -------------------------------------------------------------------------- */
 
 interface AlertsProps {
   lowStock: number;
   lowStockNames: string[];
-  consentExpiring: number;
 }
 
-function AlertsBand({ lowStock, lowStockNames, consentExpiring }: AlertsProps) {
+function AlertsBand({ lowStock, lowStockNames }: AlertsProps) {
   const { t } = useTranslation();
-  if (lowStock === 0 && consentExpiring === 0) return null;
+  if (lowStock === 0) return null;
 
   return (
     <Card>
@@ -529,25 +520,6 @@ function AlertsBand({ lowStock, lowStockNames, consentExpiring }: AlertsProps) {
               </span>
               <span className="block truncate text-xs text-muted-foreground">
                 {lowStockNames.join(' · ')}
-              </span>
-            </span>
-            <ChevronRight className="size-4 text-muted-foreground" aria-hidden="true" />
-          </Link>
-        ) : null}
-        {consentExpiring > 0 ? (
-          <Link
-            to="/patients"
-            className="flex cursor-pointer items-center gap-3 px-5 py-3 transition-colors hover:bg-muted"
-          >
-            <span
-              aria-hidden="true"
-              className="flex size-9 items-center justify-center rounded-lg bg-amber-soft text-amber-ink"
-            >
-              <ShieldCheck className="size-[18px]" strokeWidth={2} />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-sm font-medium text-foreground">
-                {t('home.alerts.consentExpiring')} · {consentExpiring}
               </span>
             </span>
             <ChevronRight className="size-4 text-muted-foreground" aria-hidden="true" />

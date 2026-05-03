@@ -5,6 +5,7 @@ import {
   GraduationCap,
   Home,
   Package,
+  ScrollText,
   ShieldCheck,
   Users,
   type LucideIcon,
@@ -32,7 +33,8 @@ export interface NavItem {
     | '/inventory'
     | '/branches'
     | '/reports'
-    | '/audit';
+    | '/audit'
+    | '/consent';
   icon: LucideIcon;
   labelKey:
     | 'nav.today'
@@ -42,7 +44,8 @@ export interface NavItem {
     | 'nav.inventory'
     | 'nav.branches'
     | 'nav.reports'
-    | 'nav.audit';
+    | 'nav.audit'
+    | 'nav.consent';
   exact: boolean;
   primary: boolean; // shown in `<sm` bottom-tab dock
   accent: SectionAccent;
@@ -100,8 +103,16 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
   },
   {
     to: '/audit',
-    icon: ShieldCheck,
+    icon: ScrollText,
     labelKey: 'nav.audit',
+    exact: false,
+    primary: false,
+    accent: 'zinc',
+  },
+  {
+    to: '/consent',
+    icon: ShieldCheck,
+    labelKey: 'nav.consent',
     exact: false,
     primary: false,
     accent: 'zinc',
