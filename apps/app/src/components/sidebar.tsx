@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from '@tanstack/react-router';
-import { NAV_ITEMS, type NavItem } from './nav-items';
+import { NAV_ITEMS, ACCENT_CLASSES, type NavItem } from './nav-items';
 import { useIsRouteActive } from './use-is-route-active';
 import { cn } from '@/lib/utils';
 
@@ -25,16 +25,20 @@ function SidebarItem({ item }: { item: NavItem }) {
   const { t } = useTranslation();
   const active = useIsRouteActive(item);
   const Icon = item.icon;
+  const accent = ACCENT_CLASSES[item.accent];
   return (
     <Link
       to={item.to}
       aria-current={active ? 'page' : undefined}
       className={cn(
         'flex min-h-[44px] items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted',
-        active ? 'bg-primary/10 text-primary' : '',
+        active && cn(accent.activeBg, accent.activeText),
       )}
     >
-      <Icon className="size-5 shrink-0" aria-hidden="true" />
+      <Icon
+        className={cn('size-5 shrink-0', active ? accent.text : 'text-muted-foreground')}
+        aria-hidden="true"
+      />
       <span>{t(item.labelKey)}</span>
     </Link>
   );

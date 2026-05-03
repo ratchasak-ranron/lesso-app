@@ -22,6 +22,40 @@ const HOME_FEATURE_ICONS: Record<string, LucideIcon> = {
   ai: Sparkles,
 };
 
+// Per-feature accent — rotates across the 4 cards. Each card gets a tinted
+// top border + tinted icon to make the feature grid scannable and memorable
+// while keeping body text on bone+slate.
+interface FeatureAccentClasses {
+  border: string;
+  icon: string;
+  iconBg: string;
+}
+
+const FALLBACK_ACCENT: FeatureAccentClasses = {
+  border: 'border-t-leaf',
+  icon: 'text-leaf-ink',
+  iconBg: 'bg-leaf-soft',
+};
+
+const HOME_FEATURE_ACCENTS: Record<string, FeatureAccentClasses> = {
+  course: FALLBACK_ACCENT,
+  branches: {
+    border: 'border-t-ink-blue',
+    icon: 'text-ink-blue',
+    iconBg: 'bg-ink-blue-soft',
+  },
+  line: {
+    border: 'border-t-petal',
+    icon: 'text-petal-ink',
+    iconBg: 'bg-petal-soft',
+  },
+  ai: {
+    border: 'border-t-honey',
+    icon: 'text-honey-ink',
+    iconBg: 'bg-honey-soft',
+  },
+};
+
 export function HomePage() {
   const { t, dict, locale } = useResolvedLocale();
   const featuresHref = `/${locale}/features`;
@@ -84,13 +118,15 @@ export function HomePage() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {dict.home.features.items.map((item) => {
             const Icon = HOME_FEATURE_ICONS[item.id] ?? GraduationCap;
+            const accent = HOME_FEATURE_ACCENTS[item.id] ?? FALLBACK_ACCENT;
             return (
-              <Card key={item.id} className="p-6">
-                <Icon
-                  className="size-8 text-primary"
+              <Card key={item.id} className={`border-t-4 p-6 ${accent.border}`}>
+                <span
+                  className={`inline-flex size-12 items-center justify-center rounded-full ${accent.iconBg}`}
                   aria-hidden="true"
-                  strokeWidth={1.5}
-                />
+                >
+                  <Icon className={`size-6 ${accent.icon}`} strokeWidth={1.75} />
+                </span>
                 <p className="mt-4 font-heading text-lg font-semibold text-foreground">
                   {item.title}
                 </p>

@@ -41,13 +41,13 @@ export function TierCard({
     <Card
       className={cn(
         'flex flex-col p-6 md:p-8',
-        featured ? 'border-primary border-2 shadow-popover' : '',
+        featured ? 'border-2 border-honey shadow-popover' : '',
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <h3 className="font-heading text-2xl font-semibold text-foreground">{name}</h3>
         {featured && featuredBadge ? (
-          <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-wide text-primary">
+          <span className="rounded-full bg-honey-soft px-3 py-1 text-xs font-medium uppercase tracking-wide text-honey-ink">
             {featuredBadge}
           </span>
         ) : null}

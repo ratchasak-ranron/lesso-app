@@ -54,6 +54,27 @@ export const reinlyPreset = {
         // Brand sage — surface-only fill (#9CAE9F). Use for decorative
         // accents, divider tints, badges. Not text-safe on bone.
         sage: '#9CAE9F',
+        // Section accents. Use the *-ink variants for text on bone; bare
+        // tokens are surface fills. *-soft is the wash bg (cards/strips).
+        honey: {
+          DEFAULT: 'hsl(var(--honey))',
+          ink: 'hsl(var(--honey-ink))',
+          soft: 'hsl(var(--honey-soft))',
+        },
+        'ink-blue': {
+          DEFAULT: 'hsl(var(--ink-blue))',
+          soft: 'hsl(var(--ink-blue-soft))',
+        },
+        petal: {
+          DEFAULT: 'hsl(var(--petal))',
+          ink: 'hsl(var(--petal-ink))',
+          soft: 'hsl(var(--petal-soft))',
+        },
+        leaf: {
+          DEFAULT: 'hsl(var(--leaf))',
+          ink: 'hsl(var(--leaf-ink))',
+          soft: 'hsl(var(--leaf-soft))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

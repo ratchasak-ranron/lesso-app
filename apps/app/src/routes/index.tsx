@@ -57,18 +57,21 @@ function HomePage() {
             value={dashboard.kpis.queueDepth}
             icon={Users}
             description={t('home.kpi.queueHint')}
+            accent="petal"
           />
           <KpiTile
             label={t('home.kpi.booked')}
             value={dashboard.kpis.appointmentsBooked}
             icon={CalendarIcon}
             description={t('home.kpi.bookedHint')}
+            accent="sage"
           />
           <KpiTile
             label={t('home.kpi.done')}
             value={dashboard.kpis.walkInsCompleted}
             icon={CheckCircle2}
             description={t('home.kpi.doneHint')}
+            accent="leaf"
           />
           <KpiTile
             label={t('home.kpi.alerts')}
@@ -76,6 +79,7 @@ function HomePage() {
             icon={AlertTriangle}
             description={t('home.kpi.alertsHint')}
             status={dashboard.kpis.lowStockAlerts > 0 ? 'warning' : 'default'}
+            accent="honey"
           />
         </section>
 

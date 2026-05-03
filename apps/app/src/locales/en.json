@@ -41,7 +41,7 @@
     "today": "Today"
   },
   "home": {
-    "greeting": "Hello, Reinly",
+    "greeting": "Today at a glance",
     "tenantBanner": "Clinic: {{tenant}} · Branch: {{branch}} · User: {{user}}",
     "todaysAppointments": "Today's appointments",
     "walkInQueue": "Walk-in queue",

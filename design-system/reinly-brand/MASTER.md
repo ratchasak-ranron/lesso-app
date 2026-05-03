@@ -28,6 +28,8 @@ The visual identity is *thoughtful product*, not *generic healthcare*. Avoid med
 
 Runtime tokens live in [`packages/ui-tokens/src/css/tokens.css`](../../packages/ui-tokens/src/css/tokens.css). Hex values shown with contrast notes.
 
+#### Core (brand quietness)
+
 | Role | Hex | Usage | Contrast on bone |
 |------|-----|-------|-------|
 | Bone (background) | `#F5F2EC` | Body bg — paper feel | — |
@@ -39,10 +41,29 @@ Runtime tokens live in [`packages/ui-tokens/src/css/tokens.css`](../../packages/
 | Clay (destructive) | `#A85F3F` | Errors, urgent only | 5.0 : 1 AA |
 | Border | `#A89E84` | Lines, input borders | 3.0 : 1 (UI) |
 
+#### Section accents (memorability)
+
+Each primary nav section gets a signature color used for left-border, eyebrow, KPI tile borders, and active-tab tint. Body text and cards remain bone+slate. Use the `*-ink` text-safe variant when placing the color on text; bare token + `-soft` are surface-only.
+
+| Section | Token | Surface | Text-safe (`-ink`) | Wash bg (`-soft`) |
+|---|---|---|---|---|
+| Today | `honey` | `#D6A24C` | `#8A5E1F` (5.7:1) | `#FBEFD7` |
+| Patients | `ink-blue` | `#3D5A80` (text-safe, 6.4:1) | — | `#DCE6F2` |
+| Appointments | `sage` (existing) | `#5A7060` (text-safe) | — | mist |
+| Courses | `leaf` | `#7A9A7E` | `#4A6E50` (5.4:1) | `#DDEBDF` |
+| Walk-in | `petal` | `#E8C4B8` (surface only) | `#864E3F` (5.0:1) | `#F8E6E0` |
+| Inventory | `clay` (existing) | `#A85F3F` (text-safe) | — | `bg-destructive/10` |
+| Reports / Audit | `slate` (existing) | `#1F2328` | — | `bg-primary/10` |
+
 **Color rules:**
 - Sage is the brand's calm/health signal — use for success, secondary actions, and editorial accents.
 - Brand sage `#9CAE9F` is for fills only — never as text on bone.
-- Clay is reserved for urgent errors. Use sparingly — quietness is the brand.
+- Clay is reserved for urgent errors and the Inventory section. Use sparingly outside Inventory.
+- Section accents are tints, not loud color. Use one per section as left-border / eyebrow / KPI tile / active nav. Body text always stays slate; card bg stays bone/cream.
+- For text on a colored surface, use the `-ink` variant (honey-ink, leaf-ink, petal-ink). Bare `honey`, `petal`, `leaf` are surface fills only.
+- `*-soft` variants are wash backgrounds — use behind icons (rounded chip) or strip backgrounds, not as primary card surface.
+- Web marketing rotates `leaf → ink-blue → petal → honey` across the home feature grid (1 accent per card) for memorability without circus.
+- Featured pricing tier uses honey (border + badge).
 - Never use bright neon, AI gradients, or medical-blue.
 
 ### Typography

@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection -- map keys are constant union literals from feature dict / accent enum */
 import {
   Building2,
   GraduationCap,
@@ -20,17 +21,47 @@ const ICONS: Record<string, LucideIcon> = {
   pdpa: ShieldCheck,
 };
 
+type FeatureAccent = 'leaf' | 'ink-blue' | 'petal' | 'honey' | 'sage';
+
+const FEATURE_ACCENTS: Record<string, FeatureAccent> = {
+  course: 'leaf',
+  branches: 'ink-blue',
+  line: 'petal',
+  ai: 'honey',
+  pdpa: 'sage',
+};
+
+const ILLUSTRATION_BG: Record<FeatureAccent, string> = {
+  leaf: 'bg-leaf-soft',
+  'ink-blue': 'bg-ink-blue-soft',
+  petal: 'bg-petal-soft',
+  honey: 'bg-honey-soft',
+  sage: 'bg-muted',
+};
+
+const ILLUSTRATION_ICON: Record<FeatureAccent, string> = {
+  leaf: 'text-leaf-ink',
+  'ink-blue': 'text-ink-blue',
+  petal: 'text-petal-ink',
+  honey: 'text-honey-ink',
+  sage: 'text-secondary',
+};
+
 // Decorative-only placeholder until real illustrations land in B4. The
 // surrounding `FeatureSection` already names the block via its h2, so the
 // illustration adds no semantic value — `aria-hidden` stops screen readers
 // from announcing the heading twice.
-function Illustration({ Icon }: { Icon: LucideIcon }) {
+function Illustration({ Icon, accent }: { Icon: LucideIcon; accent: FeatureAccent }) {
   return (
     <div
-      className="flex aspect-[4/3] w-full max-w-md items-center justify-center rounded-card bg-muted shadow-card"
+      className={`flex aspect-[4/3] w-full max-w-md items-center justify-center rounded-card shadow-card ${ILLUSTRATION_BG[accent]}`}
       aria-hidden="true"
     >
-      <Icon className="size-20 text-primary/50" aria-hidden="true" strokeWidth={1.25} />
+      <Icon
+        className={`size-20 ${ILLUSTRATION_ICON[accent]}`}
+        aria-hidden="true"
+        strokeWidth={1.25}
+      />
     </div>
   );
 }
@@ -54,6 +85,7 @@ export function FeaturesPage() {
 
       {dict.features.sections.map((section, idx) => {
         const Icon = ICONS[section.id] ?? GraduationCap;
+        const accent = FEATURE_ACCENTS[section.id] ?? 'sage';
         return (
           <FeatureSection
             key={section.id}
@@ -61,8 +93,9 @@ export function FeaturesPage() {
             eyebrow={section.eyebrow}
             heading={section.heading}
             body={section.body}
-            illustration={<Illustration Icon={Icon} />}
+            illustration={<Illustration Icon={Icon} accent={accent} />}
             align={idx % 2 === 0 ? 'right' : 'left'}
+            accent={accent}
           />
         );
       })}

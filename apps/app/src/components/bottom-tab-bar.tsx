@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from '@tanstack/react-router';
-import { NAV_ITEMS, type NavItem } from './nav-items';
+import { NAV_ITEMS, ACCENT_CLASSES, type NavItem } from './nav-items';
 import { useIsRouteActive } from './use-is-route-active';
 import { cn } from '@/lib/utils';
 
@@ -25,13 +25,14 @@ function BottomTabItem({ item }: { item: NavItem }) {
   const { t } = useTranslation();
   const active = useIsRouteActive(item);
   const Icon = item.icon;
+  const accent = ACCENT_CLASSES[item.accent];
   return (
     <Link
       to={item.to}
       aria-current={active ? 'page' : undefined}
       className={cn(
         'flex flex-1 flex-col items-center justify-center gap-1 py-2 text-xs font-medium transition-colors min-h-[56px]',
-        active ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
+        active ? accent.text : 'text-muted-foreground hover:text-foreground',
       )}
     >
       <Icon className="size-5" aria-hidden="true" />

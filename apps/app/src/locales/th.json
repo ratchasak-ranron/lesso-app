@@ -41,7 +41,7 @@
     "today": "วันนี้"
   },
   "home": {
-    "greeting": "สวัสดี Reinly",
+    "greeting": "สรุปวันนี้",
     "tenantBanner": "คลินิก: {{tenant}} · สาขา: {{branch}} · ผู้ใช้: {{user}}",
     "todaysAppointments": "นัดวันนี้",
     "walkInQueue": "คิว Walk-in",
@@ -50,7 +50,7 @@
     "kpi": {
       "sectionLabel": "ตัวชี้วัดวันนี้",
       "queue": "คิวคงเหลือ",
-      "queueHint": "รอ + กำลังบริการ",
+      "queueHint": "รอและกำลังบริการ",
       "booked": "นัดวันนี้",
       "bookedHint": "นัดทั้งหมด",
       "done": "Walk-in เสร็จแล้ว",
@@ -135,7 +135,7 @@
   },
   "walkIn": {
     "title": "Walk-in",
-    "newWalkIn": "+ Walk-in ใหม่",
+    "newWalkIn": "Walk-in ใหม่",
     "queue": "คิว Walk-in",
     "arrived": "มาถึง {{time}}",
     "status": {
@@ -160,7 +160,7 @@
     "revenue": "รายได้",
     "visits": "ครั้งให้บริการ",
     "receipts": "ใบเสร็จ",
-    "loyaltyOutstanding": "พอยท์คงเหลือ",
+    "loyaltyOutstanding": "คะแนนคงเหลือ",
     "activeMembers": "สมาชิก",
     "lowStockAlerts": "สต็อกต่ำ",
     "commissionByDoctor": "ค่ามือแพทย์",
@@ -281,8 +281,8 @@
       "course.delete": "ลบคอร์ส",
       "receipt.create": "ออกใบเสร็จ",
       "receipt.void": "ยกเลิกใบเสร็จ",
-      "loyalty.earn": "ได้รับพอยท์",
-      "loyalty.redeem": "ใช้พอยท์",
+      "loyalty.earn": "ได้รับคะแนน",
+      "loyalty.redeem": "ใช้คะแนน",
       "inventory.create": "เพิ่มสินค้าคงคลัง",
       "inventory.movement": "เคลื่อนไหวสต็อก",
       "consent.capture": "บันทึกความยินยอม",
@@ -294,16 +294,16 @@
     "cta": "ส่งความเห็น"
   },
   "loyalty": {
-    "title": "พอยท์สะสม",
-    "balance": "พอยท์คงเหลือ",
-    "lifetimeEarned": "สะสมตลอด",
-    "redeemCta": "ใช้พอยท์",
-    "redeemTitle": "ใช้พอยท์เป็นส่วนลด",
-    "pointsToRedeem": "จำนวนพอยท์",
+    "title": "คะแนนสะสม",
+    "balance": "คะแนนคงเหลือ",
+    "lifetimeEarned": "สะสมรวมทั้งหมด",
+    "redeemCta": "ใช้คะแนน",
+    "redeemTitle": "ใช้คะแนนเป็นส่วนลด",
+    "pointsToRedeem": "จำนวนคะแนน",
     "equivalentDiscount": "ส่วนลดที่ได้รับ",
-    "minBalanceHint": "ต้องมีอย่างน้อย 100 พอยท์",
+    "minBalanceHint": "ต้องมีอย่างน้อย 100 คะแนน",
     "errors": {
-      "invalidPoints": "จำนวนพอยท์ไม่ถูกต้อง"
+      "invalidPoints": "จำนวนคะแนนไม่ถูกต้อง"
     }
   },
   "consent": {

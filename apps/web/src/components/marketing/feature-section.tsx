@@ -1,5 +1,16 @@
+/* eslint-disable security/detect-object-injection -- accent is a constant union literal */
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
+
+type EyebrowAccent = 'sage' | 'honey' | 'ink-blue' | 'leaf' | 'petal';
+
+const EYEBROW_ACCENTS: Record<EyebrowAccent, string> = {
+  sage: 'text-secondary',
+  honey: 'text-honey-ink',
+  'ink-blue': 'text-ink-blue',
+  leaf: 'text-leaf-ink',
+  petal: 'text-petal-ink',
+};
 
 interface FeatureSectionProps {
   id: string;
@@ -9,6 +20,8 @@ interface FeatureSectionProps {
   illustration: ReactNode;
   /** Alternates the column order. `right` puts the illustration on the right (default for odd index). */
   align?: 'left' | 'right';
+  /** Section accent — colors the eyebrow. Defaults to sage. */
+  accent?: EyebrowAccent;
 }
 
 /**
@@ -22,6 +35,7 @@ export function FeatureSection({
   body,
   illustration,
   align = 'right',
+  accent = 'sage',
 }: FeatureSectionProps) {
   return (
     <section
@@ -31,7 +45,14 @@ export function FeatureSection({
     >
       <div className="mx-auto grid max-w-5xl gap-10 px-6 py-16 md:grid-cols-2 md:gap-14 md:py-24">
         <div className={cn(align === 'left' ? 'md:order-2' : '')}>
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-secondary">{eyebrow}</p>
+          <p
+            className={cn(
+              'text-xs font-medium uppercase tracking-[0.2em]',
+              EYEBROW_ACCENTS[accent],
+            )}
+          >
+            {eyebrow}
+          </p>
           <h2
             id={`${id}-heading`}
             className="mt-3 font-heading text-3xl font-semibold tracking-tight text-foreground md:text-4xl"
