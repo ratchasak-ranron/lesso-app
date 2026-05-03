@@ -1,63 +1,72 @@
 /**
  * Deterministic seed data generators.
- * Uses a simple seeded PRNG so reloads produce identical data without needing
- * a heavy dep. Not cryptographic; intentional.
+ *
+ * All output is Thai-script — names, services, honorifics — so a Thai
+ * clinic operator running the prototype sees realistic data, not
+ * transliterated placeholders. Technical abbreviations that are read in
+ * English in real Thai clinics (IPL, HIFU, RF) are kept as-is.
+ *
+ * Uses a simple seeded PRNG so reloads produce identical data without
+ * needing a heavy dep. Not cryptographic; intentional.
  */
 
 const TH_FIRST_NAMES = [
-  'Anong',
-  'Mali',
-  'Som',
-  'Ploy',
-  'Nat',
-  'Pim',
-  'Tip',
-  'Fern',
-  'Khai',
-  'Tan',
-  'Mint',
-  'Ying',
-  'Aim',
-  'Bow',
-  'Cake',
-  'Mai',
-  'Praew',
-  'Noey',
-  'Bell',
-  'Pang',
+  'อนงค์',
+  'มะลิ',
+  'สม',
+  'พลอย',
+  'ณัฐ',
+  'พิม',
+  'ทิพย์',
+  'เฟิร์น',
+  'ขวัญ',
+  'แทน',
+  'มินท์',
+  'หญิง',
+  'เอม',
+  'โบว์',
+  'เค้ก',
+  'ใหม่',
+  'แพรว',
+  'เนย',
+  'เบลล์',
+  'แป้ง',
 ];
 
 const TH_LAST_NAMES = [
-  'Sornchai',
-  'Wanichakul',
-  'Saetang',
-  'Phromchai',
-  'Kongsap',
-  'Boonrueng',
-  'Ratanakul',
-  'Suthep',
-  'Phaisit',
-  'Charoen',
-  'Sirisuk',
-  'Phongphat',
-  'Anantachai',
-  'Promkaew',
+  'ศรชัย',
+  'วาณิชกุล',
+  'แซ่ตั้ง',
+  'พรหมชัย',
+  'คงทรัพย์',
+  'บุญเรือง',
+  'รัตนกุล',
+  'สุเทพ',
+  'ไพศาล',
+  'เจริญ',
+  'ศิริสุข',
+  'พงษ์พัฒน์',
+  'อนันตชัย',
+  'พรหมแก้ว',
 ];
 
+// Service names — Thai script for descriptive procedures, kept as
+// abbreviations for terms that are universally read in English at Thai
+// clinics (IPL, HIFU, RF). Matches how front-desk staff actually speak.
 const SERVICES = [
-  'Botox',
-  'Filler',
-  'Laser hair removal',
+  'โบท็อกซ์',
+  'ฟิลเลอร์',
+  'กำจัดขนด้วยเลเซอร์',
   'IPL',
-  'Mesotherapy',
+  'เมโสเทอราพี',
   'HIFU',
-  'Thermage',
-  'Skin booster',
-  'Chemical peel',
-  'Microneedling',
+  'เธอร์มาจ',
+  'สกินบูสเตอร์',
+  'ผลัดเซลล์ผิว',
+  'ไมโครนีดเดิ้ลลิ่ง',
 ];
 
-const HONORIFICS = ['Khun', 'K.'];
+const HONORIFICS = ['คุณ', 'ค.'];
 
 function mulberry32(seed: number) {
   let t = seed >>> 0;
@@ -94,7 +103,7 @@ export function genFullName(rng: () => number): string {
   const honor = pick(rng, HONORIFICS);
   const first = pick(rng, TH_FIRST_NAMES);
   const last = pick(rng, TH_LAST_NAMES);
-  return `${honor} ${first} ${last}`;
+  return `${honor}${first} ${last}`;
 }
 
 export function genServiceName(rng: () => number): string {

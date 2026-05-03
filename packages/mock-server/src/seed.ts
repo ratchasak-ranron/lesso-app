@@ -26,39 +26,39 @@ export const TENANTS_KEY = 'reinly:seed:tenants';
 export const BRANCHES_KEY = 'reinly:seed:branches';
 export const USERS_KEY = 'reinly:seed:users';
 export const SEED_VERSION_KEY = 'reinly:seed:version';
-export const SEED_VERSION = 3;
+export const SEED_VERSION = 4;
 
 const SEED_KEYS = [TENANTS_KEY, BRANCHES_KEY, USERS_KEY, SEED_VERSION_KEY] as const;
 
 const SEED_TENANTS: Tenant[] = [
-  { id: '11111111-1111-1111-1111-111111111111', name: 'Clinic A' },
-  { id: '22222222-2222-2222-2222-222222222222', name: 'Clinic B' },
+  { id: '11111111-1111-1111-1111-111111111111', name: 'คลินิกสุขใจ' },
+  { id: '22222222-2222-2222-2222-222222222222', name: 'คลินิกสวยงาม' },
 ];
 
 const SEED_BRANCHES: Branch[] = [
   {
     id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
     tenantId: '11111111-1111-1111-1111-111111111111',
-    name: 'Sukhumvit',
-    city: 'Bangkok',
+    name: 'สุขุมวิท',
+    city: 'กรุงเทพมหานคร',
   },
   {
     id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
     tenantId: '11111111-1111-1111-1111-111111111111',
-    name: 'Thonglor',
-    city: 'Bangkok',
+    name: 'ทองหล่อ',
+    city: 'กรุงเทพมหานคร',
   },
   {
     id: 'cccccccc-cccc-cccc-cccc-cccccccccccc',
     tenantId: '22222222-2222-2222-2222-222222222222',
-    name: 'Phuket Town',
-    city: 'Phuket',
+    name: 'เมืองภูเก็ต',
+    city: 'ภูเก็ต',
   },
   {
     id: 'cccccccc-cccc-cccc-cccc-cccccccccccd',
     tenantId: '22222222-2222-2222-2222-222222222222',
-    name: 'Patong',
-    city: 'Phuket',
+    name: 'ป่าตอง',
+    city: 'ภูเก็ต',
   },
 ];
 
@@ -66,19 +66,19 @@ const SEED_USERS: User[] = [
   {
     id: 'dddddddd-dddd-dddd-dddd-dddddddddddd',
     tenantId: '11111111-1111-1111-1111-111111111111',
-    name: 'Khun Ploy',
+    name: 'คุณพลอย',
     role: 'receptionist',
   },
   {
     id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
     tenantId: '11111111-1111-1111-1111-111111111111',
-    name: 'Dr. Anong',
+    name: 'หมออนงค์',
     role: 'doctor',
   },
   {
     id: 'ffffffff-ffff-ffff-ffff-ffffffffffff',
     tenantId: '11111111-1111-1111-1111-111111111111',
-    name: 'Khun Sak',
+    name: 'คุณศักดิ์',
     role: 'owner',
   },
 ];
@@ -139,7 +139,7 @@ function generateCoursesForTenant(
       id: crypto.randomUUID(),
       tenantId: tenant.id,
       patientId: patient.id,
-      serviceName: `${genServiceName(rng)} ${total}-pack`,
+      serviceName: `${genServiceName(rng)} แพ็ค ${total} ครั้ง`,
       sessionsTotal: total,
       sessionsUsed: used,
       pricePaid: total * pickFrom(rng, [3000, 5000, 8000, 12000]),
@@ -212,14 +212,14 @@ function pickFrom<T>(rng: () => number, arr: ReadonlyArray<T>): T {
 }
 
 const INVENTORY_FIXTURES = [
-  { sku: 'BTX-100', name: 'Botulinum 100u', unit: 'unit' as const, min: 10, init: 32 },
-  { sku: 'HA-1ML', name: 'Hyaluronic 1ml', unit: 'ml' as const, min: 8, init: 24 },
-  { sku: 'LIDO-2', name: 'Lidocaine 2ml', unit: 'ml' as const, min: 10, init: 3 },
-  { sku: 'GAUZE', name: 'Sterile gauze', unit: 'pack' as const, min: 50, init: 150 },
-  { sku: 'NEEDLE-30G', name: 'Needle 30G', unit: 'box' as const, min: 5, init: 12 },
-  { sku: 'ALC-500', name: 'Alcohol 500ml', unit: 'unit' as const, min: 6, init: 4 },
-  { sku: 'GLOVE-M', name: 'Nitrile glove M', unit: 'box' as const, min: 4, init: 9 },
-  { sku: 'COTTON', name: 'Cotton roll', unit: 'pack' as const, min: 20, init: 35 },
+  { sku: 'BTX-100', name: 'โบทูลินัม 100u', unit: 'unit' as const, min: 10, init: 32 },
+  { sku: 'HA-1ML', name: 'ไฮยาลูโรนิก 1ml', unit: 'ml' as const, min: 8, init: 24 },
+  { sku: 'LIDO-2', name: 'ลิโดเคน 2ml', unit: 'ml' as const, min: 10, init: 3 },
+  { sku: 'GAUZE', name: 'ผ้าก๊อซปลอดเชื้อ', unit: 'pack' as const, min: 50, init: 150 },
+  { sku: 'NEEDLE-30G', name: 'เข็ม 30G', unit: 'box' as const, min: 5, init: 12 },
+  { sku: 'ALC-500', name: 'แอลกอฮอล์ 500ml', unit: 'unit' as const, min: 6, init: 4 },
+  { sku: 'GLOVE-M', name: 'ถุงมือไนไตรล์ ไซส์ M', unit: 'box' as const, min: 4, init: 9 },
+  { sku: 'COTTON', name: 'สำลีก้อน', unit: 'pack' as const, min: 20, init: 35 },
 ];
 
 function generateInventoryForTenant(tenantId: Id, branches: Branch[]): InventoryItem[] {
