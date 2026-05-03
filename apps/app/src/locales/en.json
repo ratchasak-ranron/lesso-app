@@ -118,7 +118,27 @@
     "patientSince": "Patient since {{date}}",
     "checkIn": "Check In",
     "bookAppointment": "Book appointment",
-    "addCourse": "Add course"
+    "addCourse": "Add course",
+    "stats": {
+      "total": "Total",
+      "valid": "Consent valid",
+      "expiring": "Expiring soon",
+      "missing": "Missing/expired"
+    },
+    "filter": {
+      "all": "All",
+      "valid": "Valid",
+      "expiring": "Expiring",
+      "missing": "Missing"
+    },
+    "sort": {
+      "label": "Sort",
+      "recent": "Recent",
+      "name": "Name",
+      "created": "Joined"
+    },
+    "countLabel": "{{count}} patients",
+    "since": "Since {{date}}"
   },
   "appointment": {
     "title": "Appointments",

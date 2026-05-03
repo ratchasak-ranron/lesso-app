@@ -25,8 +25,8 @@ export function PatientsPage() {
 
   return (
     <TenantGate>
-      <div className="space-y-4">
-        <PageHeader title={t('patient.title')} />
+      <div className="space-y-6">
+        <PageHeader eyebrow={t('nav.patients')} accent="sky" title={t('patient.title')} />
         <PatientList onSelect={handleSelect} onAddNew={() => setCreateOpen(true)} />
 
         <Dialog open={createOpen} onOpenChange={setCreateOpen}>

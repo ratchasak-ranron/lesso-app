@@ -118,7 +118,27 @@
     "patientSince": "เริ่มเมื่อ {{date}}",
     "checkIn": "Check In",
     "bookAppointment": "นัดหมาย",
-    "addCourse": "เพิ่มคอร์ส"
+    "addCourse": "เพิ่มคอร์ส",
+    "stats": {
+      "total": "ทั้งหมด",
+      "valid": "ยินยอมแล้ว",
+      "expiring": "ใกล้หมดอายุ",
+      "missing": "ขาด/หมดอายุ"
+    },
+    "filter": {
+      "all": "ทั้งหมด",
+      "valid": "ยินยอมแล้ว",
+      "expiring": "ใกล้หมด",
+      "missing": "ขาด"
+    },
+    "sort": {
+      "label": "เรียง",
+      "recent": "ล่าสุด",
+      "name": "ชื่อ",
+      "created": "เข้าระบบ"
+    },
+    "countLabel": "{{count}} คน",
+    "since": "เริ่มเมื่อ {{date}}"
   },
   "appointment": {
     "title": "นัดหมาย",
