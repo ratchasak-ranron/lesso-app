@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-object-injection -- status is a constant union literal */
+/* eslint-disable security/detect-object-injection -- status/accent are constant union literals */
 import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,7 +6,7 @@ import { Sparkline } from '@/components/ui/sparkline';
 import { cn } from '@/lib/utils';
 
 type Status = 'default' | 'warning' | 'destructive';
-type Accent = 'honey' | 'ink-blue' | 'sage' | 'leaf' | 'petal' | 'slate';
+type Accent = 'indigo' | 'sky' | 'emerald' | 'violet' | 'amber' | 'rose' | 'zinc';
 
 interface KpiTileProps {
   label: string;
@@ -15,38 +15,40 @@ interface KpiTileProps {
   description?: string;
   trend?: ReadonlyArray<number>;
   status?: Status;
-  /** Section accent for left-border + icon. Status overrides accent. */
+  /** Section accent for the icon chip + dot. Status overrides accent. */
   accent?: Accent;
 }
 
-const STATUS_BORDER: Record<Status, string> = {
-  default: 'border-l-border',
-  warning: 'border-l-warning',
-  destructive: 'border-l-destructive',
+const STATUS_CHIP: Record<Status, string> = {
+  default: 'bg-muted text-foreground',
+  warning: 'bg-amber-soft text-amber-ink',
+  destructive: 'bg-rose-soft text-rose-ink',
 };
 
-const STATUS_ICON: Record<Status, string> = {
-  default: 'text-primary',
-  warning: 'text-warning',
-  destructive: 'text-destructive',
+const STATUS_DOT: Record<Status, string> = {
+  default: 'bg-foreground',
+  warning: 'bg-amber',
+  destructive: 'bg-rose',
 };
 
-const ACCENT_BORDER: Record<Accent, string> = {
-  honey: 'border-l-honey',
-  'ink-blue': 'border-l-ink-blue',
-  sage: 'border-l-secondary',
-  leaf: 'border-l-leaf',
-  petal: 'border-l-petal',
-  slate: 'border-l-primary',
+const ACCENT_CHIP: Record<Accent, string> = {
+  indigo: 'bg-indigo-soft text-indigo-ink',
+  sky: 'bg-sky-soft text-sky-ink',
+  emerald: 'bg-emerald-soft text-emerald-ink',
+  violet: 'bg-violet-soft text-violet-ink',
+  amber: 'bg-amber-soft text-amber-ink',
+  rose: 'bg-rose-soft text-rose-ink',
+  zinc: 'bg-muted text-foreground',
 };
 
-const ACCENT_ICON: Record<Accent, string> = {
-  honey: 'text-honey-ink',
-  'ink-blue': 'text-ink-blue',
-  sage: 'text-secondary',
-  leaf: 'text-leaf-ink',
-  petal: 'text-petal-ink',
-  slate: 'text-primary',
+const ACCENT_DOT: Record<Accent, string> = {
+  indigo: 'bg-indigo',
+  sky: 'bg-sky',
+  emerald: 'bg-emerald',
+  violet: 'bg-violet',
+  amber: 'bg-amber',
+  rose: 'bg-rose',
+  zinc: 'bg-foreground',
 };
 
 export function KpiTile({
@@ -60,18 +62,30 @@ export function KpiTile({
 }: KpiTileProps) {
   const { t } = useTranslation();
   const useAccent = status === 'default' && accent !== undefined;
-  const borderClass = useAccent ? ACCENT_BORDER[accent] : STATUS_BORDER[status];
-  const iconClass = useAccent ? ACCENT_ICON[accent] : STATUS_ICON[status];
+  const chipClass = useAccent ? ACCENT_CHIP[accent] : STATUS_CHIP[status];
+  const dotClass = useAccent ? ACCENT_DOT[accent] : STATUS_DOT[status];
   return (
-    <Card className={cn('border-l-4', borderClass)}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">{label}</CardTitle>
-        <Icon className={cn('size-5 shrink-0', iconClass)} aria-hidden="true" />
+    <Card className="relative overflow-hidden p-5 transition-shadow hover:shadow-hover">
+      <CardHeader className="flex flex-row items-start justify-between space-y-0 p-0 pb-3">
+        <div className="flex items-center gap-2">
+          <span aria-hidden="true" className={cn('size-1.5 rounded-full', dotClass)} />
+          <CardTitle className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            {label}
+          </CardTitle>
+        </div>
+        <span
+          aria-hidden="true"
+          className={cn('flex size-9 items-center justify-center rounded-lg', chipClass)}
+        >
+          <Icon className="size-[18px]" strokeWidth={2} />
+        </span>
       </CardHeader>
-      <CardContent className="space-y-2 pt-0">
-        <p className="font-heading text-3xl font-semibold tabular-nums leading-none">{value}</p>
-        {/* Status is conveyed visually via border + icon colour. Surface the
-            same signal to AT users so the badge is not colour-only (SC 1.4.1). */}
+      <CardContent className="space-y-2 p-0">
+        <p className="font-heading text-3xl font-semibold tabular-nums leading-none tracking-tight text-foreground">
+          {value}
+        </p>
+        {/* Status is conveyed visually via dot + chip color. Surface the
+            same signal to AT users so the badge is not colour-only. */}
         {status !== 'default' ? (
           <span className="sr-only">{t(`kpi.status.${status}`)}</span>
         ) : null}

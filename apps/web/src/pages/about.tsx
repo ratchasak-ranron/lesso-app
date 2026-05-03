@@ -53,8 +53,8 @@ export function AboutPage() {
         eyebrow={t('about.missionEyebrow')}
         variant="muted"
       >
-        <blockquote className="border-l-4 border-secondary pl-6">
-          <p className="font-heading text-2xl italic leading-relaxed text-foreground md:text-3xl">
+        <blockquote className="border-l-4 border-indigo pl-6">
+          <p className="text-2xl font-medium leading-relaxed tracking-tight text-foreground md:text-3xl">
             {t('about.mission')}
           </p>
         </blockquote>

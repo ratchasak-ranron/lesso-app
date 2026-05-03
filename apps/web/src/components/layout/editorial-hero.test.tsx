@@ -18,13 +18,12 @@ describe('EditorialHero', () => {
     // Eyebrow paragraph (uppercase + tracking)
     expect(screen.getByText('Less, on purpose')).toBeInTheDocument();
 
-    // H1 contains both lines (the second wrapped in italic span)
+    // H1 contains both lines.
     const heading = screen.getByRole('heading', { level: 1 });
     expect(heading).toHaveTextContent('Clinic software,');
     expect(heading).toHaveTextContent('distilled.');
-    expect(heading.querySelector('span.italic')).not.toBeNull();
 
-    // Decorative HR rule with aria-hidden
+    // Decorative accent rule.
     const hr = document.querySelector('hr[aria-hidden="true"]');
     expect(hr).not.toBeNull();
 

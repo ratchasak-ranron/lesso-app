@@ -9,18 +9,24 @@ interface PageIntroProps {
 
 /**
  * Top-of-page header for non-Home routes. Mirrors `EditorialHero`'s rhythm
- * but smaller (h1 instead of hero-scale, terracotta rule below). Each
- * non-Home page renders this once at the top.
+ * but smaller (h1 instead of hero-scale). Each non-Home page renders this
+ * once at the top.
  */
 export function PageIntro({ eyebrow, heading, sub, className }: PageIntroProps) {
   return (
-    <section className={cn('bg-background', className)}>
-      <div className="mx-auto max-w-4xl px-6 pt-16 pb-12 md:pt-24 md:pb-16">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-secondary">{eyebrow}</p>
-        <h1 className="mt-4 font-heading text-4xl font-semibold leading-tight tracking-tight text-foreground md:text-6xl">
+    <section className={cn('relative bg-background', className)}>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[400px] bg-[radial-gradient(60%_60%_at_50%_0%,hsl(var(--indigo-soft))_0%,transparent_70%)]"
+      />
+      <div className="mx-auto max-w-4xl px-6 pb-14 pt-16 md:pb-20 md:pt-24">
+        <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-ink">
+          <span aria-hidden="true" className="size-1.5 rounded-full bg-indigo" />
+          {eyebrow}
+        </p>
+        <h1 className="mt-5 text-4xl font-semibold leading-[1.05] tracking-[-0.03em] text-foreground md:text-6xl lg:text-7xl">
           {heading}
         </h1>
-        <hr className="mt-6 h-0 w-16 border-0 border-t-2 border-secondary" aria-hidden="true" />
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
           {sub}
         </p>

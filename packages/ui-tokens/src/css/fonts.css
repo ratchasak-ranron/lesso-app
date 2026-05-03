@@ -1,15 +1,17 @@
-/* Reinly typography — quiet editorial.
- *   Heading (Latin): Playfair Display (italic accent reserved for hero)
- *   Heading (Thai):  Noto Serif Thai — pairs with Playfair editorial feel
- *   Body (Latin):    Inter
- *   Body (Thai):     IBM Plex Sans Thai Looped — per brand doc; looped
- *                    glyphs are easier-reading for Thai clinic users than
- *                    Western-style loopless sans (Noto Sans Thai default).
- *   Mono:            JetBrains Mono — receipts + ID values
- * Reference: docs/marketing/reinly.md + design-system/reinly-brand/MASTER.md
+/* Reinly typography — Soft Modern (v2 redesign).
  *
- * Note: brand doc lists humanist serifs (GT Sectra, Source Serif) as
- * preferred Latin display options. Playfair Display retained for now —
- * candidate font swap is a follow-up rebrand pass.
+ *   Latin (heading + body): Geist Sans
+ *   Thai  (heading + body): IBM Plex Sans Thai Looped
+ *   Mono:                   Geist Mono
+ *
+ * Single-family Latin (no serif). Geist is Vercel's open-source typeface
+ * tuned for product UI — close metrics to Inter but with a more
+ * distinctive geometric character. IBM Plex Sans Thai Looped is the
+ * pairing chosen for Thai since loop-style glyphs read naturally for
+ * Thai users (where loopless system fonts feel foreign).
+ *
+ * Note: fonts are loaded via <link rel="stylesheet"> in apps/{app,web}/
+ * index.html for reliability — this @import is a defensive fallback so
+ * dev/test environments without the HTML link still get the fonts.
  */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;500;600;700&family=IBM+Plex+Sans+Thai+Looped:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&family=IBM+Plex+Sans+Thai+Looped:wght@300;400;500;600;700&display=swap');

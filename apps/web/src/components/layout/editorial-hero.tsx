@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useResolvedLocale } from '@/lib/use-locale';
 import { track } from '@/lib/analytics';
@@ -12,9 +12,9 @@ const TRUST_KEYS = (Object.keys(en.home.trust) as Array<keyof typeof en.home.tru
 );
 
 /**
- * Editorial premium hero — left-anchored, italic-accent serif headline,
- * terracotta eyebrow + rule, deep-teal CTA, sage-tinted trust strip.
- * Pulls all copy from `useResolvedLocale.t`; no inline strings.
+ * Soft-modern hero — center-anchored, oversized geometric headline,
+ * indigo accent dot + ghost gradient, single primary CTA. Copy comes
+ * from `useResolvedLocale.t`; no inline strings.
  */
 export function EditorialHero() {
   const { locale, t } = useResolvedLocale();
@@ -22,45 +22,56 @@ export function EditorialHero() {
 
   return (
     <section className="relative overflow-hidden bg-background">
-      <div className="mx-auto max-w-4xl px-6 py-24 md:py-36">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-secondary">
-          {t('home.eyebrow')}
-        </p>
+      {/* Subtle gradient glow — sits behind the hero, doesn't render in
+          screenshots aggressive enough to read as "AI gradient". */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[640px] bg-[radial-gradient(60%_60%_at_50%_0%,hsl(var(--indigo-soft))_0%,transparent_70%)]"
+      />
 
-        <h1 className="mt-6 font-heading text-5xl font-semibold leading-[1.05] tracking-tight text-foreground md:text-7xl">
-          {t('home.heroLine1')}
-          <br />
-          <span className="font-normal italic">{t('home.heroLine2')}</span>
-        </h1>
+      <div className="mx-auto max-w-5xl px-6 py-24 md:py-36">
+        <div className="flex flex-col items-center text-center">
+          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground shadow-card">
+            <span aria-hidden="true" className="size-1.5 rounded-full bg-indigo" />
+            {t('home.eyebrow')}
+          </p>
 
-        <hr
-          className="mt-8 h-0 w-16 border-0 border-t-2 border-secondary"
-          aria-hidden="true"
-        />
+          <h1 className="mt-8 font-heading text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-foreground sm:text-6xl md:text-7xl lg:text-8xl">
+            {t('home.heroLine1')}
+            <br />
+            <span className="text-muted-foreground">{t('home.heroLine2')}</span>
+          </h1>
 
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-          {t('home.heroSubheading')}
-        </p>
+          <hr
+            className="mt-10 h-0 w-16 border-0 border-t-2 border-indigo"
+            aria-hidden="true"
+          />
 
-        <div className="mt-10 flex flex-wrap items-center gap-4">
-          <Button size="lg" className="shadow-card" asChild>
-            <a
-              href={pilotHref}
-              onClick={() => track('cta_click', { source: 'hero', locale })}
-            >
-              {t('home.pilotComingSoonCta')}
-            </a>
-          </Button>
+          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
+            {t('home.heroSubheading')}
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <Button size="lg" className="shadow-card" asChild>
+              <a
+                href={pilotHref}
+                onClick={() => track('cta_click', { source: 'hero', locale })}
+              >
+                {t('home.pilotComingSoonCta')}
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </a>
+            </Button>
+          </div>
+
+          <ul className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+            {TRUST_KEYS.map((key) => (
+              <li key={key} className="inline-flex items-center gap-1.5">
+                <Check className="size-3.5 shrink-0 text-emerald-ink" aria-hidden="true" />
+                {t(key)}
+              </li>
+            ))}
+          </ul>
         </div>
-
-        <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-xs text-muted-foreground">
-          {TRUST_KEYS.map((key) => (
-            <li key={key} className="inline-flex items-center gap-1.5">
-              <Check className="size-3.5 shrink-0 text-success" aria-hidden="true" />
-              {t(key)}
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );

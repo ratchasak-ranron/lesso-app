@@ -21,30 +21,30 @@ const ICONS: Record<string, LucideIcon> = {
   pdpa: ShieldCheck,
 };
 
-type FeatureAccent = 'leaf' | 'ink-blue' | 'petal' | 'honey' | 'sage';
+type FeatureAccent = 'violet' | 'sky' | 'emerald' | 'indigo' | 'amber';
 
 const FEATURE_ACCENTS: Record<string, FeatureAccent> = {
-  course: 'leaf',
-  branches: 'ink-blue',
-  line: 'petal',
-  ai: 'honey',
-  pdpa: 'sage',
+  course: 'violet',
+  branches: 'sky',
+  line: 'emerald',
+  ai: 'indigo',
+  pdpa: 'amber',
 };
 
 const ILLUSTRATION_BG: Record<FeatureAccent, string> = {
-  leaf: 'bg-leaf-soft',
-  'ink-blue': 'bg-ink-blue-soft',
-  petal: 'bg-petal-soft',
-  honey: 'bg-honey-soft',
-  sage: 'bg-muted',
+  violet: 'bg-violet-soft',
+  sky: 'bg-sky-soft',
+  emerald: 'bg-emerald-soft',
+  indigo: 'bg-indigo-soft',
+  amber: 'bg-amber-soft',
 };
 
 const ILLUSTRATION_ICON: Record<FeatureAccent, string> = {
-  leaf: 'text-leaf-ink',
-  'ink-blue': 'text-ink-blue',
-  petal: 'text-petal-ink',
-  honey: 'text-honey-ink',
-  sage: 'text-secondary',
+  violet: 'text-violet-ink',
+  sky: 'text-sky-ink',
+  emerald: 'text-emerald-ink',
+  indigo: 'text-indigo-ink',
+  amber: 'text-amber-ink',
 };
 
 // Decorative-only placeholder until real illustrations land in B4. The
@@ -54,13 +54,13 @@ const ILLUSTRATION_ICON: Record<FeatureAccent, string> = {
 function Illustration({ Icon, accent }: { Icon: LucideIcon; accent: FeatureAccent }) {
   return (
     <div
-      className={`flex aspect-[4/3] w-full max-w-md items-center justify-center rounded-card shadow-card ${ILLUSTRATION_BG[accent]}`}
+      className={`flex aspect-[4/3] w-full max-w-md items-center justify-center rounded-card border border-border ${ILLUSTRATION_BG[accent]}`}
       aria-hidden="true"
     >
       <Icon
         className={`size-20 ${ILLUSTRATION_ICON[accent]}`}
         aria-hidden="true"
-        strokeWidth={1.25}
+        strokeWidth={1.5}
       />
     </div>
   );
@@ -85,7 +85,7 @@ export function FeaturesPage() {
 
       {dict.features.sections.map((section, idx) => {
         const Icon = ICONS[section.id] ?? GraduationCap;
-        const accent = FEATURE_ACCENTS[section.id] ?? 'sage';
+        const accent = FEATURE_ACCENTS[section.id] ?? 'indigo';
         return (
           <FeatureSection
             key={section.id}

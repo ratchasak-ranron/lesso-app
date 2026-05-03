@@ -26,33 +26,28 @@ const HOME_FEATURE_ICONS: Record<string, LucideIcon> = {
 // top border + tinted icon to make the feature grid scannable and memorable
 // while keeping body text on bone+slate.
 interface FeatureAccentClasses {
-  border: string;
   icon: string;
   iconBg: string;
 }
 
 const FALLBACK_ACCENT: FeatureAccentClasses = {
-  border: 'border-t-leaf',
-  icon: 'text-leaf-ink',
-  iconBg: 'bg-leaf-soft',
+  icon: 'text-violet-ink',
+  iconBg: 'bg-violet-soft',
 };
 
 const HOME_FEATURE_ACCENTS: Record<string, FeatureAccentClasses> = {
   course: FALLBACK_ACCENT,
   branches: {
-    border: 'border-t-ink-blue',
-    icon: 'text-ink-blue',
-    iconBg: 'bg-ink-blue-soft',
+    icon: 'text-sky-ink',
+    iconBg: 'bg-sky-soft',
   },
   line: {
-    border: 'border-t-petal',
-    icon: 'text-petal-ink',
-    iconBg: 'bg-petal-soft',
+    icon: 'text-emerald-ink',
+    iconBg: 'bg-emerald-soft',
   },
   ai: {
-    border: 'border-t-honey',
-    icon: 'text-honey-ink',
-    iconBg: 'bg-honey-soft',
+    icon: 'text-indigo-ink',
+    iconBg: 'bg-indigo-soft',
   },
 };
 
@@ -120,14 +115,17 @@ export function HomePage() {
             const Icon = HOME_FEATURE_ICONS[item.id] ?? GraduationCap;
             const accent = HOME_FEATURE_ACCENTS[item.id] ?? FALLBACK_ACCENT;
             return (
-              <Card key={item.id} className={`border-t-4 p-6 ${accent.border}`}>
+              <Card
+                key={item.id}
+                className="group p-6 transition-shadow duration-200 hover:shadow-hover"
+              >
                 <span
-                  className={`inline-flex size-12 items-center justify-center rounded-full ${accent.iconBg}`}
+                  className={`inline-flex size-12 items-center justify-center rounded-xl ${accent.iconBg}`}
                   aria-hidden="true"
                 >
-                  <Icon className={`size-6 ${accent.icon}`} strokeWidth={1.75} />
+                  <Icon className={`size-6 ${accent.icon}`} strokeWidth={2} />
                 </span>
-                <p className="mt-4 font-heading text-lg font-semibold text-foreground">
+                <p className="mt-5 text-lg font-semibold tracking-tight text-foreground">
                   {item.title}
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.body}</p>

@@ -1,4 +1,4 @@
-# Design System Master File — Reinly
+# Reinly Design System — v2 (Soft Modern)
 
 > **LOGIC:** When building a specific page, first check `design-system/pages/[page-name].md`.
 > If that file exists, its rules **override** this Master file.
@@ -7,142 +7,131 @@
 ---
 
 **Project:** Reinly
-**Generated:** 2026-05-02
+**Generated:** 2026-05-03 (v2 redesign)
 **Category:** Healthcare SaaS — small-clinic backoffice
-**Brand source of truth:** [`docs/marketing/reinly.md`](../../docs/marketing/reinly.md)
+**Tokens source of truth:** [`packages/ui-tokens/src/css/tokens.css`](../../packages/ui-tokens/src/css/tokens.css)
 
 ---
 
-## Brand Essence
+## Brand Essence (v2)
 
-> **Clinic software, distilled.**
-> Quiet, fair, complete. Less, on purpose.
+> **Soft modern. One bold accent.**
+> Clean white surfaces, indigo signature, per-section color memory.
 
-The visual identity is *thoughtful product*, not *generic healthcare*. Avoid medical-cross / stethoscope / aggressive blue gradients. Lean editorial-warm: bone paper background, slate ink, sage accent, clay used only for urgent signals.
+The visual identity is *modern product* — Linear / Vercel / Notion sensibility with section-accent color rotation for memorability. Body content stays neutral (zinc-950 on white) so colored accents read as deliberate signal, not noise.
 
 ---
 
-## Global Rules
+## Core Palette
 
-### Color Palette
+| Role | Hex | Usage | Contrast on bg |
+|------|-----|-------|---------------|
+| Background | `#FAFAFA` | App + web body bg | — |
+| Card | `#FFFFFF` | Cards, popovers, dialogs | — |
+| Foreground | `#09090B` | Body text, primary text | 20.6 : 1 AAA |
+| Muted-fg | `#71717A` | Descriptions, captions | 4.6 : 1 AA |
+| Border | `#E4E4E7` | Card edges, input borders | UI-only |
+| **Primary** | `#6366F1` | Brand action, hero CTA, focus ring | 4.6 : 1 AA |
+| Success | `#059669` | Success states, trust check, positive deltas | 4.7 : 1 AA |
+| Warning | `#D97706` | Warning states (low-stock alerts) | 4.5 : 1 AA |
+| Destructive | `#E11D48` | Errors, destructive actions | 5.1 : 1 AA |
 
-Runtime tokens live in [`packages/ui-tokens/src/css/tokens.css`](../../packages/ui-tokens/src/css/tokens.css). Hex values shown with contrast notes.
+## Section Accents (memorability)
 
-#### Core (brand quietness)
+Each primary section gets a signature color. Used for: nav active state, KPI tile dot + icon chip, eyebrow on web, left-border on banners. Body text + cards stay neutral.
 
-| Role | Hex | Usage | Contrast on bone |
-|------|-----|-------|-------|
-| Bone (background) | `#F5F2EC` | Body bg — paper feel | — |
-| Cream (cards) | `#FAF7F1` | Card surfaces, warmer than bone | — |
-| Mist (muted) | `#E6E2DA` | Dividers, subtle surfaces | UI-only |
-| Slate ink (foreground + primary) | `#1F2328` | Body text, primary action | 14.6 : 1 AAA |
-| Sage (secondary + success) | `#5A7060` | Text-safe accent, success | 4.6 : 1 AA |
-| Brand sage (surface fill) | `#9CAE9F` | Decorative fill / badges only | not text-safe |
-| Clay (destructive) | `#A85F3F` | Errors, urgent only | 5.0 : 1 AA |
-| Border | `#A89E84` | Lines, input borders | 3.0 : 1 (UI) |
-
-#### Section accents (memorability)
-
-Each primary nav section gets a signature color used for left-border, eyebrow, KPI tile borders, and active-tab tint. Body text and cards remain bone+slate. Use the `*-ink` text-safe variant when placing the color on text; bare token + `-soft` are surface-only.
-
-| Section | Token | Surface | Text-safe (`-ink`) | Wash bg (`-soft`) |
+| Section | Token | Surface | Text-safe (`-ink`) | Soft wash (`-soft`) |
 |---|---|---|---|---|
-| Today | `honey` | `#D6A24C` | `#8A5E1F` (5.7:1) | `#FBEFD7` |
-| Patients | `ink-blue` | `#3D5A80` (text-safe, 6.4:1) | — | `#DCE6F2` |
-| Appointments | `sage` (existing) | `#5A7060` (text-safe) | — | mist |
-| Courses | `leaf` | `#7A9A7E` | `#4A6E50` (5.4:1) | `#DDEBDF` |
-| Walk-in | `petal` | `#E8C4B8` (surface only) | `#864E3F` (5.0:1) | `#F8E6E0` |
-| Inventory | `clay` (existing) | `#A85F3F` (text-safe) | — | `bg-destructive/10` |
-| Reports / Audit | `slate` (existing) | `#1F2328` | — | `bg-primary/10` |
+| Today | **indigo** | `#6366F1` | `#4F46E5` (5.4:1) | `#EEF2FF` |
+| Patients | **sky** | `#0EA5E9` | `#0284C7` (4.6:1) | `#F0F9FF` |
+| Appointments / Branches | **emerald** | `#10B981` | `#059669` (4.7:1) | `#ECFDF5` |
+| Courses | **violet** | `#A855F7` | `#7C3AED` (5.5:1) | `#FAF5FF` |
+| Walk-in | **amber** | `#F59E0B` | `#D97706` (4.5:1) | `#FFFBEB` |
+| Inventory | **rose** | `#F43F5E` | `#E11D48` (5.1:1) | `#FFF1F2` |
+| Reports / Audit | **zinc** | `#3F3F46` | `#09090B` | `#F4F4F5` |
 
 **Color rules:**
-- Sage is the brand's calm/health signal — use for success, secondary actions, and editorial accents.
-- Brand sage `#9CAE9F` is for fills only — never as text on bone.
-- Clay is reserved for urgent errors and the Inventory section. Use sparingly outside Inventory.
-- Section accents are tints, not loud color. Use one per section as left-border / eyebrow / KPI tile / active nav. Body text always stays slate; card bg stays bone/cream.
-- For text on a colored surface, use the `-ink` variant (honey-ink, leaf-ink, petal-ink). Bare `honey`, `petal`, `leaf` are surface fills only.
-- `*-soft` variants are wash backgrounds — use behind icons (rounded chip) or strip backgrounds, not as primary card surface.
-- Web marketing rotates `leaf → ink-blue → petal → honey` across the home feature grid (1 accent per card) for memorability without circus.
-- Featured pricing tier uses honey (border + badge).
-- Never use bright neon, AI gradients, or medical-blue.
+- Bare token (`bg-indigo`) = surface fill — dots, dot-indicator pills, KPI border-l, decorative chips.
+- `-ink` variant = text-safe — use whenever color sits on text.
+- `-soft` variant = wash bg — behind icon chips (`bg-indigo-soft + text-indigo-ink`), active nav-item, badges.
+- Featured pricing tier uses **indigo** primary (border + filled badge).
+- Web feature grid rotates **indigo → sky → emerald → violet** across the 4 home cards (1 accent per card).
+- Never use bright neon, AI gradients, or healthcare-blue cliché.
 
-### Typography
+## Typography
 
-- **Heading:** Playfair Display (italic accent reserved for hero)
-- **Body:** Inter
-- **Body (Thai):** Noto Sans Thai (auto-fallback chain)
-- **Mono:** JetBrains Mono — receipts + ID values
+- **Latin (heading + body):** Geist (Vercel's open-source UI typeface)
+- **Thai (heading + body):** IBM Plex Sans Thai Looped (loop-style for Thai readability)
+- **Mono:** Geist Mono — receipts, IDs, audit values
 
-**Brand-doc note:** humanist serifs (GT Sectra, Source Serif) are the long-term display direction. Playfair Display retained for now; font swap is a candidate follow-up rebrand pass.
+Single-family Latin: heading and body use the same font, differentiated by weight (semibold/medium) and tracking (`-0.03em` to `-0.04em` on display sizes). No serif.
 
-CSS import lives in [`packages/ui-tokens/src/css/fonts.css`](../../packages/ui-tokens/src/css/fonts.css).
+CSS load: `<link rel="stylesheet">` in `apps/{app,web}/index.html` + defensive `@import` in [`packages/ui-tokens/src/css/fonts.css`](../../packages/ui-tokens/src/css/fonts.css).
 
-### Spacing Variables
+### Type scale (display / heading)
+
+| Use | Size | Weight | Tracking |
+|---|---|---|---|
+| Hero h1 | `text-7xl` → `text-8xl` | `font-semibold` | `-0.04em` |
+| Page intro h1 | `text-6xl` → `text-7xl` | `font-semibold` | `-0.03em` |
+| Section h2 | `text-4xl` → `text-5xl` | `font-semibold` | `-0.025em` |
+| Card title | `text-base` → `text-lg` | `font-semibold` | `-0.01em` |
+| KPI value | `text-3xl` | `font-semibold tabular-nums` | `-0.01em` |
+| Body | `text-base` | `font-normal` | normal |
+| Eyebrow | `text-xs` | `font-semibold uppercase` | `0.18em` |
+
+## Radii
+
+- `--radius` `12px` — buttons (`rounded-lg` ≈ 12px)
+- `--radius-input` `10px` — text inputs
+- `--radius-card` `20px` — Card / KpiTile / Dialog
+- Section-accent dot: `rounded-full`, 6px (`size-1.5`)
+- Icon chip: `rounded-xl` (12px) or `rounded-lg` (10px)
+
+## Shadows
+
+- `shadow-card` — soft layered (1px ambient + 2-3px diffuse) for surfaces
+- `shadow-popover` — taller layered (24px) for menus/dialogs
+- `shadow-hover` — bumped layer for interactive cards on hover
+
+## Spacing
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--space-xs` | `4px` | Tight gaps |
-| `--space-sm` | `8px` | Icon gaps, inline spacing |
-| `--space-md` | `16px` | Standard padding |
-| `--space-lg` | `24px` | Section padding |
-| `--space-xl` | `32px` | Large gaps |
-| `--space-2xl` | `48px` | Section margins |
-| `--space-3xl` | `64px` | Hero padding |
-
-### Radius
-
-- `--radius` `8px` — buttons, inputs (decisive, tight)
-- `--radius-card` `16px` — Card / KpiTile / Dialog (soft, calm)
-
-### Shadow
-
-Bone-tinted shadows preserve the warm surface feel without "cold SaaS" grey:
-
-- `--shadow-card` — cards, buttons
-- `--shadow-popover` — modals, dropdowns
+| `gap-1` | 4px | Tight inline groups (eyebrow dot to label) |
+| `gap-2` | 8px | Icon → text in nav-item |
+| `gap-3` | 12px | Sidebar item padding-left |
+| `p-5` | 20px | KPI tile padding |
+| `p-6` → `p-8` | 24–32px | Cards, dialog body |
+| `py-20 md:py-28` | 80–112px | Section vertical rhythm |
 
 ---
 
-## Voice & Tone
+## Web Marketing Hero Pattern
 
-**Plain, warm, professional. Like a competent friend who happens to know clinics.**
+- Center-anchored. Pill eyebrow with indigo dot. Massive type (5xl→8xl). Indigo accent rule. Single primary CTA. Trust strip checks in emerald.
+- Subtle radial gradient glow (indigo-soft) sits behind hero — not a "AI gradient", just one soft blur.
+- No competing CTAs. Primary action is **Join the pilot**.
 
-| Reinly sounds like | Reinly doesn't sound like |
-|---|---|
-| "Schedule's set. See you tomorrow." | "🎉 Appointment successfully scheduled!" |
-| "One price. No surprises." | "Contact sales for enterprise pricing!" |
-| "Built for small clinics." | "The leading AI-powered healthcare platform!" |
-| "Your data stays yours." | "Industry-leading data ecosystem!" |
+## App Dashboard Pattern
 
-**Writing rules:**
-- Short sentences. Plain words.
-- Talk to the doctor, the receptionist, the clinic owner — not "stakeholders."
-- Never say "revolutionary," "AI-powered," "seamless," "robust."
-- Localize properly. Thai users get real Thai, not Google Translate Thai.
-- Default copy in patient-facing surfaces never mentions Reinly — the clinic is the brand to the patient.
-
----
-
-## Page Pattern
-
-**Pattern Name:** Editorial single-column, left-anchored
-
-- Hero: eyebrow (sage, uppercase, tracked) → italic-accent serif headline → short rule → calm body → primary CTA → trust strip
-- CTA Placement: above the fold, single primary
-- Section Order: Hero → Problem/Solution → Features → Social proof → Pricing teaser → FAQ → Final CTA
+- Sidebar 60w, `R` mark in indigo square + brand name. Nav items: 18px icon + medium label, active = soft section bg + ink text + bolder icon stroke.
+- Bottom tab (`<sm`): top-pill indicator filled with section color (8px wide × 4px tall) when active.
+- Today KPI tiles: dot + uppercase muted label · big tabular value · soft-bg icon chip in section color · optional trend sparkline.
+- Page heading: section eyebrow with section dot, then h2 in semibold tracking-tight.
 
 ---
 
 ## Anti-Patterns (Do NOT Use)
 
-- ❌ Bright neon colors
-- ❌ Motion-heavy animations
-- ❌ AI purple/pink gradients
-- ❌ Medical crosses, stethoscopes, EKG lines
-- ❌ Aggressive blue "trust" gradients
+- ❌ Serif fonts (no Playfair, no italic accent — single-family Latin)
+- ❌ Big multi-color hero gradients (one subtle radial glow only)
+- ❌ Section accents on body text or large surfaces (chips/dots/borders only)
+- ❌ Mixed icon weight on one screen (active = 2.25, default = 1.75)
+- ❌ Round-scale hover transforms (use shadow change, not `scale`)
+- ❌ Healthcare-blue cliché (no `#0891B2` cyan, no medical-cross)
 - ❌ Per-tier upsell language ("Unlock", "Premium", "Enterprise")
-- ❌ Emojis as icons — use SVG (Lucide / Heroicons)
-- ❌ Layout-shifting hovers — color/opacity only
+- ❌ Emojis as icons — use SVG (Lucide)
 - ❌ Low contrast text — maintain 4.5:1 minimum
 - ❌ Instant state changes — always 150–300ms transitions
 - ❌ Invisible focus states — focus rings must be visible
@@ -153,15 +142,14 @@ Bone-tinted shadows preserve the warm surface feel without "cold SaaS" grey:
 
 Before delivering any UI code, verify:
 
-- [ ] No emojis used as icons (use SVG instead)
-- [ ] All icons from consistent set (Lucide)
+- [ ] Geist + IBM Plex Sans Thai Looped both load (browser inspect → DOM fonts loaded)
 - [ ] `cursor-pointer` on all clickable elements
 - [ ] Hover states with smooth transitions (150–300ms)
-- [ ] Light mode: text contrast 4.5:1 minimum
-- [ ] Focus states visible for keyboard navigation
-- [ ] `prefers-reduced-motion` respected
+- [ ] Focus rings visible on all interactive elements (2px ring + 2px offset)
+- [ ] Text contrast 4.5:1 minimum (use `-ink` variants for text on color)
+- [ ] Section accent applied to nav active + KPI tile dot
 - [ ] Responsive: 375px, 768px, 1024px, 1440px
 - [ ] No content hidden behind fixed navbars
 - [ ] No horizontal scroll on mobile
-- [ ] Brand sage `#9CAE9F` never used as text on bone
-- [ ] Clay `#C97F5C` reserved for urgent only (not decorative)
+- [ ] No emojis used as icons (use SVG instead)
+- [ ] `prefers-reduced-motion` respected

@@ -31,12 +31,11 @@ describe('Section', () => {
 });
 
 describe('PageIntro', () => {
-  it('renders eyebrow + h1 + sub + accent rule', () => {
-    const { container } = render(<PageIntro eyebrow="E" heading="H" sub="S" />);
+  it('renders eyebrow + h1 + sub', () => {
+    render(<PageIntro eyebrow="E" heading="H" sub="S" />);
     expect(screen.getByText('E')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: 'H' })).toBeInTheDocument();
     expect(screen.getByText('S')).toBeInTheDocument();
-    expect(container.querySelector('hr[aria-hidden="true"]')).not.toBeNull();
   });
 });
 

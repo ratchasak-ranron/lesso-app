@@ -1,146 +1,157 @@
-/* Reinly design tokens — light + dark.
- * Brand: bone + slate + sage + mist + clay + cream — quiet editorial.
- *   ink slate #1F2328 primary (actions, body text)
- *   secondary sage #5A7060 (text-safe accent)
- *   destructive clay #A85F3F (text-safe urgent)
- *   bone #F5F2EC background — paper feel
- *   cream #FAF7F1 cards (warmer)
- *   mist #E6E2DA muted surfaces
+/* Reinly design tokens — Soft Modern (v2 redesign).
  *
- * Section-accent palette (memorability tints, surface-only on bone):
- *   honey   #D6A24C  — Today/Home, KPI positive, loyalty, eyebrow
- *   ink     #3D5A80  — Patients, charts primary, info banners, links
- *   petal   #E8C4B8  — Walk-in card, today highlight, decorative wash
- *   leaf    #7A9A7E  — Courses progress fill, success badges
- *   (sage / clay retained from brand pillar)
+ * Palette: zinc neutrals + indigo primary + emerald/amber/rose status,
+ * with section-accent rotation (sky / emerald / violet / amber / rose / zinc).
  *
- * Reference: docs/marketing/reinly.md + design-system/reinly-brand/MASTER.md
+ * Brand intent: "Linear / Vercel / Notion-modern" — clean white surfaces,
+ * one bold accent, generous radius, layered soft shadow. Memorable
+ * because of the indigo-against-white contrast plus per-section tinting.
  *
- * Contrast notes (vs `--background` bone #F5F2EC):
- *   foreground (ink slate #1F2328)         14.6 : 1   AAA
- *   primary (ink slate #1F2328)            14.6 : 1   AAA  (button bg → bone fg = AAA inverse)
- *   muted-foreground (stone-600 #57534E)    7.0 : 1   AAA
- *   secondary sage #5A7060                  4.6 : 1   AA   (text-safe; brand sage #9CAE9F is surface-only)
- *   destructive clay #A85F3F                5.0 : 1   AA
- *   border #A89E84                          3.0 : 1   passes 1.4.11 (brand mist #E6E2DA fails for UI)
- *   honey-ink #8A5E1F                       5.7 : 1   AA   (text-safe variant for honey)
- *   ink-blue #3D5A80                        6.4 : 1   AA   (text-safe)
- *   leaf-ink #4A6E50                        5.4 : 1   AA   (text-safe variant for leaf)
- *   petal #E8C4B8                           1.4 : 1   surface-only (decorative; pair with foreground text)
+ * Contrast (vs `--background` zinc-50 #FAFAFA):
+ *   foreground (zinc-950 #09090B)        20.6 : 1   AAA
+ *   primary    (indigo-500 #6366F1)       4.6 : 1   AA  (text-safe on white)
+ *   muted-foreground (zinc-500 #71717A)   4.6 : 1   AA
+ *   success    (emerald-600 #059669)      4.7 : 1   AA
+ *   warning    (amber-600  #D97706)       4.5 : 1   AA
+ *   destructive (rose-600  #E11D48)       5.1 : 1   AA
+ *   border     (zinc-200   #E4E4E7)       UI-only
  */
 
 :root {
   /* Brand */
-  --primary: 213 12% 14%;            /* #1F2328 ink slate — primary action + emphasis */
-  --primary-foreground: 40 23% 94%;  /* #F5F2EC bone — on slate */
-  --secondary: 135 10% 40%;          /* #5A7060 darker sage — text-safe (≥4.5:1 on bone) */
-  --secondary-foreground: 40 23% 94%;
+  --primary: 239 84% 67%;             /* #6366F1 indigo-500 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 5% 26%;            /* #3F3F46 zinc-700 — neutral secondary */
+  --secondary-foreground: 0 0% 100%;
 
   /* Status */
-  --success: 135 10% 40%;            /* #5A7060 sage — calm/health signal (matches brand pillar) */
-  --success-foreground: 40 23% 94%;
-  --warning: 32 94% 44%;             /* #D97706 amber-600 */
+  --success: 160 84% 30%;             /* #059669 emerald-600 — text-safe */
+  --success-foreground: 0 0% 100%;
+  --warning: 32 95% 44%;              /* #D97706 amber-600 — text-safe */
   --warning-foreground: 0 0% 100%;
-  --destructive: 18 46% 45%;         /* #A85F3F clay — text-safe (brand clay #C97F5C surface-only) */
-  --destructive-foreground: 40 23% 94%;
-  --info: 217 91% 60%;               /* #2563EB blue-600 */
+  --destructive: 350 89% 50%;         /* #E11D48 rose-600 — text-safe */
+  --destructive-foreground: 0 0% 100%;
+  --info: 199 89% 48%;                /* #0EA5E9 sky-500 */
   --info-foreground: 0 0% 100%;
 
   /* Surfaces */
-  --background: 40 23% 94%;          /* #F5F2EC bone — paper feel, the brand's quietest surface */
-  --card: 38 41% 96%;                /* #FAF7F1 cream — warmer than bone for cards */
-  --card-foreground: 213 12% 14%;    /* #1F2328 ink slate */
-  --popover: 38 41% 96%;
-  --popover-foreground: 213 12% 14%;
-  --muted: 40 19% 88%;               /* #E6E2DA mist — dividers, subtle surfaces */
-  --muted-foreground: 30 6% 32%;     /* #57534E stone-600 — meets AAA on bone */
-  --accent: 40 19% 88%;              /* #E6E2DA mist */
-  --accent-foreground: 213 12% 14%;
+  --background: 0 0% 98%;             /* #FAFAFA zinc-50 */
+  --card: 0 0% 100%;                  /* #FFFFFF — cards float on bg */
+  --card-foreground: 240 10% 4%;      /* #09090B zinc-950 */
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 4%;
+  --muted: 240 5% 96%;                /* #F4F4F5 zinc-100 */
+  --muted-foreground: 240 4% 46%;     /* #71717A zinc-500 */
+  --accent: 240 5% 96%;
+  --accent-foreground: 240 10% 4%;
 
   /* Lines */
-  --border: 38 18% 59%;              /* #A89E84 — bumped from mist (1.6:1) for 3:1 against bone */
-  --input: 38 18% 59%;
-  --ring: 213 12% 14%;               /* match primary — focus rings stay obvious */
+  --border: 240 6% 90%;               /* #E4E4E7 zinc-200 */
+  --input: 240 6% 90%;
+  --ring: 239 84% 67%;                /* match primary */
 
   /* Text */
-  --foreground: 213 12% 14%;         /* #1F2328 ink slate — high contrast on bone */
+  --foreground: 240 10% 4%;           /* #09090B zinc-950 */
 
-  /* Radius */
-  --radius: 0.5rem;                  /* 8px — buttons + inputs (decisive, tight) */
-  --radius-card: 1rem;               /* 16px — Card / KpiTile / SelectableCard / Dialog (soft, calm) */
+  /* Radii — generous + modern */
+  --radius: 0.75rem;                  /* 12px buttons */
+  --radius-card: 1.25rem;             /* 20px cards */
+  --radius-input: 0.625rem;           /* 10px inputs */
 
-  /* Shadow — bone-tinted to match the warm surface. Per-mode declarations
-   * because dark mode wants a true shadow, not a tinted one. */
-  --shadow-card: 0 2px 12px 0 hsl(40 23% 78% / 0.55);
-  --shadow-popover: 0 4px 24px 0 hsl(40 23% 72% / 0.45);
+  /* Layered soft shadows (Notion-style) */
+  --shadow-card: 0 1px 2px 0 hsl(240 6% 10% / 0.04), 0 1px 3px 0 hsl(240 6% 10% / 0.06);
+  --shadow-popover: 0 4px 12px -2px hsl(240 6% 10% / 0.08), 0 8px 24px -4px hsl(240 6% 10% / 0.10);
+  --shadow-hover: 0 2px 4px 0 hsl(240 6% 10% / 0.06), 0 4px 12px -2px hsl(240 6% 10% / 0.10);
 
-  /* Section-accent palette. Surface tints unless `-ink` (text-safe variant). */
-  --honey: 36 64% 57%;             /* #D6A24C honey — surface fill */
-  --honey-ink: 36 64% 33%;         /* #8A5E1F — text-safe on bone */
-  --honey-soft: 38 78% 92%;        /* #FBEFD7 — wash bg */
+  /* Section accents — surface fills + text-safe (-ink) + soft wash */
+  --indigo: 239 84% 67%;              /* #6366F1 — Today */
+  --indigo-ink: 239 84% 56%;          /* #4F46E5 indigo-600, 5.4:1 */
+  --indigo-soft: 239 100% 96%;        /* #EEF2FF indigo-50 */
 
-  --ink-blue: 215 35% 37%;         /* #3D5A80 ink-blue — text-safe + chart */
-  --ink-blue-soft: 215 38% 92%;    /* #DCE6F2 — wash bg */
+  --sky: 199 89% 48%;                 /* #0EA5E9 — Patients */
+  --sky-ink: 200 98% 39%;             /* #0284C7 sky-600, 4.6:1 */
+  --sky-soft: 204 100% 97%;           /* #F0F9FF sky-50 */
 
-  --petal: 14 56% 82%;             /* #E8C4B8 petal — surface only */
-  --petal-soft: 14 60% 94%;        /* #F8E6E0 — wash bg */
-  --petal-ink: 14 38% 38%;         /* #864E3F — text-safe variant */
+  --emerald: 160 84% 39%;             /* #10B981 — Appointments */
+  --emerald-ink: 160 84% 30%;         /* #059669 emerald-600, 4.7:1 */
+  --emerald-soft: 152 81% 96%;        /* #ECFDF5 emerald-50 */
 
-  --leaf: 126 14% 54%;             /* #7A9A7E leaf — surface fill */
-  --leaf-ink: 126 19% 36%;         /* #4A6E50 — text-safe on bone */
-  --leaf-soft: 126 30% 92%;        /* #DDEBDF — wash bg */
+  --violet: 271 81% 56%;              /* #A855F7 — Courses */
+  --violet-ink: 263 70% 50%;          /* #7C3AED violet-600, 5.5:1 */
+  --violet-soft: 270 100% 98%;        /* #FAF5FF violet-50 */
+
+  --amber: 38 92% 50%;                /* #F59E0B — Walk-in */
+  --amber-ink: 32 95% 44%;            /* #D97706 amber-600, 4.5:1 */
+  --amber-soft: 48 100% 96%;          /* #FFFBEB amber-50 */
+
+  --rose: 350 89% 60%;                /* #F43F5E — Inventory */
+  --rose-ink: 350 89% 50%;            /* #E11D48 rose-600, 5.1:1 */
+  --rose-soft: 355 100% 97%;          /* #FFF1F2 rose-50 */
+
+  --zinc: 240 5% 26%;                 /* #3F3F46 — Reports */
+  --zinc-ink: 240 10% 4%;             /* #09090B */
+  --zinc-soft: 240 5% 96%;            /* #F4F4F5 */
 }
 
 .dark {
-  --background: 222 47% 11%;         /* slate-900 */
-  --card: 217 33% 17%;               /* slate-800 */
-  --card-foreground: 210 40% 96%;
-  --popover: 217 33% 17%;
-  --popover-foreground: 210 40% 96%;
-  --muted: 217 33% 17%;
-  --muted-foreground: 215 20% 65%;   /* slate-400 */
-  --accent: 217 33% 17%;
-  --accent-foreground: 210 40% 96%;
-  --border: 215 25% 27%;             /* slate-700 */
-  --input: 215 25% 27%;
-  --foreground: 210 40% 96%;         /* slate-100 */
+  --background: 240 10% 4%;           /* #09090B zinc-950 */
+  --card: 240 6% 10%;                 /* #18181B zinc-900 */
+  --card-foreground: 0 0% 98%;
+  --popover: 240 6% 10%;
+  --popover-foreground: 0 0% 98%;
+  --muted: 240 4% 16%;                /* #27272A zinc-800 */
+  --muted-foreground: 240 5% 65%;     /* #A1A1AA zinc-400 */
+  --accent: 240 4% 16%;
+  --accent-foreground: 0 0% 98%;
+  --border: 240 4% 16%;
+  --input: 240 4% 16%;
+  --foreground: 0 0% 98%;
 
-  /* Brand (dark) — primary inverts to bone-on-dark for contrast; sage
-     and clay nudged lighter so they read against slate bg.
-     TODO(dark-mode pass): full contrast audit; pilot ships light-mode only. */
-  --primary: 40 23% 94%;             /* #F5F2EC bone — on dark, primary inverts */
-  --primary-foreground: 213 12% 14%; /* slate */
-  --secondary: 126 11% 65%;          /* #9CAE9F brand sage reads against dark */
-  --secondary-foreground: 222 47% 11%;
-  --ring: 40 23% 94%;
+  --primary: 239 84% 71%;             /* lighter indigo for dark bg */
+  --primary-foreground: 240 10% 4%;
+  --secondary: 240 5% 65%;
+  --secondary-foreground: 240 10% 4%;
+  --ring: 239 84% 71%;
 
-  /* Status — mirror light status hues at higher lightness; foreground stays
-     white-on-saturated for buttons/badges to keep legibility. */
-  --success: 126 11% 65%;            /* brand sage on dark */
-  --success-foreground: 222 47% 11%;
-  --warning: 32 94% 60%;
-  --warning-foreground: 222 47% 11%;
-  --destructive: 20 50% 64%;         /* clay on dark */
-  --destructive-foreground: 222 47% 11%;
-  --info: 217 91% 70%;
-  --info-foreground: 222 47% 11%;
+  --success: 160 64% 45%;
+  --success-foreground: 240 10% 4%;
+  --warning: 38 92% 60%;
+  --warning-foreground: 240 10% 4%;
+  --destructive: 350 89% 65%;
+  --destructive-foreground: 240 10% 4%;
+  --info: 199 89% 60%;
+  --info-foreground: 240 10% 4%;
 
-  --shadow-card: 0 2px 12px 0 hsl(0 0% 0% / 0.4);
-  --shadow-popover: 0 4px 24px 0 hsl(0 0% 0% / 0.5);
+  --shadow-card: 0 1px 2px 0 hsl(0 0% 0% / 0.4), 0 1px 3px 0 hsl(0 0% 0% / 0.5);
+  --shadow-popover: 0 4px 12px -2px hsl(0 0% 0% / 0.5), 0 8px 24px -4px hsl(0 0% 0% / 0.6);
+  --shadow-hover: 0 2px 4px 0 hsl(0 0% 0% / 0.5), 0 4px 12px -2px hsl(0 0% 0% / 0.6);
 
-  /* Section accents (dark) — lift lightness so tints read on slate-900. */
-  --honey: 36 70% 65%;
-  --honey-ink: 36 78% 75%;
-  --honey-soft: 36 30% 22%;
+  /* Section accents — lift lightness for dark bg */
+  --indigo: 239 84% 71%;
+  --indigo-ink: 239 84% 78%;
+  --indigo-soft: 239 30% 18%;
 
-  --ink-blue: 215 50% 65%;
-  --ink-blue-soft: 215 30% 22%;
+  --sky: 199 89% 60%;
+  --sky-ink: 199 89% 70%;
+  --sky-soft: 200 30% 18%;
 
-  --petal: 14 55% 78%;
-  --petal-soft: 14 25% 22%;
-  --petal-ink: 14 50% 80%;
+  --emerald: 160 64% 50%;
+  --emerald-ink: 160 64% 60%;
+  --emerald-soft: 160 30% 14%;
 
-  --leaf: 126 18% 65%;
-  --leaf-ink: 126 22% 75%;
-  --leaf-soft: 126 18% 22%;
+  --violet: 271 81% 65%;
+  --violet-ink: 271 81% 75%;
+  --violet-soft: 271 30% 18%;
+
+  --amber: 38 92% 60%;
+  --amber-ink: 38 92% 70%;
+  --amber-soft: 38 30% 14%;
+
+  --rose: 350 89% 65%;
+  --rose-ink: 350 89% 75%;
+  --rose-soft: 350 30% 18%;
+
+  --zinc: 240 5% 65%;
+  --zinc-ink: 0 0% 98%;
+  --zinc-soft: 240 4% 16%;
 }

@@ -26,24 +26,27 @@ export function Section({ id, eyebrow, heading, sub, variant = 'default', childr
         className,
       )}
     >
-      <div className="mx-auto max-w-5xl px-6 py-16 md:py-24">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
         {eyebrow ? (
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-secondary">{eyebrow}</p>
+          <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-ink">
+            <span aria-hidden="true" className="size-1.5 rounded-full bg-indigo" />
+            {eyebrow}
+          </p>
         ) : null}
         {heading ? (
           <h2
             id={`${id}-heading`}
-            className="mt-3 font-heading text-3xl font-semibold tracking-tight text-foreground md:text-4xl"
+            className="mt-4 max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-foreground md:text-4xl lg:text-5xl"
           >
             {heading}
           </h2>
         ) : null}
         {sub ? (
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
             {sub}
           </p>
         ) : null}
-        <div className={cn(eyebrow || heading || sub ? 'mt-10' : '')}>{children}</div>
+        <div className={cn(eyebrow || heading || sub ? 'mt-12' : '')}>{children}</div>
       </div>
     </section>
   );

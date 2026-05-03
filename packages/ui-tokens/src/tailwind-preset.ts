@@ -51,61 +51,70 @@ export const reinlyPreset = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        // Brand sage — surface-only fill (#9CAE9F). Use for decorative
-        // accents, divider tints, badges. Not text-safe on bone.
-        sage: '#9CAE9F',
-        // Section accents. Use the *-ink variants for text on bone; bare
-        // tokens are surface fills. *-soft is the wash bg (cards/strips).
-        honey: {
-          DEFAULT: 'hsl(var(--honey))',
-          ink: 'hsl(var(--honey-ink))',
-          soft: 'hsl(var(--honey-soft))',
+
+        // Section accents. Use bare token for surface fill, `-ink` for
+        // text-on-bone, `-soft` for wash backgrounds.
+        indigo: {
+          DEFAULT: 'hsl(var(--indigo))',
+          ink: 'hsl(var(--indigo-ink))',
+          soft: 'hsl(var(--indigo-soft))',
         },
-        'ink-blue': {
-          DEFAULT: 'hsl(var(--ink-blue))',
-          soft: 'hsl(var(--ink-blue-soft))',
+        sky: {
+          DEFAULT: 'hsl(var(--sky))',
+          ink: 'hsl(var(--sky-ink))',
+          soft: 'hsl(var(--sky-soft))',
         },
-        petal: {
-          DEFAULT: 'hsl(var(--petal))',
-          ink: 'hsl(var(--petal-ink))',
-          soft: 'hsl(var(--petal-soft))',
+        emerald: {
+          DEFAULT: 'hsl(var(--emerald))',
+          ink: 'hsl(var(--emerald-ink))',
+          soft: 'hsl(var(--emerald-soft))',
         },
-        leaf: {
-          DEFAULT: 'hsl(var(--leaf))',
-          ink: 'hsl(var(--leaf-ink))',
-          soft: 'hsl(var(--leaf-soft))',
+        violet: {
+          DEFAULT: 'hsl(var(--violet))',
+          ink: 'hsl(var(--violet-ink))',
+          soft: 'hsl(var(--violet-soft))',
+        },
+        amber: {
+          DEFAULT: 'hsl(var(--amber))',
+          ink: 'hsl(var(--amber-ink))',
+          soft: 'hsl(var(--amber-soft))',
+        },
+        rose: {
+          DEFAULT: 'hsl(var(--rose))',
+          ink: 'hsl(var(--rose-ink))',
+          soft: 'hsl(var(--rose-soft))',
+        },
+        zinc: {
+          DEFAULT: 'hsl(var(--zinc))',
+          ink: 'hsl(var(--zinc-ink))',
+          soft: 'hsl(var(--zinc-soft))',
         },
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
-        // 16 px — used by surface containers (Card / KpiTile / SelectableCard
-        // / Dialog / EmptyState). Buttons + inputs keep `lg` (8 px).
+        // 20px — surface containers (Card, KpiTile, Dialog).
         card: 'var(--radius-card)',
+        // 10px — form inputs.
+        input: 'var(--radius-input)',
       },
       boxShadow: {
-        // Bone-tinted shadows so cards stay visible on the warm bone/cream
-        // background without the cool-grey "cold SaaS" look of `shadow-sm`.
         card: 'var(--shadow-card)',
         popover: 'var(--shadow-popover)',
+        hover: 'var(--shadow-hover)',
       },
       fontFamily: {
-        // Inter for Latin body. IBM Plex Sans Thai Looped handles Thai
-        // chars via automatic per-glyph fallback (most browsers do this).
-        // Looped Thai glyphs match the readability conventions Thai
-        // clinic users expect — Western-style loopless sans (Noto Sans
-        // Thai) reads cold/foreign in this context.
-        // Multi-word family names are quoted so the browser parses them
-        // as a single identifier (unquoted multi-word names work per
-        // CSS spec but break in some font-resolution paths in the wild).
-        sans: ['Inter', '"IBM Plex Sans Thai Looped"', 'system-ui', 'sans-serif'],
-        // Playfair Display for headings — italic accent reserved for
-        // the marketing hero. Noto Serif Thai sits in the chain so Thai
-        // headings get a serif fallback that matches the editorial feel
-        // (Playfair Display has no Thai glyphs).
-        heading: ['"Playfair Display"', '"Noto Serif Thai"', 'Georgia', 'serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
+        // Geist Sans for Latin body + headings. IBM Plex Sans Thai Looped
+        // handles Thai chars via per-glyph fallback. Multi-word names are
+        // quoted to survive any CSS pipeline that splits unquoted
+        // whitespace identifiers.
+        sans: ['Geist', '"IBM Plex Sans Thai Looped"', 'system-ui', 'sans-serif'],
+        // No separate display font — heading and body share the family,
+        // using weight + size for hierarchy. Map `font-heading` to the
+        // same chain so existing components compile.
+        heading: ['Geist', '"IBM Plex Sans Thai Looped"', 'system-ui', 'sans-serif'],
+        mono: ['"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
     },
   },

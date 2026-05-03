@@ -31,12 +31,24 @@ function BottomTabItem({ item }: { item: NavItem }) {
       to={item.to}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'flex flex-1 flex-col items-center justify-center gap-1 py-2 text-xs font-medium transition-colors min-h-[56px]',
-        active ? accent.text : 'text-muted-foreground hover:text-foreground',
+        'group relative flex min-h-[60px] flex-1 flex-col items-center justify-center gap-1 py-2 text-[11px] font-medium transition-colors',
+        active ? accent.text : 'text-muted-foreground',
       )}
     >
-      <Icon className="size-5" aria-hidden="true" />
-      <span>{t(item.labelKey)}</span>
+      {/* Active indicator pill — sits above the icon. */}
+      <span
+        aria-hidden="true"
+        className={cn(
+          'absolute top-1 h-1 w-8 rounded-full transition-all',
+          active ? accent.bg : 'bg-transparent',
+        )}
+      />
+      <Icon
+        className="size-5"
+        strokeWidth={active ? 2.25 : 1.75}
+        aria-hidden="true"
+      />
+      <span className="truncate">{t(item.labelKey)}</span>
     </Link>
   );
 }

@@ -38,8 +38,17 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
-        <a href={`/${locale}`} className="font-heading text-xl font-bold text-primary">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
+        <a
+          href={`/${locale}`}
+          className="inline-flex items-center gap-2 text-base font-semibold tracking-tight text-foreground"
+        >
+          <span
+            aria-hidden="true"
+            className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground"
+          >
+            <span className="text-sm font-bold">R</span>
+          </span>
           {siteConfig.name}
         </a>
 
@@ -88,7 +97,13 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
             </SheetTrigger>
             <SheetContent side="right" className="w-72 p-0">
               <SheetHeader className="border-b border-border px-6 py-5">
-                <SheetTitle className="font-heading text-2xl font-bold text-primary">
+                <SheetTitle className="inline-flex items-center gap-2 text-base font-semibold tracking-tight text-foreground">
+                  <span
+                    aria-hidden="true"
+                    className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground"
+                  >
+                    <span className="text-sm font-bold">R</span>
+                  </span>
                   {siteConfig.name}
                 </SheetTitle>
               </SheetHeader>

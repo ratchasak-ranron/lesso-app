@@ -11,10 +11,17 @@ import {
 } from 'lucide-react';
 
 // Per-section accent token. Maps to color tokens defined in
-// packages/ui-tokens/src/css/tokens.css. Used for left-border, eyebrow,
-// active-state tint, and KPI-strip color so each section has a memorable
-// signature color while body content remains bone+slate.
-export type SectionAccent = 'honey' | 'ink-blue' | 'sage' | 'leaf' | 'slate' | 'clay';
+// packages/ui-tokens/src/css/tokens.css. Used for left-border,
+// dot indicator, active-state tint, and KPI-strip color so each section
+// has a memorable signature color while body content stays neutral.
+export type SectionAccent =
+  | 'indigo'
+  | 'sky'
+  | 'emerald'
+  | 'violet'
+  | 'amber'
+  | 'rose'
+  | 'zinc';
 
 export interface NavItem {
   to:
@@ -42,14 +49,14 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: ReadonlyArray<NavItem> = [
-  { to: '/', icon: Home, labelKey: 'nav.today', exact: true, primary: true, accent: 'honey' },
+  { to: '/', icon: Home, labelKey: 'nav.today', exact: true, primary: true, accent: 'indigo' },
   {
     to: '/patients',
     icon: Users,
     labelKey: 'nav.patients',
     exact: false,
     primary: true,
-    accent: 'ink-blue',
+    accent: 'sky',
   },
   {
     to: '/appointments',
@@ -57,7 +64,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     labelKey: 'nav.appointments',
     exact: false,
     primary: true,
-    accent: 'sage',
+    accent: 'emerald',
   },
   {
     to: '/courses',
@@ -65,7 +72,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     labelKey: 'nav.courses',
     exact: false,
     primary: false,
-    accent: 'leaf',
+    accent: 'violet',
   },
   {
     to: '/inventory',
@@ -73,7 +80,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     labelKey: 'nav.inventory',
     exact: false,
     primary: false,
-    accent: 'clay',
+    accent: 'rose',
   },
   {
     to: '/branches',
@@ -81,7 +88,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     labelKey: 'nav.branches',
     exact: false,
     primary: false,
-    accent: 'sage',
+    accent: 'emerald',
   },
   {
     to: '/reports',
@@ -89,7 +96,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     labelKey: 'nav.reports',
     exact: false,
     primary: true,
-    accent: 'slate',
+    accent: 'zinc',
   },
   {
     to: '/audit',
@@ -97,69 +104,84 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     labelKey: 'nav.audit',
     exact: false,
     primary: false,
-    accent: 'slate',
+    accent: 'zinc',
   },
 ];
 
-// Tailwind class lookup per accent. Lazy strings for safelist purposes —
-// keep these as full literals so Tailwind's JIT picks them up at build.
+// Tailwind class lookup per accent. Each accent provides a dot color
+// (filled bg), text-safe (-ink), and a soft wash for active-tab bg.
+// Strings are full literals so Tailwind's JIT picks them up at build.
 export const ACCENT_CLASSES: Record<
   SectionAccent,
   {
-    text: string;
+    /** Solid surface fill — dots, indicator pills */
     bg: string;
+    /** Text-safe variant for icon/label color */
+    text: string;
+    /** Left-border for KPI tile or banner */
     border: string;
+    /** Wash background for active nav, KPI strip, badge */
     softBg: string;
+    /** Active nav-item background */
     activeBg: string;
+    /** Active nav-item text/icon color */
     activeText: string;
   }
 > = {
-  honey: {
-    text: 'text-honey-ink',
-    bg: 'bg-honey',
-    border: 'border-l-honey',
-    softBg: 'bg-honey-soft',
-    activeBg: 'bg-honey-soft',
-    activeText: 'text-honey-ink',
+  indigo: {
+    bg: 'bg-indigo',
+    text: 'text-indigo-ink',
+    border: 'border-l-indigo',
+    softBg: 'bg-indigo-soft',
+    activeBg: 'bg-indigo-soft',
+    activeText: 'text-indigo-ink',
   },
-  'ink-blue': {
-    text: 'text-ink-blue',
-    bg: 'bg-ink-blue',
-    border: 'border-l-ink-blue',
-    softBg: 'bg-ink-blue-soft',
-    activeBg: 'bg-ink-blue-soft',
-    activeText: 'text-ink-blue',
+  sky: {
+    bg: 'bg-sky',
+    text: 'text-sky-ink',
+    border: 'border-l-sky',
+    softBg: 'bg-sky-soft',
+    activeBg: 'bg-sky-soft',
+    activeText: 'text-sky-ink',
   },
-  sage: {
-    text: 'text-secondary',
-    bg: 'bg-secondary',
-    border: 'border-l-secondary',
+  emerald: {
+    bg: 'bg-emerald',
+    text: 'text-emerald-ink',
+    border: 'border-l-emerald',
+    softBg: 'bg-emerald-soft',
+    activeBg: 'bg-emerald-soft',
+    activeText: 'text-emerald-ink',
+  },
+  violet: {
+    bg: 'bg-violet',
+    text: 'text-violet-ink',
+    border: 'border-l-violet',
+    softBg: 'bg-violet-soft',
+    activeBg: 'bg-violet-soft',
+    activeText: 'text-violet-ink',
+  },
+  amber: {
+    bg: 'bg-amber',
+    text: 'text-amber-ink',
+    border: 'border-l-amber',
+    softBg: 'bg-amber-soft',
+    activeBg: 'bg-amber-soft',
+    activeText: 'text-amber-ink',
+  },
+  rose: {
+    bg: 'bg-rose',
+    text: 'text-rose-ink',
+    border: 'border-l-rose',
+    softBg: 'bg-rose-soft',
+    activeBg: 'bg-rose-soft',
+    activeText: 'text-rose-ink',
+  },
+  zinc: {
+    bg: 'bg-foreground',
+    text: 'text-foreground',
+    border: 'border-l-foreground',
     softBg: 'bg-muted',
-    activeBg: 'bg-secondary/15',
-    activeText: 'text-secondary',
-  },
-  leaf: {
-    text: 'text-leaf-ink',
-    bg: 'bg-leaf',
-    border: 'border-l-leaf',
-    softBg: 'bg-leaf-soft',
-    activeBg: 'bg-leaf-soft',
-    activeText: 'text-leaf-ink',
-  },
-  slate: {
-    text: 'text-primary',
-    bg: 'bg-primary',
-    border: 'border-l-primary',
-    softBg: 'bg-muted',
-    activeBg: 'bg-primary/10',
-    activeText: 'text-primary',
-  },
-  clay: {
-    text: 'text-destructive',
-    bg: 'bg-destructive',
-    border: 'border-l-destructive',
-    softBg: 'bg-destructive/10',
-    activeBg: 'bg-destructive/10',
-    activeText: 'text-destructive',
+    activeBg: 'bg-muted',
+    activeText: 'text-foreground',
   },
 };

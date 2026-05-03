@@ -40,26 +40,26 @@ export function TierCard({
   return (
     <Card
       className={cn(
-        'flex flex-col p-6 md:p-8',
-        featured ? 'border-2 border-honey shadow-popover' : '',
+        'relative flex flex-col p-6 transition-shadow duration-200 hover:shadow-hover md:p-8',
+        featured ? 'border-2 border-indigo shadow-popover' : '',
       )}
     >
+      {featured && featuredBadge ? (
+        <span className="absolute -top-3 left-6 inline-flex rounded-full bg-indigo px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary-foreground shadow-card">
+          {featuredBadge}
+        </span>
+      ) : null}
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-heading text-2xl font-semibold text-foreground">{name}</h3>
-        {featured && featuredBadge ? (
-          <span className="rounded-full bg-honey-soft px-3 py-1 text-xs font-medium uppercase tracking-wide text-honey-ink">
-            {featuredBadge}
-          </span>
-        ) : null}
+        <h3 className="text-xl font-semibold tracking-tight text-foreground">{name}</h3>
       </div>
       <p className="mt-2 text-sm text-muted-foreground">{description}</p>
-      <div className="mt-6 flex items-baseline gap-2">
-        <span className="font-heading text-4xl font-semibold tabular-nums text-foreground">
+      <div className="mt-6 flex items-baseline gap-1.5">
+        <span className="text-5xl font-semibold tabular-nums tracking-[-0.03em] text-foreground">
           {price}
         </span>
-        <span className="text-sm text-muted-foreground">{currency}</span>
+        <span className="text-sm font-medium text-muted-foreground">{currency}</span>
       </div>
-      <p className="text-sm text-muted-foreground">{period}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{period}</p>
       <ul className="mt-6 space-y-2 text-sm" role="list">
         {bullets.map((b, i) => (
           // Composite key — bullets are translated free-text strings and
