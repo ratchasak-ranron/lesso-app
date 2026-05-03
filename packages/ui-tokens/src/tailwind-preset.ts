@@ -96,13 +96,16 @@ export const reinlyPreset = {
         // Looped Thai glyphs match the readability conventions Thai
         // clinic users expect — Western-style loopless sans (Noto Sans
         // Thai) reads cold/foreign in this context.
-        sans: ['Inter', 'IBM Plex Sans Thai Looped', 'system-ui', 'sans-serif'],
+        // Multi-word family names are quoted so the browser parses them
+        // as a single identifier (unquoted multi-word names work per
+        // CSS spec but break in some font-resolution paths in the wild).
+        sans: ['Inter', '"IBM Plex Sans Thai Looped"', 'system-ui', 'sans-serif'],
         // Playfair Display for headings — italic accent reserved for
         // the marketing hero. Noto Serif Thai sits in the chain so Thai
         // headings get a serif fallback that matches the editorial feel
         // (Playfair Display has no Thai glyphs).
-        heading: ['Playfair Display', 'Noto Serif Thai', 'Georgia', 'serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        heading: ['"Playfair Display"', '"Noto Serif Thai"', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
       },
     },
   },
