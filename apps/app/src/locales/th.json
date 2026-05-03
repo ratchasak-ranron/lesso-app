@@ -193,7 +193,21 @@
     "noCourses": "ยังไม่มีคอร์ส",
     "activeCourses": "คอร์สที่ใช้งาน",
     "courseBalance": "ยอดคงเหลือคอร์ส",
-    "progressLabel": "ความคืบหน้า {{service}}"
+    "progressLabel": "ความคืบหน้า {{service}}",
+    "stats": {
+      "active": "คอร์สใช้งาน",
+      "sessionsLeft": "เซสชั่นคงเหลือ",
+      "expiring": "ใกล้หมด",
+      "closed": "ปิดแล้ว"
+    },
+    "filter": {
+      "all": "ทั้งหมด"
+    },
+    "empty": {
+      "list": "ยังไม่มีคอร์ส",
+      "filter": "ไม่พบคอร์สในเงื่อนไขนี้"
+    },
+    "searchPlaceholder": "ค้นหาชื่อหรือบริการ..."
   },
   "walkIn": {
     "title": "Walk-in",

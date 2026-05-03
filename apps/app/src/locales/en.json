@@ -193,7 +193,21 @@
     "noCourses": "No courses yet",
     "activeCourses": "Active courses",
     "courseBalance": "Course balance",
-    "progressLabel": "{{service}} progress"
+    "progressLabel": "{{service}} progress",
+    "stats": {
+      "active": "Active courses",
+      "sessionsLeft": "Sessions left",
+      "expiring": "Expiring",
+      "closed": "Closed"
+    },
+    "filter": {
+      "all": "All"
+    },
+    "empty": {
+      "list": "No courses yet",
+      "filter": "No courses match"
+    },
+    "searchPlaceholder": "Search name or service…"
   },
   "walkIn": {
     "title": "Walk-in",
