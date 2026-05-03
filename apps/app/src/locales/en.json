@@ -57,6 +57,35 @@
       "doneHint": "Completed today",
       "alerts": "Low-stock alerts",
       "alertsHint": "Items below minimum"
+    },
+    "greetingTime": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "now": {
+      "title": "Right now",
+      "empty": "No active session",
+      "next": "Next",
+      "inMinutes": "in {{n}} min",
+      "minutesAgo": "{{n}} min ago",
+      "free": "No appointments coming up"
+    },
+    "timeline": {
+      "title": "Today's schedule",
+      "empty": "Nothing scheduled"
+    },
+    "actions": {
+      "title": "Quick actions",
+      "newPatient": "New patient",
+      "newAppt": "Schedule",
+      "newWalkIn": "New walk-in",
+      "takePayment": "Take payment"
+    },
+    "alerts": {
+      "title": "Heads up",
+      "lowStock": "Low stock",
+      "consentExpiring": "Consent expiring"
     }
   },
   "patient": {

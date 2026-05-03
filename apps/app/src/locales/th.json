@@ -57,6 +57,35 @@
       "doneHint": "เสร็จวันนี้",
       "alerts": "สต็อกใกล้หมด",
       "alertsHint": "รายการต่ำกว่าขั้นต่ำ"
+    },
+    "greetingTime": {
+      "morning": "สวัสดีตอนเช้า",
+      "afternoon": "สวัสดีตอนบ่าย",
+      "evening": "สวัสดีตอนเย็น"
+    },
+    "now": {
+      "title": "ตอนนี้",
+      "empty": "ไม่มีคนไข้กำลังให้บริการ",
+      "next": "ถัดไป",
+      "inMinutes": "อีก {{n}} นาที",
+      "minutesAgo": "{{n}} นาทีที่แล้ว",
+      "free": "ไม่มีนัดในชั่วโมงต่อไป"
+    },
+    "timeline": {
+      "title": "ตารางวันนี้",
+      "empty": "ไม่มีนัด"
+    },
+    "actions": {
+      "title": "ทางลัด",
+      "newPatient": "เพิ่มคนไข้",
+      "newAppt": "นัดใหม่",
+      "newWalkIn": "Walk-in ใหม่",
+      "takePayment": "รับชำระเงิน"
+    },
+    "alerts": {
+      "title": "สิ่งที่ต้องดู",
+      "lowStock": "สต็อกต่ำ",
+      "consentExpiring": "ความยินยอมใกล้หมดอายุ"
     }
   },
   "patient": {
