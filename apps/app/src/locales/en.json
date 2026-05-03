@@ -256,7 +256,18 @@
     "noBranches": "No branches yet",
     "topDoctor": "Top doctor",
     "lowStockCount": "{{count}} low-stock item(s)",
-    "combined": "Combined"
+    "combined": "Combined",
+    "stats": {
+      "active": "Active branches",
+      "revenue": "Combined revenue",
+      "visits": "Total visits",
+      "lowStock": "Low-stock total"
+    },
+    "copy": {
+      "top": "Top earner",
+      "noData": "No data this month"
+    },
+    "monthly": "Monthly"
   },
   "ai": {
     "preview": "Preview",
