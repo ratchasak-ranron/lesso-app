@@ -17,7 +17,7 @@ import {
 import type { Appointment, Patient, WalkIn } from '@reinly/domain';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { KpiTile } from '@/components/ui/kpi-tile';
+import { Sparkline } from '@/components/ui/sparkline';
 import { TenantGate } from '@/components/tenant-gate';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { usePatients } from '@/features/patient';
@@ -56,38 +56,44 @@ function HomePage() {
           locale={locale}
         />
 
+        {/* KPI bento — Today-only visual treatment: oversized rounded
+            cards with display-scale numbers, mock 7-day trend
+            sparkline, and per-section accent colour. */}
         <section
           aria-label={t('home.kpi.sectionLabel')}
           className="grid grid-cols-2 gap-3 lg:grid-cols-4"
         >
-          <KpiTile
+          <BentoKpi
             label={t('home.kpi.queue')}
             value={dashboard.kpis.queueDepth}
             icon={Users}
-            description={t('home.kpi.queueHint')}
+            hint={t('home.kpi.queueHint')}
             accent="sky"
+            trend={mockTrend(dashboard.kpis.queueDepth, 1)}
           />
-          <KpiTile
+          <BentoKpi
             label={t('home.kpi.booked')}
             value={dashboard.kpis.appointmentsBooked}
             icon={CalendarIcon}
-            description={t('home.kpi.bookedHint')}
+            hint={t('home.kpi.bookedHint')}
             accent="emerald"
+            trend={mockTrend(dashboard.kpis.appointmentsBooked, 2)}
           />
-          <KpiTile
+          <BentoKpi
             label={t('home.kpi.done')}
             value={dashboard.kpis.walkInsCompleted}
             icon={CheckCircle2}
-            description={t('home.kpi.doneHint')}
+            hint={t('home.kpi.doneHint')}
             accent="violet"
+            trend={mockTrend(dashboard.kpis.walkInsCompleted, 3)}
           />
-          <KpiTile
+          <BentoKpi
             label={t('home.kpi.alerts')}
             value={dashboard.kpis.lowStockAlerts}
             icon={AlertTriangle}
-            description={t('home.kpi.alertsHint')}
-            status={dashboard.kpis.lowStockAlerts > 0 ? 'warning' : 'default'}
-            accent="rose"
+            hint={t('home.kpi.alertsHint')}
+            accent={dashboard.kpis.lowStockAlerts > 0 ? 'amber' : 'rose'}
+            trend={mockTrend(dashboard.kpis.lowStockAlerts, 4)}
           />
         </section>
 
@@ -232,8 +238,8 @@ function RightNowCard({ appointments, walkIns, patientsById, locale }: NowCardPr
         : 'bg-muted';
 
   return (
-    <Card className={cn('overflow-hidden border-2 p-0', accentBorder)}>
-      <div className={cn('flex items-center gap-2 px-5 py-2 text-xs font-semibold uppercase tracking-wider', accentBg, accentText)}>
+    <Card className={cn('overflow-hidden rounded-3xl border-2 p-0', accentBorder)}>
+      <div className={cn('flex items-center gap-2 px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.16em]', accentBg, accentText)}>
         <span aria-hidden="true" className={cn('size-1.5 rounded-full', accent === 'emerald' ? 'bg-emerald' : accent === 'indigo' ? 'bg-indigo' : 'bg-foreground/30')} />
         {mode === 'inProgress'
           ? t('home.now.title')
@@ -241,23 +247,23 @@ function RightNowCard({ appointments, walkIns, patientsById, locale }: NowCardPr
             ? t('home.now.next')
             : t('home.now.title')}
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-3 p-5">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-6">
         {mode === 'empty' ? (
-          <p className="text-base text-muted-foreground">{t('home.now.empty')}</p>
+          <p className="text-lg text-muted-foreground">{t('home.now.empty')}</p>
         ) : (
           <>
             <div className="min-w-0">
-              <p className="truncate text-2xl font-semibold tracking-tight text-foreground">
+              <p className="truncate font-heading text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
                 {title}
               </p>
-              <p className="truncate text-sm text-muted-foreground">{subtitle}</p>
+              <p className="mt-1 truncate text-sm text-muted-foreground">{subtitle}</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className={cn('rounded-full px-3 py-1 text-xs font-medium tabular-nums', accentBg, accentText)}>
+              <span className={cn('rounded-full px-3 py-1.5 text-xs font-semibold tabular-nums', accentBg, accentText)}>
                 {chip}
               </span>
               {mode === 'next' && upcoming ? (
-                <span className="font-mono text-xl font-semibold tabular-nums text-foreground">
+                <span className="font-mono text-2xl font-semibold tabular-nums tracking-tight text-foreground sm:text-3xl">
                   {formatTime(upcoming.startAt, locale)}
                 </span>
               ) : null}
@@ -271,6 +277,110 @@ function RightNowCard({ appointments, walkIns, patientsById, locale }: NowCardPr
 
 /* -------------------------------------------------------------------------- */
 /*  TodayTimeline — vertical hour rows with appointment chips inline          */
+/* -------------------------------------------------------------------------- */
+/*  BentoKpi — Today-only oversized KPI tile with sparkline                   */
+/*                                                                            */
+/*  Visual identity for the dashboard: 24px corners, display-scale tabular    */
+/*  number, soft section-tinted icon chip, mock 7-day trend underneath.       */
+/*  Other pages keep the global <KpiTile/> for density.                       */
+/* -------------------------------------------------------------------------- */
+
+type BentoAccent = 'sky' | 'emerald' | 'violet' | 'amber' | 'rose';
+
+const BENTO_BG: Record<BentoAccent, string> = {
+  sky: 'bg-sky-soft text-sky-ink',
+  emerald: 'bg-emerald-soft text-emerald-ink',
+  violet: 'bg-violet-soft text-violet-ink',
+  amber: 'bg-amber-soft text-amber-ink',
+  rose: 'bg-rose-soft text-rose-ink',
+};
+
+const BENTO_DOT: Record<BentoAccent, string> = {
+  sky: 'bg-sky',
+  emerald: 'bg-emerald',
+  violet: 'bg-violet',
+  amber: 'bg-amber',
+  rose: 'bg-rose',
+};
+
+const BENTO_SPARK: Record<BentoAccent, 'success' | 'warning' | 'destructive' | 'default'> = {
+  sky: 'default',
+  emerald: 'success',
+  violet: 'default',
+  amber: 'warning',
+  rose: 'destructive',
+};
+
+function BentoKpi({
+  label,
+  value,
+  hint,
+  icon: Icon,
+  accent,
+  trend,
+}: {
+  label: string;
+  value: number;
+  hint: string;
+  icon: typeof Users;
+  accent: BentoAccent;
+  trend: number[];
+}) {
+  const chipClass = BENTO_BG[accent];
+  const dotClass = BENTO_DOT[accent];
+  const sparkVariant = BENTO_SPARK[accent];
+  return (
+    <div className="relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 shadow-card transition-shadow hover:shadow-hover">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2">
+          <span aria-hidden="true" className={cn('size-1.5 rounded-full', dotClass)} />
+          <span className="truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+            {label}
+          </span>
+        </div>
+        <span
+          aria-hidden="true"
+          className={cn('flex size-10 shrink-0 items-center justify-center rounded-2xl', chipClass)}
+        >
+          <Icon className="size-5" strokeWidth={2} />
+        </span>
+      </div>
+      <p className="mt-4 font-heading text-5xl font-semibold tabular-nums leading-none tracking-[-0.04em] text-foreground">
+        {value}
+      </p>
+      <p className="mt-2 text-xs text-muted-foreground">{hint}</p>
+      <div className="mt-3 -mb-1 -ml-1 -mr-1 opacity-80">
+        <Sparkline
+          data={trend}
+          ariaLabel={`${label} trend`}
+          variant={sparkVariant}
+          className="h-10"
+        />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Deterministic 7-day mock series anchored on the current value, so the
+ * sparkline reads as movement rather than noise. Replace with a real
+ * `trend7` field on the dashboard hook once the server tracks daily
+ * snapshots.
+ */
+function mockTrend(value: number, seed: number): number[] {
+  const out: number[] = [];
+  const base = Math.max(1, value);
+  for (let i = 0; i < 7; i++) {
+    // Sine-ish wave + slight up-trend so the spark line tilts forward
+    // even when value is 0.
+    const w = Math.sin((i + seed) * 0.9) * 0.3;
+    const drift = (i / 6) * 0.2;
+    const v = base * (0.7 + w + drift);
+    out.push(Math.max(0, Math.round(v)));
+  }
+  return out;
+}
+
 /* -------------------------------------------------------------------------- */
 
 interface TimelineProps {
@@ -324,7 +434,7 @@ function TodayTimeline({ appointments, walkIns, patientsById, locale }: Timeline
   );
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden rounded-3xl">
       <CardHeader className="flex flex-row items-center justify-between gap-2 border-b border-border p-5">
         <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
           {t('home.timeline.title')}
@@ -394,7 +504,7 @@ function TodayTimeline({ appointments, walkIns, patientsById, locale }: Timeline
 function QuickActions({ onNewWalkIn }: { onNewWalkIn: () => void }) {
   const { t } = useTranslation();
   return (
-    <Card>
+    <Card className="rounded-3xl">
       <CardHeader className="border-b border-border p-5">
         <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
           {t('home.actions.title')}
@@ -496,7 +606,7 @@ function AlertsBand({ lowStock, lowStockNames }: AlertsProps) {
   if (lowStock === 0) return null;
 
   return (
-    <Card>
+    <Card className="rounded-3xl">
       <CardHeader className="border-b border-border p-5">
         <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
           {t('home.alerts.title')}
