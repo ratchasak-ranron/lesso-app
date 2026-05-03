@@ -105,6 +105,20 @@ addEventListener('fetch', function (event) {
     return
   }
 
+  // Bypass cross-origin font/CSS requests so the SW does not re-issue
+  // them under its own (potentially stale) CSP. Without this, the
+  // browser-initiated <link>/woff2 fetches get intercepted, the SW
+  // calls fetch() to forward them, and that fetch is governed by
+  // connect-src — which historically did not include fonts.gstatic.com.
+  // Letting the browser load these directly avoids the round trip.
+  const url = event.request.url
+  if (
+    url.startsWith('https://fonts.googleapis.com/') ||
+    url.startsWith('https://fonts.gstatic.com/')
+  ) {
+    return
+  }
+
   // Bypass all requests when there are no active clients.
   // Prevents the self-unregistered worked from handling requests
   // after it's been terminated (still remains active until the next reload).
