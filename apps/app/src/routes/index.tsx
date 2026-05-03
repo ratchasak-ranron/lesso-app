@@ -237,39 +237,45 @@ function RightNowCard({ appointments, walkIns, patientsById, locale }: NowCardPr
         ? 'bg-indigo-soft'
         : 'bg-muted';
 
+  // Empty state renders as a compact one-row card so it doesn't hog
+  // vertical real estate when there's nothing to act on.
+  if (mode === 'empty') {
+    return (
+      <Card className="flex items-center justify-between gap-3 rounded-3xl border border-border bg-muted/40 px-5 py-3 shadow-none">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-foreground/30" />
+          <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+            {t('home.now.title')}
+          </span>
+          <span className="truncate text-sm text-foreground">{t('home.now.empty')}</span>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className={cn('overflow-hidden rounded-3xl border-2 p-0', accentBorder)}>
       <div className={cn('flex items-center gap-2 px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.16em]', accentBg, accentText)}>
-        <span aria-hidden="true" className={cn('size-1.5 rounded-full', accent === 'emerald' ? 'bg-emerald' : accent === 'indigo' ? 'bg-indigo' : 'bg-foreground/30')} />
-        {mode === 'inProgress'
-          ? t('home.now.title')
-          : mode === 'next'
-            ? t('home.now.next')
-            : t('home.now.title')}
+        <span aria-hidden="true" className={cn('size-1.5 rounded-full', accent === 'emerald' ? 'bg-emerald' : 'bg-indigo')} />
+        {mode === 'inProgress' ? t('home.now.title') : t('home.now.next')}
       </div>
       <div className="flex flex-wrap items-center justify-between gap-4 p-6">
-        {mode === 'empty' ? (
-          <p className="text-lg text-muted-foreground">{t('home.now.empty')}</p>
-        ) : (
-          <>
-            <div className="min-w-0">
-              <p className="truncate font-heading text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
-                {title}
-              </p>
-              <p className="mt-1 truncate text-sm text-muted-foreground">{subtitle}</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className={cn('rounded-full px-3 py-1.5 text-xs font-semibold tabular-nums', accentBg, accentText)}>
-                {chip}
-              </span>
-              {mode === 'next' && upcoming ? (
-                <span className="font-mono text-2xl font-semibold tabular-nums tracking-tight text-foreground sm:text-3xl">
-                  {formatTime(upcoming.startAt, locale)}
-                </span>
-              ) : null}
-            </div>
-          </>
-        )}
+        <div className="min-w-0">
+          <p className="truncate font-heading text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
+            {title}
+          </p>
+          <p className="mt-1 truncate text-sm text-muted-foreground">{subtitle}</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className={cn('rounded-full px-3 py-1.5 text-xs font-semibold tabular-nums', accentBg, accentText)}>
+            {chip}
+          </span>
+          {mode === 'next' && upcoming ? (
+            <span className="font-mono text-2xl font-semibold tabular-nums tracking-tight text-foreground sm:text-3xl">
+              {formatTime(upcoming.startAt, locale)}
+            </span>
+          ) : null}
+        </div>
       </div>
     </Card>
   );
