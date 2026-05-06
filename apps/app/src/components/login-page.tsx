@@ -140,7 +140,7 @@ export function LoginPage() {
                 {t('login.mockingMode')}
               </div>
 
-              <h2 className="text-lg font-semibold tracking-tight text-foreground">
+              <h2 className="font-heading text-lg font-semibold tracking-tight text-foreground">
                 {t('login.title')}
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">{t('login.subtitle')}</p>
@@ -187,7 +187,7 @@ export function LoginPage() {
             </>
           ) : (
             <div className="text-center">
-              <h2 className="text-lg font-semibold tracking-tight text-foreground">
+              <h2 className="font-heading text-lg font-semibold tracking-tight text-foreground">
                 {t('login.title')}
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">{t('login.realAuthHint')}</p>

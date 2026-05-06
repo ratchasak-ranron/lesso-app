@@ -62,7 +62,12 @@ export function PageHeader({
             {eyebrow}
           </p>
         ) : null}
-        <h2 className={cn('text-3xl font-semibold tracking-[-0.02em]', eyebrow ? 'mt-1' : '')}>
+        <h2
+          className={cn(
+            'font-heading text-3xl font-semibold tracking-[-0.02em]',
+            eyebrow ? 'mt-1' : '',
+          )}
+        >
           {title}
         </h2>
         {description ? (

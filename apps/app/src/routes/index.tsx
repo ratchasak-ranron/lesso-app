@@ -145,7 +145,7 @@ function GreetingHeader({ onNewWalkIn }: { onNewWalkIn: () => void }) {
   return (
     <header className="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h2 className="text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
+        <h2 className="font-heading text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
           {t(`home.greetingTime.${partOfDay}` as const)}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">{dateLabel}</p>
