@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import type { TFunction } from 'i18next';
 import {
   Cake,
   CalendarCheck2,
   CalendarPlus,
-  ChevronRight,
   Coins,
   Download,
   FileText,
@@ -109,8 +108,6 @@ export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
   return (
     <TenantGate>
       <div className="space-y-6">
-        <Breadcrumb fullName={patient?.fullName} t={t} />
-
         {isLoading ? (
           <div className="space-y-4">
             <Skeleton className="h-24" />
@@ -259,25 +256,6 @@ export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
         ) : null}
       </div>
     </TenantGate>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*  Breadcrumb                                                                */
-/* -------------------------------------------------------------------------- */
-
-function Breadcrumb({ fullName, t }: { fullName: string | undefined; t: TFunction }) {
-  return (
-    <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm">
-      <Link
-        to="/patients"
-        className="rounded-md px-1.5 py-1 font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-      >
-        {t('patient.title')}
-      </Link>
-      <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-      <span className="truncate font-medium text-foreground">{fullName ?? '…'}</span>
-    </nav>
   );
 }
 
