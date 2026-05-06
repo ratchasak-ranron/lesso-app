@@ -9,10 +9,12 @@ import {
   CircleSlash,
   Clock,
   Plus,
+  Stethoscope,
 } from 'lucide-react';
 import type { Appointment, Patient } from '@reinly/domain';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { AppointmentForm, useAppointments } from '@/features/appointment';
+import { useDoctors } from '@/store/doctor-store';
 import {
   Dialog,
   DialogContent,
@@ -55,6 +57,13 @@ export function AppointmentsPage() {
     (patients.data ?? []).forEach((p) => map.set(p.id, p));
     return map;
   }, [patients.data]);
+
+  const doctors = useDoctors();
+  const doctorsById = useMemo(() => {
+    const map = new Map<string, string>();
+    doctors.forEach((d) => map.set(d.id, d.name));
+    return map;
+  }, [doctors]);
 
   const appts = useMemo(() => data ?? [], [data]);
 
@@ -178,6 +187,7 @@ export function AppointmentsPage() {
                             key={a.id}
                             appt={a}
                             patient={patientsById.get(a.patientId)}
+                            doctorName={a.doctorId ? doctorsById.get(a.doctorId) : undefined}
                             locale={locale}
                             onSelect={() =>
                               void navigate({
@@ -329,11 +339,13 @@ const STATUS_PILL: Record<Appointment['status'], string> = {
 function ApptCard({
   appt,
   patient,
+  doctorName,
   locale,
   onSelect,
 }: {
   appt: Appointment;
   patient: Patient | undefined;
+  doctorName: string | undefined;
   locale: 'en' | 'th';
   onSelect: () => void;
 }) {
@@ -341,10 +353,11 @@ function ApptCard({
   const start = formatTime(appt.startAt, locale);
   const end = formatTime(appt.endAt, locale);
   const name = patient?.fullName ?? '—';
+  const doctorLabel = doctorName ?? t('appointment.unassignedDoctor');
   return (
     <button
       type="button"
-      aria-label={`${start}, ${name}, ${appt.serviceName}, ${t(`appointment.status.${appt.status}`)}`}
+      aria-label={`${start}, ${name}, ${appt.serviceName}, ${doctorLabel}, ${t(`appointment.status.${appt.status}`)}`}
       onClick={onSelect}
       className="group flex cursor-pointer items-stretch overflow-hidden rounded-lg border border-border bg-card text-left shadow-card transition-shadow hover:shadow-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
@@ -356,7 +369,19 @@ function ApptCard({
         </div>
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm font-medium text-foreground">{name}</div>
-          <div className="truncate text-xs text-muted-foreground">{appt.serviceName}</div>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
+            <span className="truncate">{appt.serviceName}</span>
+            <span aria-hidden="true">·</span>
+            <span
+              className={cn(
+                'inline-flex items-center gap-1 truncate',
+                doctorName ? 'text-sky-ink' : 'text-muted-foreground/80',
+              )}
+            >
+              <Stethoscope className="size-3" aria-hidden="true" />
+              {doctorLabel}
+            </span>
+          </div>
         </div>
         <span
           className={cn(

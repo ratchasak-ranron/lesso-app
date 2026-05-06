@@ -225,6 +225,8 @@
     "newAppointment": "นัดใหม่",
     "newAppointmentDescription": "สร้างนัดหมายให้คนไข้ที่สาขานี้",
     "patient": "คนไข้",
+    "unassignedDoctor": "ยังไม่ได้กำหนดแพทย์",
+    "noDoctorsHint": "เพิ่มแพทย์ในหน้าแพทย์เพื่อเลือกในนัดหมาย",
     "errors": {
       "patientRequired": "เลือกคนไข้",
       "branchRequired": "เลือกสาขาในเมนูโปรไฟล์",

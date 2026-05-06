@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   ShieldOff,
   Sparkles,
+  Stethoscope,
   Trash2,
   User2,
   Users,
@@ -54,6 +55,7 @@ import {
 } from '@/features/consent';
 import { ExportButton } from '@/features/export';
 import { useAppointments } from '@/features/appointment/hooks/use-appointments';
+import { useDoctors } from '@/store/doctor-store';
 import { useReceipts } from '@/features/receipt/hooks/use-receipts';
 import { useLoyaltyAccount } from '@/features/loyalty/hooks/use-loyalty';
 import {
@@ -532,6 +534,12 @@ function AppointmentScheduleCard({
   t: TFunction;
 }) {
   const { data, isLoading } = useAppointments({ patientId });
+  const doctors = useDoctors();
+  const doctorsById = useMemo(() => {
+    const map = new Map<string, string>();
+    doctors.forEach((d) => map.set(d.id, d.name));
+    return map;
+  }, [doctors]);
 
   const sorted = useMemo(() => {
     const arr = data ? [...data] : [];
@@ -561,7 +569,13 @@ function AppointmentScheduleCard({
               className="absolute left-1.5 top-1 bottom-1 w-px bg-border"
             />
             {sorted.map((a) => (
-              <TimelineItem key={a.id} appointment={a} locale={locale} t={t} />
+              <TimelineItem
+                key={a.id}
+                appointment={a}
+                doctorName={a.doctorId ? doctorsById.get(a.doctorId) : undefined}
+                locale={locale}
+                t={t}
+              />
             ))}
           </ol>
         )}
@@ -572,10 +586,12 @@ function AppointmentScheduleCard({
 
 function TimelineItem({
   appointment,
+  doctorName,
   locale,
   t,
 }: {
   appointment: Appointment;
+  doctorName: string | undefined;
   locale: 'en' | 'th';
   t: TFunction;
 }) {
@@ -593,7 +609,15 @@ function TimelineItem({
         {formatDate(appointment.startAt, locale)}
       </div>
       <div className="mt-1 rounded-lg border border-border bg-card px-3 py-2">
-        <div className="text-sm font-medium text-foreground">{appointment.serviceName}</div>
+        <div className="flex flex-wrap items-center gap-x-2 text-sm font-medium text-foreground">
+          <span>{appointment.serviceName}</span>
+          {doctorName ? (
+            <span className="inline-flex items-center gap-1 text-xs font-normal text-sky-ink">
+              <Stethoscope className="size-3" aria-hidden="true" />
+              {doctorName}
+            </span>
+          ) : null}
+        </div>
         <div className="mt-0.5 text-xs text-muted-foreground">
           {t(`appointment.status.${appointment.status}`)}
           {appointment.notes ? ` · ${appointment.notes}` : ''}

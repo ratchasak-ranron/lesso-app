@@ -225,6 +225,8 @@
     "newAppointment": "New appointment",
     "newAppointmentDescription": "Schedule a visit for a patient at this branch.",
     "patient": "Patient",
+    "unassignedDoctor": "Unassigned",
+    "noDoctorsHint": "Add doctors in the Doctors page to assign them here.",
     "errors": {
       "patientRequired": "Pick a patient",
       "branchRequired": "Pick a branch in the profile menu",

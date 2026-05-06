@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Calendar as CalendarIcon, AlertCircle } from 'lucide-react';
+import { Calendar as CalendarIcon, AlertCircle, Stethoscope } from 'lucide-react';
 import type { Appointment, Patient } from '@reinly/domain';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -12,6 +12,7 @@ interface AppointmentListProps {
   appointments: Appointment[] | undefined;
   isLoading: boolean;
   patientsById?: Map<string, Patient>;
+  doctorsById?: Map<string, string>;
   onSelect?: (appt: Appointment) => void;
 }
 
@@ -19,6 +20,7 @@ export function AppointmentList({
   appointments,
   isLoading,
   patientsById,
+  doctorsById,
   onSelect,
 }: AppointmentListProps) {
   const { t } = useTranslation();
@@ -63,7 +65,15 @@ export function AppointmentList({
                     <div className="truncate font-medium">
                       {patient?.fullName ?? <span className="text-muted-foreground">…</span>}
                     </div>
-                    <div className="truncate text-sm text-muted-foreground">{a.serviceName}</div>
+                    <div className="flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground">
+                      <span className="truncate">{a.serviceName}</span>
+                      {a.doctorId && doctorsById?.get(a.doctorId) ? (
+                        <span className="inline-flex items-center gap-1 truncate text-sky-ink">
+                          <Stethoscope className="size-3" aria-hidden="true" />
+                          {doctorsById.get(a.doctorId)}
+                        </span>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">

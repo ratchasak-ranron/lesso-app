@@ -8,6 +8,7 @@ import { Select } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { FormError } from '@/components/ui/form-feedback';
 import { useDevToolbar } from '@/store/dev-toolbar';
+import { useDoctors } from '@/store/doctor-store';
 import { usePatients } from '@/features/patient';
 import { useCreateAppointment } from '../hooks/use-appointments';
 
@@ -58,10 +59,25 @@ export function AppointmentForm({
     return (patients.data ?? []).map((p: Patient) => ({ value: p.id, label: p.fullName }));
   }, [patients.data]);
 
+  const doctors = useDoctors();
+  const doctorOptions = useMemo(
+    () => [
+      { value: '', label: t('appointment.unassignedDoctor') },
+      ...doctors
+        .filter((d) => d.active)
+        .map((d) => ({
+          value: d.id,
+          label: d.specialty ? `${d.name} · ${d.specialty}` : d.name,
+        })),
+    ],
+    [doctors, t],
+  );
+
   const patientLocked = !!patientId;
   const [selectedPatient, setSelectedPatient] = useState<string>(
     patientId ?? patientOptions[0]?.value ?? '',
   );
+  const [doctorId, setDoctorId] = useState<string>('');
   const [serviceName, setServiceName] = useState('');
   const [startAt, setStartAt] = useState<string>(defaultStart(defaultDate));
   const [endAt, setEndAt] = useState<string>(
@@ -109,6 +125,7 @@ export function AppointmentForm({
     const input: AppointmentCreateInput = {
       branchId,
       patientId: pid,
+      doctorId: doctorId || undefined,
       serviceName: serviceName.trim(),
       startAt: startDate.toISOString(),
       endAt: endDate.toISOString(),
@@ -152,6 +169,19 @@ export function AppointmentForm({
           onChange={(e) => setServiceName(e.target.value)}
           required
         />
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="appointment-doctor">{t('appointment.doctor')}</Label>
+        <Select
+          id="appointment-doctor"
+          options={doctorOptions}
+          value={doctorId}
+          onValueChange={setDoctorId}
+        />
+        {doctors.length === 0 ? (
+          <p className="text-xs text-muted-foreground">{t('appointment.noDoctorsHint')}</p>
+        ) : null}
       </div>
 
       <div className="grid grid-cols-2 gap-3">
