@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@tanstack/react-router';
 import { ChevronLeft, ChevronRight, HelpCircle, Settings } from 'lucide-react';
-import { NAV_ITEMS, ACCENT_CLASSES, type NavItem } from './nav-items';
+import { ACCENT_CLASSES, NAV_GROUPS, NAV_ITEMS, type NavItem } from './nav-items';
 import { useIsRouteActive } from './use-is-route-active';
 import { cn } from '@/lib/utils';
 
@@ -63,14 +63,37 @@ export function Sidebar() {
         </button>
       </div>
 
-      {/* Primary nav */}
+      {/* Primary nav — items are bucketed into groups so the rail stays
+          scannable as the catalog grows. Group headings render only in
+          the expanded state; the collapsed rail uses a thin divider
+          between groups instead. */}
       <nav
-        className={cn('flex-1 space-y-0.5 overflow-y-auto', expanded ? 'px-3' : 'px-2')}
+        className={cn('flex-1 overflow-y-auto', expanded ? 'px-3' : 'px-2')}
         aria-label={t('nav.primary')}
       >
-        {NAV_ITEMS.map((item) => (
-          <SidebarItem key={item.to} item={item} expanded={expanded} />
-        ))}
+        {NAV_GROUPS.map(({ group, labelKey }, idx) => {
+          const items = NAV_ITEMS.filter((item) => item.group === group);
+          if (items.length === 0) return null;
+          return (
+            <div
+              key={group}
+              className={cn(idx > 0 && (expanded ? 'mt-4' : 'mt-3 border-t border-border pt-3'))}
+            >
+              {expanded ? (
+                <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  {t(labelKey)}
+                </p>
+              ) : null}
+              <ul role="list" className="space-y-0.5">
+                {items.map((item) => (
+                  <li key={item.to}>
+                    <SidebarItem item={item} expanded={expanded} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
       </nav>
 
       {/* Bottom actions — Help + Settings, both inert until those features land. */}

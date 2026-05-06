@@ -21,7 +21,13 @@
     "collapse": "Collapse menu",
     "expand": "Expand menu",
     "help": "Help",
-    "settings": "Settings"
+    "settings": "Settings",
+    "group": {
+      "operations": "Operations",
+      "catalog": "Catalog",
+      "organization": "Organization",
+      "insights": "Insights & compliance"
+    }
   },
   "common": {
     "loading": "Loading...",

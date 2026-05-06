@@ -21,7 +21,13 @@
     "collapse": "ย่อเมนู",
     "expand": "ขยายเมนู",
     "help": "ช่วยเหลือ",
-    "settings": "ตั้งค่า"
+    "settings": "ตั้งค่า",
+    "group": {
+      "operations": "งานประจำวัน",
+      "catalog": "สินค้าและบริการ",
+      "organization": "ทีมและสาขา",
+      "insights": "รายงานและการปฏิบัติตาม"
+    }
   },
   "common": {
     "loading": "กำลังโหลด...",

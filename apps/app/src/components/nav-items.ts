@@ -27,6 +27,13 @@ export type SectionAccent =
   | 'rose'
   | 'zinc';
 
+/**
+ * Sidebar section a nav item belongs to. Items with the same group are
+ * rendered as a contiguous block with an optional uppercase label
+ * (shown only in the expanded rail).
+ */
+export type NavGroup = 'operations' | 'catalog' | 'organization' | 'insights';
+
 export interface NavItem {
   to:
     | '/'
@@ -58,10 +65,20 @@ export interface NavItem {
   exact: boolean;
   primary: boolean; // shown in `<sm` bottom-tab dock
   accent: SectionAccent;
+  group: NavGroup;
 }
 
 export const NAV_ITEMS: ReadonlyArray<NavItem> = [
-  { to: '/', icon: Home, labelKey: 'nav.today', exact: true, primary: true, accent: 'indigo' },
+  // Operations — daily clinic flow.
+  {
+    to: '/',
+    icon: Home,
+    labelKey: 'nav.today',
+    exact: true,
+    primary: true,
+    accent: 'indigo',
+    group: 'operations',
+  },
   {
     to: '/patients',
     icon: Users,
@@ -69,6 +86,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: true,
     accent: 'sky',
+    group: 'operations',
   },
   {
     to: '/appointments',
@@ -77,6 +95,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: true,
     accent: 'emerald',
+    group: 'operations',
   },
   {
     to: '/courses',
@@ -85,15 +104,9 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: false,
     accent: 'violet',
+    group: 'operations',
   },
-  {
-    to: '/inventory',
-    icon: Package,
-    labelKey: 'nav.inventory',
-    exact: false,
-    primary: false,
-    accent: 'rose',
-  },
+  // Catalog — master data the front desk picks from.
   {
     to: '/products',
     icon: PackageSearch,
@@ -101,6 +114,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: false,
     accent: 'indigo',
+    group: 'catalog',
   },
   {
     to: '/promotions',
@@ -109,7 +123,18 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: false,
     accent: 'amber',
+    group: 'catalog',
   },
+  {
+    to: '/inventory',
+    icon: Package,
+    labelKey: 'nav.inventory',
+    exact: false,
+    primary: false,
+    accent: 'rose',
+    group: 'catalog',
+  },
+  // Organization — clinical roster + branches.
   {
     to: '/doctors',
     icon: Stethoscope,
@@ -117,6 +142,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: false,
     accent: 'sky',
+    group: 'organization',
   },
   {
     to: '/branches',
@@ -125,7 +151,9 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: false,
     accent: 'emerald',
+    group: 'organization',
   },
+  // Insights — reporting + compliance.
   {
     to: '/reports',
     icon: BarChart3,
@@ -133,6 +161,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: true,
     accent: 'zinc',
+    group: 'insights',
   },
   {
     to: '/audit',
@@ -141,6 +170,7 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: false,
     accent: 'zinc',
+    group: 'insights',
   },
   {
     to: '/consent',
@@ -149,7 +179,16 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     exact: false,
     primary: false,
     accent: 'zinc',
+    group: 'insights',
   },
+];
+
+/** Display order + label key for each group header. */
+export const NAV_GROUPS: ReadonlyArray<{ group: NavGroup; labelKey: string }> = [
+  { group: 'operations', labelKey: 'nav.group.operations' },
+  { group: 'catalog', labelKey: 'nav.group.catalog' },
+  { group: 'organization', labelKey: 'nav.group.organization' },
+  { group: 'insights', labelKey: 'nav.group.insights' },
 ];
 
 // Tailwind class lookup per accent. Each accent provides a dot color
