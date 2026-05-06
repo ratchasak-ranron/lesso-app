@@ -5,10 +5,13 @@ import { getUsers } from '@reinly/mock-server';
 import { Button } from '@/components/ui/button';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { cn } from '@/lib/utils';
+import { Breadcrumbs } from './breadcrumbs';
 import { MobileNav } from './mobile-nav';
 
 interface TopBarProps {
-  title: string;
+  /** Kept for API compatibility but no longer rendered — the breadcrumb
+   *  trail replaces the static title. */
+  title?: string;
 }
 
 /**
@@ -21,7 +24,7 @@ interface TopBarProps {
  * Bell is decorative; the unread indicator is a static red dot until the
  * notification feature lands.
  */
-export function TopBar({ title }: TopBarProps) {
+export function TopBar(_props: TopBarProps) {
   const { i18n, t } = useTranslation();
   const isThai = i18n.language === 'th';
   const nextLabel = isThai ? 'English' : 'ภาษาไทย';
@@ -38,15 +41,16 @@ export function TopBar({ title }: TopBarProps) {
 
   return (
     <header className="flex h-16 items-center justify-between gap-3 border-b border-border bg-card px-3 md:px-6">
-      <div className="flex min-w-0 items-center gap-2">
+      {/* Left: mobile nav + breadcrumb chain. Breadcrumb truncates instead
+          of pushing the search/profile cluster off-screen. */}
+      <div className="flex min-w-0 flex-1 items-center gap-3">
         <MobileNav />
-        <h1 className="truncate font-heading text-lg font-semibold tracking-tight md:hidden">
-          {title}
-        </h1>
+        <Breadcrumbs />
       </div>
 
-      {/* Search — flex-1 so it eats remaining width on md+. */}
-      <div className="hidden flex-1 max-w-xl md:block">
+      {/* Search — collapses to icon-only on smaller widths so the breadcrumb
+          gets first dibs on the remaining space. */}
+      <div className="hidden max-w-sm flex-1 lg:block">
         <label htmlFor="topbar-search" className="sr-only">
           {t('common.search')}
         </label>
@@ -63,6 +67,13 @@ export function TopBar({ title }: TopBarProps) {
           />
         </div>
       </div>
+      <button
+        type="button"
+        aria-label={t('common.search')}
+        className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:hidden"
+      >
+        <Search className="size-5" strokeWidth={1.75} aria-hidden="true" />
+      </button>
 
       <div className="flex shrink-0 items-center gap-1.5">
         {/* Notification bell — static red dot until the feature ships. */}

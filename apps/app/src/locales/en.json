@@ -16,7 +16,9 @@
     "menu": "Open menu",
     "consent": "PDPA",
     "collapse": "Collapse menu",
-    "expand": "Expand menu"
+    "expand": "Expand menu",
+    "help": "Help",
+    "settings": "Settings"
   },
   "common": {
     "loading": "Loading...",
