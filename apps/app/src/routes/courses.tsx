@@ -14,8 +14,15 @@ import {
 } from 'lucide-react';
 import type { Course, CourseStatus, Patient } from '@reinly/domain';
 import { sessionsRemaining } from '@reinly/domain';
-import { useCourses } from '@/features/course';
+import { CourseForm, useCourses } from '@/features/course';
 import { usePatients } from '@/features/patient';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { PageHeader } from '@/components/page-header';
 import { TenantGate } from '@/components/tenant-gate';
 import { Button } from '@/components/ui/button';
@@ -37,6 +44,7 @@ export function CoursesPage() {
   const locale = useLocale();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<StatusFilter>('active');
+  const [createOpen, setCreateOpen] = useState(false);
   const debounced = useDebounce(query, 200);
 
   const { data, isLoading } = useCourses();
@@ -89,7 +97,7 @@ export function CoursesPage() {
           accent="violet"
           title={t('course.title')}
           actions={
-            <Button className="cursor-pointer">
+            <Button className="cursor-pointer" onClick={() => setCreateOpen(true)}>
               <Plus className="size-4" aria-hidden="true" />
               {t('course.newCourse')}
             </Button>
@@ -190,6 +198,19 @@ export function CoursesPage() {
             />
           </>
         )}
+
+        <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t('course.newCourse')}</DialogTitle>
+              <DialogDescription>{t('course.newCourseDescription')}</DialogDescription>
+            </DialogHeader>
+            <CourseForm
+              onCancel={() => setCreateOpen(false)}
+              onDone={() => setCreateOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
     </TenantGate>
   );

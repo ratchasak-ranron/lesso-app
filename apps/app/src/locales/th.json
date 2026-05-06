@@ -188,13 +188,30 @@
       "actions": {
         "call": "โทรหาคนไข้",
         "lineChat": "แชต LINE",
-        "edit": "แก้ไขคนไข้"
-      }
+        "edit": "แก้ไขคนไข้",
+        "delete": "ลบคนไข้"
+      },
+      "deleteTitle": "ลบ {{name}} หรือไม่?",
+      "deleteDescription": "การลบจะนำคนไข้และข้อมูลความยินยอม PDPA ออกอย่างถาวร แต่ใบเสร็จและประวัติการตรวจสอบจะยังคงอยู่",
+      "withdrawCta": "เพิกถอนความยินยอม",
+      "withdrawTitle": "เพิกถอนความยินยอม PDPA?",
+      "withdrawDescription": "สิทธิ์การประมวลผลข้อมูลและการตลาดของคนไข้จะถูกยกเลิก สามารถให้ความยินยอมใหม่ภายหลังได้",
+      "withdrawConfirm": "เพิกถอน"
     }
   },
   "appointment": {
     "title": "นัดหมาย",
     "newAppointment": "นัดใหม่",
+    "newAppointmentDescription": "สร้างนัดหมายให้คนไข้ที่สาขานี้",
+    "patient": "คนไข้",
+    "errors": {
+      "patientRequired": "เลือกคนไข้",
+      "branchRequired": "เลือกสาขาในเมนูโปรไฟล์",
+      "serviceRequired": "ต้องระบุบริการ",
+      "timeInvalid": "เวลาไม่ถูกต้อง",
+      "endBeforeStart": "เวลาสิ้นสุดต้องอยู่หลังเริ่ม"
+    },
+    "notes": "หมายเหตุ",
     "service": "บริการ",
     "doctor": "แพทย์",
     "startAt": "เริ่ม",
@@ -226,6 +243,14 @@
   "course": {
     "title": "คอร์ส",
     "newCourse": "เพิ่มคอร์ส",
+    "newCourseDescription": "สร้างแพ็กเกจหลายเซสชันให้คนไข้",
+    "patient": "คนไข้",
+    "errors": {
+      "patientRequired": "เลือกคนไข้",
+      "serviceRequired": "ต้องระบุบริการ",
+      "sessionsInvalid": "จำนวนเซสชันต้องไม่น้อยกว่า 1",
+      "priceInvalid": "ราคาต้องไม่ติดลบ"
+    },
     "service": "บริการ",
     "sessionsTotal": "จำนวน session ทั้งหมด",
     "sessionsUsed": "ใช้ไปแล้ว",
@@ -369,6 +394,16 @@
   "inventory": {
     "title": "คลังสินค้า",
     "newItem": "เพิ่มสินค้า",
+    "newItemDescription": "เพิ่ม SKU ใหม่ในคลังสาขานี้",
+    "itemName": "ชื่อสินค้า",
+    "sku": "รหัสสินค้า",
+    "initialStock": "ยอดเริ่มต้น",
+    "unitCost": "ต้นทุนต่อหน่วย",
+    "errors": {
+      "branchRequired": "เลือกสาขาก่อน",
+      "required": "กรอกรหัสสินค้าและชื่อ",
+      "numericInvalid": "ตัวเลขต้องไม่ติดลบ"
+    },
     "newMovement": "บันทึกการเคลื่อนไหว",
     "noItems": "ยังไม่มีสินค้า",
     "lowStock": "สต็อกต่ำกว่ากำหนด",

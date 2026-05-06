@@ -1,19 +1,23 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import type { TFunction } from 'i18next';
 import {
   Cake,
   CalendarCheck2,
+  CalendarPlus,
   ChevronRight,
   Coins,
   Download,
   FileText,
+  GraduationCap,
   Mail,
   MessageCircle,
   Pencil,
   Phone,
   ShieldCheck,
+  ShieldOff,
+  Trash2,
   User2,
   Users,
 } from 'lucide-react';
@@ -23,13 +27,41 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Pagination, usePagination } from '@/components/ui/pagination';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { TenantGate } from '@/components/tenant-gate';
-import { ConsentDialog } from '@/features/consent';
+import { AppointmentForm } from '@/features/appointment';
+import { CourseForm } from '@/features/course';
+import {
+  ConsentDialog,
+  useConsentByPatient,
+  useWithdrawConsent,
+} from '@/features/consent';
 import { ExportButton } from '@/features/export';
 import { useAppointments } from '@/features/appointment/hooks/use-appointments';
 import { useReceipts } from '@/features/receipt/hooks/use-receipts';
 import { useLoyaltyAccount } from '@/features/loyalty/hooks/use-loyalty';
-import { usePatient } from '@/features/patient';
+import {
+  PatientForm,
+  useDeletePatient,
+  usePatient,
+  useUpdatePatient,
+} from '@/features/patient';
 import { displayPhone, formatCurrency, formatDate, formatNumber } from '@/lib/format';
 import { useLocale } from '@/lib/use-locale';
 import { cn } from '@/lib/utils';
@@ -41,8 +73,38 @@ interface PatientDetailPageProps {
 export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
   const { t } = useTranslation();
   const locale = useLocale();
+  const navigate = useNavigate();
   const { data: patient, isLoading, isError } = usePatient(patientId);
   const [consentOpen, setConsentOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
+  const [bookOpen, setBookOpen] = useState(false);
+  const [courseOpen, setCourseOpen] = useState(false);
+
+  const updatePatient = useUpdatePatient();
+  const deletePatient = useDeletePatient();
+  const withdrawConsent = useWithdrawConsent();
+  const consentRecord = useConsentByPatient(patient?.id);
+
+  function handleDelete() {
+    if (!patient) return;
+    deletePatient.mutate(patient.id, {
+      onSuccess: () => {
+        setDeleteOpen(false);
+        void navigate({ to: '/patients', replace: true });
+      },
+    });
+  }
+
+  function handleWithdraw() {
+    const consentId = consentRecord.data?.active?.id;
+    if (!patient || !consentId) return;
+    withdrawConsent.mutate(
+      { consentId, patientId: patient.id },
+      { onSuccess: () => setWithdrawOpen(false) },
+    );
+  }
 
   return (
     <TenantGate>
@@ -64,7 +126,15 @@ export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
 
         {patient ? (
           <>
-            <PatientHeader patient={patient} locale={locale} t={t} onEdit={() => setConsentOpen(true)} />
+            <PatientHeader
+              patient={patient}
+              locale={locale}
+              t={t}
+              onEdit={() => setEditOpen(true)}
+              onDelete={() => setDeleteOpen(true)}
+              onBookAppointment={() => setBookOpen(true)}
+              onAddCourse={() => setCourseOpen(true)}
+            />
 
             <div className="grid gap-4 lg:grid-cols-3">
               <BasicInfoCard patient={patient} locale={locale} t={t} />
@@ -75,6 +145,9 @@ export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
                   locale={locale}
                   t={t}
                   onCapture={() => setConsentOpen(true)}
+                  onWithdraw={
+                    consentRecord.data?.active?.id ? () => setWithdrawOpen(true) : undefined
+                  }
                 />
                 <LoyaltyCard patient={patient} locale={locale} t={t} />
                 <DocumentsCard patient={patient} t={t} />
@@ -84,6 +157,104 @@ export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
             <HistoryCard patientId={patient.id} locale={locale} t={t} />
 
             <ConsentDialog open={consentOpen} onOpenChange={setConsentOpen} patient={patient} />
+
+            <Dialog open={editOpen} onOpenChange={setEditOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{t('patient.editPatient')}</DialogTitle>
+                  <DialogDescription>{t('patient.fullName')}</DialogDescription>
+                </DialogHeader>
+                <PatientForm
+                  initial={{
+                    fullName: patient.fullName,
+                    phoneDigits: patient.phoneDigits,
+                    phoneDisplay: patient.phoneDisplay,
+                    lineId: patient.lineId,
+                    notes: patient.notes,
+                  }}
+                  isSubmitting={updatePatient.isPending}
+                  onCancel={() => setEditOpen(false)}
+                  onSubmit={(input) => {
+                    updatePatient.mutate(
+                      { id: patient.id, patch: input },
+                      { onSuccess: () => setEditOpen(false) },
+                    );
+                  }}
+                />
+              </DialogContent>
+            </Dialog>
+
+            <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {t('patient.detail.deleteTitle', { name: patient.fullName })}
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {t('patient.detail.deleteDescription')}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    onClick={handleDelete}
+                    disabled={deletePatient.isPending}
+                  >
+                    {t('common.delete')}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog open={withdrawOpen} onOpenChange={setWithdrawOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>{t('patient.detail.withdrawTitle')}</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {t('patient.detail.withdrawDescription')}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    onClick={handleWithdraw}
+                    disabled={withdrawConsent.isPending}
+                  >
+                    {t('patient.detail.withdrawConfirm')}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <Dialog open={bookOpen} onOpenChange={setBookOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{t('appointment.newAppointment')}</DialogTitle>
+                  <DialogDescription>{patient.fullName}</DialogDescription>
+                </DialogHeader>
+                <AppointmentForm
+                  patientId={patient.id}
+                  onCancel={() => setBookOpen(false)}
+                  onDone={() => setBookOpen(false)}
+                />
+              </DialogContent>
+            </Dialog>
+
+            <Dialog open={courseOpen} onOpenChange={setCourseOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{t('course.newCourse')}</DialogTitle>
+                  <DialogDescription>{patient.fullName}</DialogDescription>
+                </DialogHeader>
+                <CourseForm
+                  patientId={patient.id}
+                  onCancel={() => setCourseOpen(false)}
+                  onDone={() => setCourseOpen(false)}
+                />
+              </DialogContent>
+            </Dialog>
           </>
         ) : null}
       </div>
@@ -140,11 +311,17 @@ function PatientHeader({
   locale,
   t,
   onEdit,
+  onDelete,
+  onBookAppointment,
+  onAddCourse,
 }: {
   patient: Patient;
   locale: 'en' | 'th';
   t: TFunction;
   onEdit: () => void;
+  onDelete: () => void;
+  onBookAppointment: () => void;
+  onAddCourse: () => void;
 }) {
   const isMember = patient.consentStatus === 'valid';
   const phoneHref = `tel:+${patient.phoneDigits}`;
@@ -178,7 +355,20 @@ function PatientHeader({
           </p>
         </div>
       </div>
-      <div className="flex shrink-0 items-center gap-1">
+      <div className="flex shrink-0 flex-wrap items-center gap-1">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onBookAppointment}
+          className="cursor-pointer"
+        >
+          <CalendarPlus className="size-4" aria-hidden="true" />
+          {t('patient.bookAppointment')}
+        </Button>
+        <Button variant="outline" size="sm" onClick={onAddCourse} className="cursor-pointer">
+          <GraduationCap className="size-4" aria-hidden="true" />
+          {t('patient.addCourse')}
+        </Button>
         <ActionIconLink
           href={lineHref}
           icon={MessageCircle}
@@ -191,6 +381,12 @@ function PatientHeader({
           label={t('patient.detail.actions.call')}
         />
         <ActionIconButton onClick={onEdit} icon={Pencil} label={t('patient.detail.actions.edit')} />
+        <ActionIconButton
+          onClick={onDelete}
+          icon={Trash2}
+          label={t('patient.detail.actions.delete')}
+          tone="destructive"
+        />
       </div>
     </Card>
   );
@@ -227,17 +423,24 @@ function ActionIconButton({
   icon: Icon,
   label,
   onClick,
+  tone,
 }: {
   icon: typeof Pencil;
   label: string;
   onClick: () => void;
+  tone?: 'destructive';
 }) {
   return (
     <button
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg border border-border bg-card text-muted-foreground shadow-card transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className={cn(
+        'inline-flex size-10 cursor-pointer items-center justify-center rounded-lg border border-border bg-card shadow-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+        tone === 'destructive'
+          ? 'text-rose-ink hover:bg-rose-soft'
+          : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+      )}
     >
       <Icon className="size-4" aria-hidden="true" />
     </button>
@@ -429,11 +632,13 @@ function ConsentAssuranceCard({
   locale,
   t,
   onCapture,
+  onWithdraw,
 }: {
   patient: Patient;
   locale: 'en' | 'th';
   t: TFunction;
   onCapture: () => void;
+  onWithdraw?: () => void;
 }) {
   const status = patient.consentStatus;
   const statusLabel =
@@ -479,16 +684,28 @@ function ConsentAssuranceCard({
           <dd className="mt-0.5 font-medium">{statusLabel}</dd>
         </div>
       </dl>
-      {status !== 'valid' ? (
-        <button
-          type="button"
-          onClick={onCapture}
-          className="mt-4 inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-md bg-white/15 px-3 text-xs font-semibold text-white backdrop-blur transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-        >
-          <ShieldCheck className="size-3.5" aria-hidden="true" />
-          {t('consent.captureCta')}
-        </button>
-      ) : null}
+      <div className="mt-4 flex flex-wrap gap-2">
+        {status !== 'valid' ? (
+          <button
+            type="button"
+            onClick={onCapture}
+            className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-md bg-white/15 px-3 text-xs font-semibold text-white backdrop-blur transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <ShieldCheck className="size-3.5" aria-hidden="true" />
+            {t('consent.captureCta')}
+          </button>
+        ) : null}
+        {onWithdraw ? (
+          <button
+            type="button"
+            onClick={onWithdraw}
+            className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-md bg-white/10 px-3 text-xs font-semibold text-white/90 backdrop-blur transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <ShieldOff className="size-3.5" aria-hidden="true" />
+            {t('patient.detail.withdrawCta')}
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }

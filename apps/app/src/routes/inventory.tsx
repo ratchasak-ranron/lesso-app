@@ -26,7 +26,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Pagination, usePagination } from '@/components/ui/pagination';
 import { useDevToolbar } from '@/store/dev-toolbar';
-import { MovementForm, useInventoryItems } from '@/features/inventory';
+import { InventoryItemForm, MovementForm, useInventoryItems } from '@/features/inventory';
 import { PageHeader } from '@/components/page-header';
 import { TenantGate } from '@/components/tenant-gate';
 import { useDebounce } from '@/lib/use-debounce';
@@ -46,6 +46,7 @@ export function InventoryPage() {
   const branchId = useDevToolbar((s) => s.branchId);
   const { data, isLoading, isError, error } = useInventoryItems(branchId);
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<StatusFilter>('all');
   const debounced = useDebounce(query, 200);
@@ -93,7 +94,7 @@ export function InventoryPage() {
           accent="rose"
           title={t('inventory.title')}
           actions={
-            <Button className="cursor-pointer">
+            <Button className="cursor-pointer" onClick={() => setCreateOpen(true)}>
               <Plus className="size-4" aria-hidden="true" />
               {t('inventory.newItem')}
             </Button>
@@ -218,6 +219,19 @@ export function InventoryPage() {
                 onDone={() => setSelectedItem(null)}
               />
             ) : null}
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t('inventory.newItem')}</DialogTitle>
+              <DialogDescription>{t('inventory.newItemDescription')}</DialogDescription>
+            </DialogHeader>
+            <InventoryItemForm
+              onCancel={() => setCreateOpen(false)}
+              onDone={() => setCreateOpen(false)}
+            />
           </DialogContent>
         </Dialog>
       </div>

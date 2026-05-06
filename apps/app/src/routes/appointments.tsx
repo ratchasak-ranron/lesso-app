@@ -12,7 +12,14 @@ import {
 } from 'lucide-react';
 import type { Appointment, Patient } from '@reinly/domain';
 import { useDevToolbar } from '@/store/dev-toolbar';
-import { useAppointments } from '@/features/appointment';
+import { AppointmentForm, useAppointments } from '@/features/appointment';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { usePatients } from '@/features/patient';
 import { PageHeader } from '@/components/page-header';
 import { TenantGate } from '@/components/tenant-gate';
@@ -36,6 +43,7 @@ export function AppointmentsPage() {
   const branchId = useDevToolbar((s) => s.branchId);
   const [date, setDate] = useState(() => dayjs().format('YYYY-MM-DD'));
   const [filter, setFilter] = useState<StatusFilter>('all');
+  const [createOpen, setCreateOpen] = useState(false);
 
   const { data, isLoading } = useAppointments({
     branchId: branchId ?? undefined,
@@ -100,7 +108,7 @@ export function AppointmentsPage() {
           actions={
             <div className="flex flex-wrap items-center gap-2">
               <DateNav value={date} onChange={setDate} />
-              <Button className="cursor-pointer">
+              <Button className="cursor-pointer" onClick={() => setCreateOpen(true)}>
                 <Plus className="size-4" aria-hidden="true" />
                 {t('appointment.newAppointment')}
               </Button>
@@ -187,6 +195,20 @@ export function AppointmentsPage() {
             </ul>
           </Card>
         )}
+
+        <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t('appointment.newAppointment')}</DialogTitle>
+              <DialogDescription>{t('appointment.newAppointmentDescription')}</DialogDescription>
+            </DialogHeader>
+            <AppointmentForm
+              defaultDate={date}
+              onCancel={() => setCreateOpen(false)}
+              onDone={() => setCreateOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
     </TenantGate>
   );

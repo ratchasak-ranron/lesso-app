@@ -188,13 +188,30 @@
       "actions": {
         "call": "Call patient",
         "lineChat": "LINE chat",
-        "edit": "Edit patient"
-      }
+        "edit": "Edit patient",
+        "delete": "Delete patient"
+      },
+      "deleteTitle": "Delete {{name}}?",
+      "deleteDescription": "This permanently removes the patient and their PDPA consent record. Receipts and audit history are kept.",
+      "withdrawCta": "Withdraw consent",
+      "withdrawTitle": "Withdraw PDPA consent?",
+      "withdrawDescription": "The patient's marketing and data-processing permissions will be revoked. They can re-consent later.",
+      "withdrawConfirm": "Withdraw"
     }
   },
   "appointment": {
     "title": "Appointments",
     "newAppointment": "New appointment",
+    "newAppointmentDescription": "Schedule a visit for a patient at this branch.",
+    "patient": "Patient",
+    "errors": {
+      "patientRequired": "Pick a patient",
+      "branchRequired": "Pick a branch in the profile menu",
+      "serviceRequired": "Service name is required",
+      "timeInvalid": "Time is invalid",
+      "endBeforeStart": "End must be after start"
+    },
+    "notes": "Notes",
     "service": "Service",
     "doctor": "Doctor",
     "startAt": "Start",
@@ -226,6 +243,14 @@
   "course": {
     "title": "Courses",
     "newCourse": "New course",
+    "newCourseDescription": "Add a multi-session package for a patient.",
+    "patient": "Patient",
+    "errors": {
+      "patientRequired": "Pick a patient",
+      "serviceRequired": "Service name is required",
+      "sessionsInvalid": "Sessions must be at least 1",
+      "priceInvalid": "Price must be 0 or greater"
+    },
     "service": "Service",
     "sessionsTotal": "Total sessions",
     "sessionsUsed": "Used",
@@ -369,6 +394,16 @@
   "inventory": {
     "title": "Inventory",
     "newItem": "New item",
+    "newItemDescription": "Add a new SKU to this branch's inventory.",
+    "itemName": "Item name",
+    "sku": "SKU",
+    "initialStock": "Initial stock",
+    "unitCost": "Unit cost",
+    "errors": {
+      "branchRequired": "Pick a branch first",
+      "required": "SKU and name are required",
+      "numericInvalid": "Numeric values cannot be negative"
+    },
     "newMovement": "New movement",
     "noItems": "No inventory items yet",
     "lowStock": "Below minimum stock",

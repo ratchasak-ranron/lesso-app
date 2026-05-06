@@ -8,3 +8,4 @@ export {
 } from './hooks/use-courses';
 export { CourseBalanceCard } from './components/course-balance-card';
 export { ActiveCoursesList } from './components/active-courses-list';
+export { CourseForm } from './components/course-form';
