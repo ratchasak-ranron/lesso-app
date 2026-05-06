@@ -3,10 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { Bell, Languages, LogOut, Search } from 'lucide-react';
 import { getUsers } from '@reinly/mock-server';
 import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { cn } from '@/lib/utils';
 import { Breadcrumbs } from './breadcrumbs';
 import { MobileNav } from './mobile-nav';
+import { TopbarSearch } from './topbar-search';
 
 interface TopBarProps {
   /** Kept for API compatibility but no longer rendered — the breadcrumb
@@ -35,6 +43,8 @@ export function TopBar(_props: TopBarProps) {
     return getUsers().find((u) => u.id === userId) ?? null;
   }, [userId]);
 
+  const [searchSheetOpen, setSearchSheetOpen] = useState(false);
+
   function toggleLanguage(): void {
     void i18n.changeLanguage(isThai ? 'en' : 'th');
   }
@@ -48,32 +58,38 @@ export function TopBar(_props: TopBarProps) {
         <Breadcrumbs />
       </div>
 
-      {/* Search — collapses to icon-only on smaller widths so the breadcrumb
-          gets first dibs on the remaining space. */}
+      {/* Search — debounced patient lookup. Collapses to icon-only below
+          lg so the breadcrumb keeps room. The icon opens a sheet hosting
+          the same search component for mobile. */}
       <div className="hidden max-w-sm flex-1 lg:block">
-        <label htmlFor="topbar-search" className="sr-only">
-          {t('common.search')}
-        </label>
-        <div className="relative">
-          <Search
-            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-            aria-hidden="true"
-          />
-          <input
-            id="topbar-search"
-            type="search"
-            placeholder={t('common.search')}
-            className="h-10 w-full rounded-full border border-input bg-background pl-9 pr-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          />
-        </div>
+        <TopbarSearch variant="inline" />
       </div>
       <button
         type="button"
         aria-label={t('common.search')}
+        onClick={() => setSearchSheetOpen(true)}
         className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:hidden"
       >
         <Search className="size-5" strokeWidth={1.75} aria-hidden="true" />
       </button>
+
+      <Sheet open={searchSheetOpen} onOpenChange={setSearchSheetOpen}>
+        <SheetContent side="top" className="max-h-[90vh] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>{t('topbar.searchPlaceholder')}</SheetTitle>
+            <SheetDescription className="sr-only">
+              {t('topbar.searchResults')}
+            </SheetDescription>
+          </SheetHeader>
+          <div className="mt-4">
+            <TopbarSearch
+              variant="panel"
+              autoFocus
+              onAfterSelect={() => setSearchSheetOpen(false)}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
 
       <div className="flex shrink-0 items-center gap-1.5">
         {/* Notification bell — static red dot until the feature ships. */}

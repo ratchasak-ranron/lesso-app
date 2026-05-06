@@ -38,7 +38,9 @@
     "notifications": "Notifications"
   },
   "topbar": {
-    "switchTo": "Switch to {{lang}}"
+    "switchTo": "Switch to {{lang}}",
+    "searchPlaceholder": "Search patients by name, phone, or LINE…",
+    "searchResults": "Patient search results"
   },
   "dateNav": {
     "previous": "Previous day",

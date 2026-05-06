@@ -38,7 +38,9 @@
     "notifications": "การแจ้งเตือน"
   },
   "topbar": {
-    "switchTo": "เปลี่ยนเป็น {{lang}}"
+    "switchTo": "เปลี่ยนเป็น {{lang}}",
+    "searchPlaceholder": "ค้นหาคนไข้จากชื่อ เบอร์โทร หรือ LINE…",
+    "searchResults": "ผลการค้นหาคนไข้"
   },
   "dateNav": {
     "previous": "วันก่อนหน้า",
