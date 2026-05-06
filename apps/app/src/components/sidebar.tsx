@@ -1,24 +1,44 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@tanstack/react-router';
 import { ChevronLeft, ChevronRight, HelpCircle, Settings } from 'lucide-react';
 import { ACCENT_CLASSES, NAV_GROUPS, NAV_ITEMS, type NavItem } from './nav-items';
 import { useIsRouteActive } from './use-is-route-active';
 import { BrandMark } from './brand-mark';
+import { SIDEBAR_EXPANDED_KEY } from '@/lib/persist-keys';
 import { cn } from '@/lib/utils';
 
 /**
- * App sidebar — Dentalica-style rail. Defaults to a 64px icon-only rail
- * (matches the reference's left rail) with a brand square on top, primary
- * nav icons in the middle, and Help + Settings affordances at the bottom.
- *
- * The chevron at the very bottom toggles to a 240px expanded mode that
- * shows labels. Toggle state is local — wire to the dev-toolbar store
- * later if persistence becomes useful.
+ * App sidebar — Dentalica-style rail. Renders a 240px expanded rail by
+ * default (full labels) with a brand block on top, grouped primary
+ * nav, and Help + Settings affordances at the bottom. The chevron
+ * toggles a 64px icon-only rail. The toggle state persists per
+ * browser via localStorage so a user's preferred density survives
+ * reloads.
  */
+function readPersistedExpanded(): boolean {
+  if (typeof window === 'undefined') return true;
+  try {
+    const raw = window.localStorage.getItem(SIDEBAR_EXPANDED_KEY);
+    if (raw === null) return true;
+    return raw === 'true';
+  } catch {
+    return true;
+  }
+}
+
 export function Sidebar() {
   const { t } = useTranslation();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState<boolean>(readPersistedExpanded);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(SIDEBAR_EXPANDED_KEY, String(expanded));
+    } catch {
+      // localStorage may be disabled (private mode quotas, browser flags).
+      // Failing silently keeps the toggle working in-session.
+    }
+  }, [expanded]);
 
   return (
     <aside

@@ -16,6 +16,8 @@ export const DOCTOR_STORE_VERSION = 1;
 export const EXPENSE_STORE_KEY = 'reinly:expenses';
 export const EXPENSE_STORE_VERSION = 1;
 
+export const SIDEBAR_EXPANDED_KEY = 'reinly:sidebar-expanded';
+
 /**
  * Shape persisted by Zustand `persist` middleware for the dev toolbar.
  * Read on the app side AND by the mock-server context reader.
