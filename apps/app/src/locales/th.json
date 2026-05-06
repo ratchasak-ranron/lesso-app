@@ -148,7 +148,49 @@
       "created": "เข้าระบบ"
     },
     "countLabel": "{{count}} คน",
-    "since": "เริ่มเมื่อ {{date}}"
+    "since": "เริ่มเมื่อ {{date}}",
+    "detail": {
+      "memberBadge": "สมาชิก",
+      "joinedSince": "เข้าร่วมเมื่อ {{date}}",
+      "basicInfo": "ข้อมูลพื้นฐาน",
+      "appointmentSchedule": "ตารางนัดหมาย",
+      "noAppointments": "ยังไม่มีนัดหมาย",
+      "consentCard": "ความยินยอม PDPA",
+      "consentNumber": "เลขอ้างอิงความยินยอม",
+      "expiry": "หมดอายุ",
+      "noExpiry": "ไม่มีวันหมดอายุ",
+      "consentValid": "ใช้งานได้",
+      "consentExpiringSoon": "ใกล้หมดอายุ",
+      "consentExpired": "หมดอายุ",
+      "consentMissing": "ยังไม่มี",
+      "loyaltyTitle": "สมาชิกสะสมแต้ม",
+      "balance": "คะแนน",
+      "lifetime": "สะสม",
+      "redeem": "ใช้คะแนน",
+      "documents": "เอกสาร",
+      "documentsEmpty": "ยังไม่มีเอกสาร",
+      "downloadConsent": "ดาวน์โหลดความยินยอม",
+      "history": "ประวัติการรักษา",
+      "historyEmpty": "ยังไม่มีใบเสร็จ",
+      "col": {
+        "id": "เลขที่",
+        "treatment": "การรักษา",
+        "date": "วันที่",
+        "result": "ผลลัพธ์",
+        "payment": "สถานะชำระเงิน"
+      },
+      "result": {
+        "completed": "เสร็จสิ้น",
+        "voided": "ยกเลิก",
+        "refunded": "คืนเงิน",
+        "draft": "ฉบับร่าง"
+      },
+      "actions": {
+        "call": "โทรหาคนไข้",
+        "lineChat": "แชต LINE",
+        "edit": "แก้ไขคนไข้"
+      }
+    }
   },
   "appointment": {
     "title": "นัดหมาย",

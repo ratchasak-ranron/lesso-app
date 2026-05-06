@@ -148,7 +148,49 @@
       "created": "Joined"
     },
     "countLabel": "{{count}} patients",
-    "since": "Since {{date}}"
+    "since": "Since {{date}}",
+    "detail": {
+      "memberBadge": "MEMBER",
+      "joinedSince": "Joined since {{date}}",
+      "basicInfo": "Basic informational",
+      "appointmentSchedule": "Appointment schedule",
+      "noAppointments": "No appointments scheduled.",
+      "consentCard": "PDPA consent",
+      "consentNumber": "Consent reference",
+      "expiry": "Expiry",
+      "noExpiry": "No expiry",
+      "consentValid": "Active",
+      "consentExpiringSoon": "Expiring soon",
+      "consentExpired": "Expired",
+      "consentMissing": "Missing",
+      "loyaltyTitle": "Loyalty member",
+      "balance": "Points",
+      "lifetime": "Lifetime",
+      "redeem": "Redeem",
+      "documents": "Documents",
+      "documentsEmpty": "No documents yet.",
+      "downloadConsent": "Download consent",
+      "history": "Treatment history",
+      "historyEmpty": "No receipts yet.",
+      "col": {
+        "id": "ID",
+        "treatment": "Treatment",
+        "date": "Date",
+        "result": "Result",
+        "payment": "Payment status"
+      },
+      "result": {
+        "completed": "Well done",
+        "voided": "Voided",
+        "refunded": "Refunded",
+        "draft": "Draft"
+      },
+      "actions": {
+        "call": "Call patient",
+        "lineChat": "LINE chat",
+        "edit": "Edit patient"
+      }
+    }
   },
   "appointment": {
     "title": "Appointments",
