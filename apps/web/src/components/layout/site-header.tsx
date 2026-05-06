@@ -42,9 +42,9 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
         <a
           href={`/${locale}`}
-          className="inline-flex items-center gap-2 text-base font-semibold tracking-tight text-foreground"
+          className="inline-flex items-center gap-2 text-xl font-semibold tracking-tight text-foreground"
         >
-          <BrandMark className="size-7" />
+          <BrandMark className="size-9" />
           {siteConfig.name}
         </a>
 
@@ -93,8 +93,8 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
             </SheetTrigger>
             <SheetContent side="right" className="w-72 p-0">
               <SheetHeader className="border-b border-border px-6 py-5">
-                <SheetTitle className="inline-flex items-center gap-2 text-base font-semibold tracking-tight text-foreground">
-                  <BrandMark className="size-7" />
+                <SheetTitle className="inline-flex items-center gap-2 text-xl font-semibold tracking-tight text-foreground">
+                  <BrandMark className="size-9" />
                   {siteConfig.name}
                 </SheetTitle>
               </SheetHeader>
