@@ -23,6 +23,7 @@ import { Card } from '@/components/ui/card';
 import { SegmentedTabs } from '@/components/ui/segmented-tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
+import { Pagination, usePagination } from '@/components/ui/pagination';
 import { useDebounce } from '@/lib/use-debounce';
 import { useLocale } from '@/lib/use-locale';
 import { formatCurrency, formatDate } from '@/lib/format';
@@ -77,6 +78,8 @@ export function CoursesPage() {
         return b.updatedAt.localeCompare(a.updatedAt);
       });
   }, [courses, filter, debounced, patientsById]);
+
+  const pagination = usePagination(filtered, 10);
 
   return (
     <TenantGate>
@@ -154,26 +157,38 @@ export function CoursesPage() {
             title={t(courses.length === 0 ? 'course.empty.list' : 'course.empty.filter')}
           />
         ) : (
-          <Card className="overflow-hidden p-0">
-            <ul role="list" className="divide-y divide-border">
-              {filtered.map((c) => (
-                <li key={c.id}>
-                  <CourseRow
-                    course={c}
-                    patient={patientsById.get(c.patientId)}
-                    onSelect={() =>
-                      void navigate({
-                        to: '/patients/$id',
-                        params: { id: c.patientId },
-                      })
-                    }
-                    locale={locale}
-                    t={t}
-                  />
-                </li>
-              ))}
-            </ul>
-          </Card>
+          <>
+            <Card className="overflow-hidden p-0">
+              <ul role="list" className="divide-y divide-border">
+                {pagination.pageItems.map((c) => (
+                  <li key={c.id}>
+                    <CourseRow
+                      course={c}
+                      patient={patientsById.get(c.patientId)}
+                      onSelect={() =>
+                        void navigate({
+                          to: '/patients/$id',
+                          params: { id: c.patientId },
+                        })
+                      }
+                      locale={locale}
+                      t={t}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </Card>
+            <Pagination
+              page={pagination.page}
+              totalPages={pagination.totalPages}
+              total={pagination.total}
+              from={pagination.from}
+              to={pagination.to}
+              pageSize={pagination.pageSize}
+              onPageChange={pagination.setPage}
+              onPageSizeChange={pagination.setPageSize}
+            />
+          </>
         )}
       </div>
     </TenantGate>

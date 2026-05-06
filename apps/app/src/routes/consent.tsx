@@ -16,6 +16,7 @@ import { TenantGate } from '@/components/tenant-gate';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
+import { Pagination, usePagination } from '@/components/ui/pagination';
 import { usePatients } from '@/features/patient';
 import { displayPhone, formatDate } from '@/lib/format';
 import { useDebounce } from '@/lib/use-debounce';
@@ -60,6 +61,8 @@ export function ConsentPage() {
         a.fullName.localeCompare(b.fullName),
       );
   }, [data, filter]);
+
+  const pagination = usePagination(filtered, 10);
 
   return (
     <TenantGate>
@@ -133,25 +136,37 @@ export function ConsentPage() {
         ) : filtered.length === 0 ? (
           <EmptyState icon={ShieldCheck} title={t('patient.noPatients')} />
         ) : (
-          <Card className="overflow-hidden p-0">
-            <ul role="list" className="divide-y divide-border">
-              {filtered.map((p) => (
-                <li key={p.id}>
-                  <PatientConsentRow
-                    patient={p}
-                    onSelect={() =>
-                      void navigate({ to: '/patients/$id', params: { id: p.id } })
-                    }
-                    locale={locale}
-                    consentLabel={t(`patient.consent.${p.consentStatus}`)}
-                    sinceLabel={t('patient.since', {
-                      date: formatDate(p.createdAt, locale),
-                    })}
-                  />
-                </li>
-              ))}
-            </ul>
-          </Card>
+          <>
+            <Card className="overflow-hidden p-0">
+              <ul role="list" className="divide-y divide-border">
+                {pagination.pageItems.map((p) => (
+                  <li key={p.id}>
+                    <PatientConsentRow
+                      patient={p}
+                      onSelect={() =>
+                        void navigate({ to: '/patients/$id', params: { id: p.id } })
+                      }
+                      locale={locale}
+                      consentLabel={t(`patient.consent.${p.consentStatus}`)}
+                      sinceLabel={t('patient.since', {
+                        date: formatDate(p.createdAt, locale),
+                      })}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </Card>
+            <Pagination
+              page={pagination.page}
+              totalPages={pagination.totalPages}
+              total={pagination.total}
+              from={pagination.from}
+              to={pagination.to}
+              pageSize={pagination.pageSize}
+              onPageChange={pagination.setPage}
+              onPageSizeChange={pagination.setPageSize}
+            />
+          </>
         )}
       </div>
     </TenantGate>

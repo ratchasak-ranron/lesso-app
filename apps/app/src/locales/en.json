@@ -496,5 +496,13 @@
     "signOut": "Sign out",
     "realAuthHint": "Real authentication ships in a later phase.",
     "footerNote": "© Reinly · Demo environment"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "previous": "Previous page",
+    "next": "Next page",
+    "goToPage": "Go to page {{page}}",
+    "showing": "Showing {{from}}–{{to}} of {{total}}",
+    "perPage": "Per page"
   }
 }

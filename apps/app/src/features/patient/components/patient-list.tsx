@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Card } from '@/components/ui/card';
+import { Pagination, usePagination } from '@/components/ui/pagination';
 import { displayPhone, formatDate } from '@/lib/format';
 import { useDebounce } from '@/lib/use-debounce';
 import { useLocale } from '@/lib/use-locale';
@@ -35,6 +36,8 @@ export function PatientList({ onSelect, onAddNew }: PatientListProps) {
     else arr.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
     return arr;
   }, [data, sort]);
+
+  const pagination = usePagination(sorted, 10);
 
   return (
     <div className="space-y-5">
@@ -89,15 +92,27 @@ export function PatientList({ onSelect, onAddNew }: PatientListProps) {
 
       {/* Dense rows — avatar + name + phone/LINE/since + chevron. */}
       {sorted.length > 0 ? (
-        <Card className="overflow-hidden p-0">
-          <ul role="list" className="divide-y divide-border">
-            {sorted.map((p) => (
-              <li key={p.id}>
-                <PatientRow patient={p} onSelect={onSelect} t={t} locale={locale} />
-              </li>
-            ))}
-          </ul>
-        </Card>
+        <>
+          <Card className="overflow-hidden p-0">
+            <ul role="list" className="divide-y divide-border">
+              {pagination.pageItems.map((p) => (
+                <li key={p.id}>
+                  <PatientRow patient={p} onSelect={onSelect} t={t} locale={locale} />
+                </li>
+              ))}
+            </ul>
+          </Card>
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            total={pagination.total}
+            from={pagination.from}
+            to={pagination.to}
+            pageSize={pagination.pageSize}
+            onPageChange={pagination.setPage}
+            onPageSizeChange={pagination.setPageSize}
+          />
+        </>
       ) : null}
     </div>
   );

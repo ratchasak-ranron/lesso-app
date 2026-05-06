@@ -24,6 +24,7 @@ import { Card } from '@/components/ui/card';
 import { SegmentedTabs } from '@/components/ui/segmented-tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
+import { Pagination, usePagination } from '@/components/ui/pagination';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { MovementForm, useInventoryItems } from '@/features/inventory';
 import { PageHeader } from '@/components/page-header';
@@ -81,6 +82,8 @@ export function InventoryPage() {
         return a.name.localeCompare(b.name);
       });
   }, [items, debounced, filter]);
+
+  const pagination = usePagination(filtered, 10);
 
   return (
     <TenantGate>
@@ -170,19 +173,31 @@ export function InventoryPage() {
             title={t(items.length === 0 ? 'inventory.empty.list' : 'inventory.empty.filter')}
           />
         ) : (
-          <Card className="overflow-hidden p-0">
-            <ul role="list" className="divide-y divide-border">
-              {filtered.map((it) => (
-                <li key={it.id}>
-                  <ItemRow
-                    item={it}
-                    onSelect={() => setSelectedItem(it)}
-                    t={t}
-                  />
-                </li>
-              ))}
-            </ul>
-          </Card>
+          <>
+            <Card className="overflow-hidden p-0">
+              <ul role="list" className="divide-y divide-border">
+                {pagination.pageItems.map((it) => (
+                  <li key={it.id}>
+                    <ItemRow
+                      item={it}
+                      onSelect={() => setSelectedItem(it)}
+                      t={t}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </Card>
+            <Pagination
+              page={pagination.page}
+              totalPages={pagination.totalPages}
+              total={pagination.total}
+              from={pagination.from}
+              to={pagination.to}
+              pageSize={pagination.pageSize}
+              onPageChange={pagination.setPage}
+              onPageSizeChange={pagination.setPageSize}
+            />
+          </>
         )}
 
         <Dialog

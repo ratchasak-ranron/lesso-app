@@ -4,6 +4,7 @@ import type { AuditLog } from '@reinly/domain';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
+import { Pagination, usePagination } from '@/components/ui/pagination';
 import { formatDateTime } from '@/lib/format';
 import { useLocale } from '@/lib/use-locale';
 
@@ -15,6 +16,7 @@ interface AuditListProps {
 export function AuditList({ logs, isLoading }: AuditListProps) {
   const { t } = useTranslation();
   const locale = useLocale();
+  const pagination = usePagination(logs, 25);
 
   if (isLoading) {
     return (
@@ -30,48 +32,60 @@ export function AuditList({ logs, isLoading }: AuditListProps) {
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-border">
-      <table className="w-full text-left text-sm">
-        <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
-          <tr>
-            <th scope="col" className="px-4 py-2 font-medium">
-              {t('audit.col.when')}
-            </th>
-            <th scope="col" className="px-4 py-2 font-medium">
-              {t('audit.col.action')}
-            </th>
-            <th scope="col" className="px-4 py-2 font-medium">
-              {t('audit.col.actor')}
-            </th>
-            <th scope="col" className="px-4 py-2 font-medium">
-              {t('audit.col.resource')}
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-border">
-          {logs.map((log) => (
-            <tr key={log.id}>
-              <td className="px-4 py-2 font-mono text-xs text-muted-foreground tabular-nums whitespace-nowrap">
-                {formatDateTime(log.createdAt, locale)}
-              </td>
-              <td className="px-4 py-2">
-                <Badge variant="outline">{t(`audit.action.${log.action}`)}</Badge>
-              </td>
-              <td className="px-4 py-2 text-muted-foreground">{log.userName ?? '—'}</td>
-              <td className="px-4 py-2 font-mono text-xs text-muted-foreground">
-                {log.resourceId ? (
-                  <span title={log.resourceId}>
-                    {log.resourceType}:{' '}
-                    <span className="break-all">{log.resourceId.slice(0, 8)}…</span>
-                  </span>
-                ) : (
-                  log.resourceType
-                )}
-              </td>
+    <div className="space-y-3">
+      <div className="overflow-x-auto rounded-lg border border-border">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
+            <tr>
+              <th scope="col" className="px-4 py-2 font-medium">
+                {t('audit.col.when')}
+              </th>
+              <th scope="col" className="px-4 py-2 font-medium">
+                {t('audit.col.action')}
+              </th>
+              <th scope="col" className="px-4 py-2 font-medium">
+                {t('audit.col.actor')}
+              </th>
+              <th scope="col" className="px-4 py-2 font-medium">
+                {t('audit.col.resource')}
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {pagination.pageItems.map((log) => (
+              <tr key={log.id}>
+                <td className="px-4 py-2 font-mono text-xs text-muted-foreground tabular-nums whitespace-nowrap">
+                  {formatDateTime(log.createdAt, locale)}
+                </td>
+                <td className="px-4 py-2">
+                  <Badge variant="outline">{t(`audit.action.${log.action}`)}</Badge>
+                </td>
+                <td className="px-4 py-2 text-muted-foreground">{log.userName ?? '—'}</td>
+                <td className="px-4 py-2 font-mono text-xs text-muted-foreground">
+                  {log.resourceId ? (
+                    <span title={log.resourceId}>
+                      {log.resourceType}:{' '}
+                      <span className="break-all">{log.resourceId.slice(0, 8)}…</span>
+                    </span>
+                  ) : (
+                    log.resourceType
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Pagination
+        page={pagination.page}
+        totalPages={pagination.totalPages}
+        total={pagination.total}
+        from={pagination.from}
+        to={pagination.to}
+        pageSize={pagination.pageSize}
+        onPageChange={pagination.setPage}
+        onPageSizeChange={pagination.setPageSize}
+      />
     </div>
   );
 }

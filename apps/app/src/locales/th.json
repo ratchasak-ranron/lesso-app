@@ -496,5 +496,13 @@
     "signOut": "ออกจากระบบ",
     "realAuthHint": "การยืนยันตัวตนจริงจะเปิดใช้งานในเฟสถัดไป",
     "footerNote": "© Reinly · ระบบทดลองสำหรับการสาธิต"
+  },
+  "pagination": {
+    "label": "แบ่งหน้า",
+    "previous": "หน้าก่อนหน้า",
+    "next": "หน้าถัดไป",
+    "goToPage": "ไปหน้า {{page}}",
+    "showing": "แสดง {{from}}–{{to}} จาก {{total}}",
+    "perPage": "ต่อหน้า"
   }
 }

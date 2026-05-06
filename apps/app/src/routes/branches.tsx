@@ -14,6 +14,7 @@ import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select } from '@/components/ui/select';
 import { EmptyState } from '@/components/ui/empty-state';
+import { Pagination, usePagination } from '@/components/ui/pagination';
 import { useBranchesSummary } from '@/features/branch';
 import { monthRangeToDates } from '@/features/report';
 import { PageHeader } from '@/components/page-header';
@@ -62,6 +63,7 @@ export function BranchesPage() {
     [items],
   );
   const topRevenue = sorted[0]?.revenue ?? 0;
+  const pagination = usePagination(sorted, 10);
 
   return (
     <TenantGate>
@@ -132,23 +134,35 @@ export function BranchesPage() {
         ) : items.length === 0 ? (
           <EmptyState icon={Building2} title={t('branch.copy.noData')} />
         ) : (
-          <Card className="overflow-hidden p-0">
-            <ul role="list" className="divide-y divide-border">
-              {sorted.map((b, idx) => (
-                <li key={b.branchId}>
-                  <BranchRow
-                    summary={b}
-                    rank={idx + 1}
-                    topRevenue={topRevenue}
-                    locale={locale}
-                    onSelect={() =>
-                      void navigate({ to: '/reports', search: { branchId: b.branchId } as never })
-                    }
-                  />
-                </li>
-              ))}
-            </ul>
-          </Card>
+          <>
+            <Card className="overflow-hidden p-0">
+              <ul role="list" className="divide-y divide-border">
+                {pagination.pageItems.map((b, idx) => (
+                  <li key={b.branchId}>
+                    <BranchRow
+                      summary={b}
+                      rank={(pagination.page - 1) * pagination.pageSize + idx + 1}
+                      topRevenue={topRevenue}
+                      locale={locale}
+                      onSelect={() =>
+                        void navigate({ to: '/reports', search: { branchId: b.branchId } as never })
+                      }
+                    />
+                  </li>
+                ))}
+              </ul>
+            </Card>
+            <Pagination
+              page={pagination.page}
+              totalPages={pagination.totalPages}
+              total={pagination.total}
+              from={pagination.from}
+              to={pagination.to}
+              pageSize={pagination.pageSize}
+              onPageChange={pagination.setPage}
+              onPageSizeChange={pagination.setPageSize}
+            />
+          </>
         )}
       </div>
     </TenantGate>

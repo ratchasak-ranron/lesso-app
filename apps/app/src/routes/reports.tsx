@@ -12,11 +12,16 @@ import {
   Users,
 } from 'lucide-react';
 import type { ReportDimension } from '@reinly/api-client';
-import type { CommissionStatus } from '@reinly/domain';
+import type {
+  CommissionStatus,
+  DoctorCommissionSummary,
+  InventoryItem,
+} from '@reinly/domain';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select } from '@/components/ui/select';
 import { FormError, FormStatus } from '@/components/ui/form-feedback';
+import { Pagination, usePagination } from '@/components/ui/pagination';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import {
   monthRangeToDates,
@@ -181,36 +186,7 @@ export function ReportsPage() {
                     {t('report.noCommission')}
                   </p>
                 ) : (
-                  <ul className="divide-y divide-border" role="list">
-                    {report.data.commissionSummary.map((s) => (
-                      <li
-                        key={s.doctorId}
-                        className="flex items-center justify-between gap-3 px-5 py-3"
-                      >
-                        <div className="min-w-0">
-                          <div className="truncate text-sm font-medium text-foreground">
-                            {s.doctorName}
-                          </div>
-                          <div className="text-xs text-muted-foreground tabular-nums">
-                            {formatNumber(s.visitCount, locale)} {t('report.receipts')}
-                          </div>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-3">
-                          <span
-                            className={cn(
-                              'rounded-full px-2.5 py-0.5 text-[11px] font-medium',
-                              COMMISSION_PILL[s.status],
-                            )}
-                          >
-                            {t(`commission.status.${s.status}`)}
-                          </span>
-                          <span className="font-mono text-base font-semibold tabular-nums">
-                            {formatCurrency(s.totalAmount, locale)}
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                  <CommissionList rows={report.data.commissionSummary} locale={locale} t={t} />
                 )}
               </CardContent>
             </Card>
@@ -234,27 +210,7 @@ export function ReportsPage() {
                     {t('report.lowStockAlerts')}: 0
                   </p>
                 ) : (
-                  <ul className="divide-y divide-border" role="list">
-                    {report.data.lowStockItems.map((it) => (
-                      <li
-                        key={it.id}
-                        className="flex items-center justify-between gap-3 px-5 py-3"
-                      >
-                        <div className="min-w-0">
-                          <div className="truncate text-sm font-medium text-foreground">
-                            {it.name}
-                          </div>
-                          <div className="text-xs text-muted-foreground">{it.sku}</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="font-mono text-sm font-semibold tabular-nums text-amber-ink">
-                            {it.currentStock}
-                            <span className="text-muted-foreground"> / {it.minStock}</span>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                  <LowStockList items={report.data.lowStockItems} />
                 )}
               </CardContent>
             </Card>
@@ -388,45 +344,62 @@ function BreakdownList({
   locale: 'en' | 'th';
   t: TFunction;
 }) {
-  const sorted = [...rows].sort((a, b) => b.revenue - a.revenue);
+  const sorted = useMemo(() => [...rows].sort((a, b) => b.revenue - a.revenue), [rows]);
   const top = sorted[0]?.revenue ?? 0;
+  const pagination = usePagination(sorted, 10);
   return (
-    <ul className="divide-y divide-border" role="list">
-      {sorted.map((r) => {
-        const percent = top > 0
-          ? Math.max(2, Math.min(100, Math.round((r.revenue / top) * 100)))
-          : 0;
-        return (
-          <li key={r.key} className="px-5 py-4">
-            <div className="flex items-baseline justify-between gap-3">
-              <span className="truncate text-sm font-medium text-foreground">{r.label}</span>
-              <span className="font-mono text-sm font-semibold tabular-nums text-foreground">
-                {formatCurrency(r.revenue, locale)}
-              </span>
-            </div>
-            <div className="mt-2 flex items-center gap-3">
-              <div
-                className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted"
-                role="progressbar"
-                aria-valuenow={percent}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-label={r.label}
-              >
-                <span
-                  aria-hidden="true"
-                  className="block h-full bg-foreground/85 transition-[width] duration-200"
-                  style={{ width: `${percent}%` }}
-                />
+    <div>
+      <ul className="divide-y divide-border" role="list">
+        {pagination.pageItems.map((r) => {
+          const percent = top > 0
+            ? Math.max(2, Math.min(100, Math.round((r.revenue / top) * 100)))
+            : 0;
+          return (
+            <li key={r.key} className="px-5 py-4">
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="truncate text-sm font-medium text-foreground">{r.label}</span>
+                <span className="font-mono text-sm font-semibold tabular-nums text-foreground">
+                  {formatCurrency(r.revenue, locale)}
+                </span>
               </div>
-              <span className="font-mono text-[11px] text-muted-foreground tabular-nums">
-                {formatNumber(r.visitCount, locale)} {t('report.receipts')}
-              </span>
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+              <div className="mt-2 flex items-center gap-3">
+                <div
+                  className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted"
+                  role="progressbar"
+                  aria-valuenow={percent}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label={r.label}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="block h-full bg-foreground/85 transition-[width] duration-200"
+                    style={{ width: `${percent}%` }}
+                  />
+                </div>
+                <span className="font-mono text-[11px] text-muted-foreground tabular-nums">
+                  {formatNumber(r.visitCount, locale)} {t('report.receipts')}
+                </span>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+      {pagination.totalPages > 1 ? (
+        <div className="border-t border-border px-5 py-3">
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            total={pagination.total}
+            from={pagination.from}
+            to={pagination.to}
+            pageSize={pagination.pageSize}
+            onPageChange={pagination.setPage}
+            onPageSizeChange={pagination.setPageSize}
+          />
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -444,3 +417,110 @@ const COMMISSION_PILL: Record<CommissionSummaryStatus, string> = {
   voided: 'bg-rose-soft text-rose-ink',
   mixed: 'bg-amber-soft text-amber-ink',
 };
+
+/* -------------------------------------------------------------------------- */
+/*  CommissionList — paginated doctor commission rows                         */
+/* -------------------------------------------------------------------------- */
+
+function CommissionList({
+  rows,
+  locale,
+  t,
+}: {
+  rows: DoctorCommissionSummary[];
+  locale: 'en' | 'th';
+  t: TFunction;
+}) {
+  const pagination = usePagination(rows, 10);
+  return (
+    <div>
+      <ul className="divide-y divide-border" role="list">
+        {pagination.pageItems.map((s) => (
+          <li
+            key={s.doctorId}
+            className="flex items-center justify-between gap-3 px-5 py-3"
+          >
+            <div className="min-w-0">
+              <div className="truncate text-sm font-medium text-foreground">
+                {s.doctorName}
+              </div>
+              <div className="text-xs text-muted-foreground tabular-nums">
+                {formatNumber(s.visitCount, locale)} {t('report.receipts')}
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-3">
+              <span
+                className={cn(
+                  'rounded-full px-2.5 py-0.5 text-[11px] font-medium',
+                  COMMISSION_PILL[s.status],
+                )}
+              >
+                {t(`commission.status.${s.status}`)}
+              </span>
+              <span className="font-mono text-base font-semibold tabular-nums">
+                {formatCurrency(s.totalAmount, locale)}
+              </span>
+            </div>
+          </li>
+        ))}
+      </ul>
+      {pagination.totalPages > 1 ? (
+        <div className="border-t border-border px-5 py-3">
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            total={pagination.total}
+            from={pagination.from}
+            to={pagination.to}
+            pageSize={pagination.pageSize}
+            onPageChange={pagination.setPage}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  LowStockList — paginated low-stock rows                                   */
+/* -------------------------------------------------------------------------- */
+
+function LowStockList({ items }: { items: InventoryItem[] }) {
+  const pagination = usePagination(items, 10);
+  return (
+    <div>
+      <ul className="divide-y divide-border" role="list">
+        {pagination.pageItems.map((it) => (
+          <li
+            key={it.id}
+            className="flex items-center justify-between gap-3 px-5 py-3"
+          >
+            <div className="min-w-0">
+              <div className="truncate text-sm font-medium text-foreground">{it.name}</div>
+              <div className="text-xs text-muted-foreground">{it.sku}</div>
+            </div>
+            <div className="text-right">
+              <div className="font-mono text-sm font-semibold tabular-nums text-amber-ink">
+                {it.currentStock}
+                <span className="text-muted-foreground"> / {it.minStock}</span>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+      {pagination.totalPages > 1 ? (
+        <div className="border-t border-border px-5 py-3">
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            total={pagination.total}
+            from={pagination.from}
+            to={pagination.to}
+            pageSize={pagination.pageSize}
+            onPageChange={pagination.setPage}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+}
