@@ -157,6 +157,14 @@
       "noAppointments": "No appointments scheduled.",
       "consentCard": "PDPA consent",
       "consentNumber": "Consent reference",
+      "memberCard": "Member card",
+      "memberNumber": "Member number",
+      "memberSince": "Member since",
+      "memberTier": "Tier",
+      "tier": {
+        "standard": "Standard",
+        "priority": "Priority"
+      },
       "expiry": "Expiry",
       "noExpiry": "No expiry",
       "consentValid": "Active",

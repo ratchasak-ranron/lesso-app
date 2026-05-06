@@ -157,6 +157,14 @@
       "noAppointments": "ยังไม่มีนัดหมาย",
       "consentCard": "ความยินยอม PDPA",
       "consentNumber": "เลขอ้างอิงความยินยอม",
+      "memberCard": "บัตรสมาชิก",
+      "memberNumber": "หมายเลขสมาชิก",
+      "memberSince": "เป็นสมาชิกตั้งแต่",
+      "memberTier": "ระดับสมาชิก",
+      "tier": {
+        "standard": "ทั่วไป",
+        "priority": "พิเศษ"
+      },
       "expiry": "หมดอายุ",
       "noExpiry": "ไม่มีวันหมดอายุ",
       "consentValid": "ใช้งานได้",

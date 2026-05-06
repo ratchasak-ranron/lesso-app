@@ -16,6 +16,7 @@ import {
   Phone,
   ShieldCheck,
   ShieldOff,
+  Sparkles,
   Trash2,
   User2,
   Users,
@@ -137,7 +138,9 @@ export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
               <BasicInfoCard patient={patient} locale={locale} t={t} />
               <AppointmentScheduleCard patientId={patient.id} locale={locale} t={t} />
               <div className="space-y-4">
-                <ConsentAssuranceCard
+                <MemberCard patient={patient} locale={locale} t={t} />
+                <LoyaltyCard patient={patient} locale={locale} t={t} />
+                <ConsentStatusCard
                   patient={patient}
                   locale={locale}
                   t={t}
@@ -146,7 +149,6 @@ export function PatientDetailPage({ patientId }: PatientDetailPageProps) {
                     consentRecord.data?.active?.id ? () => setWithdrawOpen(true) : undefined
                   }
                 />
-                <LoyaltyCard patient={patient} locale={locale} t={t} />
                 <DocumentsCard patient={patient} t={t} />
               </div>
             </div>
@@ -602,10 +604,90 @@ function TimelineItem({
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Consent assurance card (gradient)                                         */
+/*  Member card (gradient)                                                    */
 /* -------------------------------------------------------------------------- */
 
-function ConsentAssuranceCard({
+function MemberCard({
+  patient,
+  locale,
+  t,
+}: {
+  patient: Patient;
+  locale: 'en' | 'th';
+  t: TFunction;
+}) {
+  const memberNumber = membershipNumber(patient.id);
+  const tier = membershipTier(patient);
+  return (
+    <div className="overflow-hidden rounded-card bg-gradient-to-br from-indigo via-indigo to-violet p-5 text-white shadow-card">
+      <div className="flex items-center justify-between">
+        <h3 className="font-heading text-sm font-semibold tracking-tight">
+          {t('patient.detail.memberCard')}
+        </h3>
+        <Sparkles className="size-5" aria-hidden="true" />
+      </div>
+      <p className="mt-1 text-xs text-white/80">{t('patient.detail.memberNumber')}</p>
+      <div className="mt-3 flex items-center gap-3">
+        <span
+          aria-hidden="true"
+          className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-white/15 backdrop-blur"
+        >
+          <span className="font-heading text-base font-bold">R</span>
+        </span>
+        <p className="font-mono text-xl font-semibold tracking-tight tabular-nums">
+          {memberNumber}
+        </p>
+      </div>
+      <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-white/15 pt-3 text-xs">
+        <div>
+          <dt className="text-white/70">{t('patient.detail.memberSince')}</dt>
+          <dd className="mt-0.5 font-medium tabular-nums">
+            {formatDate(patient.createdAt, locale)}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-white/70">{t('patient.detail.memberTier')}</dt>
+          <dd className="mt-0.5 font-medium">{t(`patient.detail.tier.${tier}`)}</dd>
+        </div>
+      </dl>
+    </div>
+  );
+}
+
+function membershipNumber(id: string): string {
+  let h1 = 0;
+  let h2 = 0;
+  for (let i = 0; i < id.length; i++) {
+    const c = id.charCodeAt(i);
+    h1 = (h1 * 31 + c) | 0;
+    h2 = (h2 * 17 + c) | 0;
+  }
+  const a = Math.abs(h1).toString().padStart(3, '0').slice(0, 3);
+  const b = Math.abs(h2).toString().padStart(3, '0').slice(0, 3);
+  const c = Math.abs(h1 ^ h2).toString().padStart(3, '0').slice(0, 3);
+  const d = Math.abs(h1 * 7 + h2 * 13).toString().padStart(2, '0').slice(0, 2);
+  return `${a}-${b}-${c}-${d}`;
+}
+
+function membershipTier(patient: Patient): 'standard' | 'priority' {
+  // Patients with active PDPA consent + a LINE id get a higher-touch
+  // priority tier; everyone else is standard. Cheap heuristic that does
+  // not require a separate domain field for now.
+  return patient.consentStatus === 'valid' && !!patient.lineId ? 'priority' : 'standard';
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Consent status card (compact)                                             */
+/* -------------------------------------------------------------------------- */
+
+const CONSENT_PILL: Record<Patient['consentStatus'], string> = {
+  valid: 'bg-emerald-soft text-emerald-ink',
+  expiring_soon: 'bg-amber-soft text-amber-ink',
+  expired: 'bg-rose-soft text-rose-ink',
+  missing: 'bg-muted text-muted-foreground',
+};
+
+function ConsentStatusCard({
   patient,
   locale,
   t,
@@ -627,83 +709,57 @@ function ConsentAssuranceCard({
         : status === 'expired'
           ? t('patient.detail.consentExpired')
           : t('patient.detail.consentMissing');
-  const reference = consentReference(patient.id);
   return (
-    <div className="overflow-hidden rounded-card bg-gradient-to-br from-indigo via-indigo to-violet p-5 text-white shadow-card">
-      <div className="flex items-center justify-between">
-        <h3 className="font-heading text-sm font-semibold tracking-tight">
-          {t('patient.detail.consentCard')}
-        </h3>
-        <ShieldCheck className="size-5" aria-hidden="true" />
-      </div>
-      <p className="mt-1 text-xs text-white/80">{t('patient.detail.consentNumber')}</p>
-      <div className="mt-3 flex items-center gap-3">
+    <Card className="p-5">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <ShieldCheck
+            className={cn(
+              'size-4',
+              status === 'valid' ? 'text-emerald-ink' : 'text-muted-foreground',
+            )}
+            aria-hidden="true"
+          />
+          <h3 className="font-heading text-base font-semibold tracking-tight text-foreground">
+            {t('patient.detail.consentCard')}
+          </h3>
+        </div>
         <span
-          aria-hidden="true"
-          className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-white/15 backdrop-blur"
+          className={cn(
+            'rounded-full px-2.5 py-0.5 text-[11px] font-medium',
+            // eslint-disable-next-line security/detect-object-injection -- status is a constant union literal
+            CONSENT_PILL[status],
+          )}
         >
-          <ShieldCheck className="size-6" />
+          {statusLabel}
         </span>
-        <p className="font-mono text-xl font-semibold tracking-tight tabular-nums">
-          {reference}
-        </p>
       </div>
-      <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-white/15 pt-3 text-xs">
-        <div>
-          <dt className="text-white/70">{t('patient.detail.expiry')}</dt>
-          <dd className="mt-0.5 font-medium tabular-nums">
-            {patient.consentExpiresAt
-              ? formatDate(patient.consentExpiresAt, locale)
-              : t('patient.detail.noExpiry')}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-white/70">{t('patient.consentStatus')}</dt>
-          <dd className="mt-0.5 font-medium">{statusLabel}</dd>
-        </div>
-      </dl>
-      <div className="mt-4 flex flex-wrap gap-2">
+      <p className="mt-2 text-xs text-muted-foreground tabular-nums">
+        {patient.consentExpiresAt
+          ? `${t('patient.detail.expiry')}: ${formatDate(patient.consentExpiresAt, locale)}`
+          : t('patient.detail.noExpiry')}
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
         {status !== 'valid' ? (
-          <button
-            type="button"
-            onClick={onCapture}
-            className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-md bg-white/15 px-3 text-xs font-semibold text-white backdrop-blur transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-          >
-            <ShieldCheck className="size-3.5" aria-hidden="true" />
+          <Button variant="outline" size="sm" onClick={onCapture} className="cursor-pointer">
+            <ShieldCheck className="size-4" aria-hidden="true" />
             {t('consent.captureCta')}
-          </button>
+          </Button>
         ) : null}
         {onWithdraw ? (
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="sm"
             onClick={onWithdraw}
-            className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-md bg-white/10 px-3 text-xs font-semibold text-white/90 backdrop-blur transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="cursor-pointer text-rose-ink hover:bg-rose-soft"
           >
-            <ShieldOff className="size-3.5" aria-hidden="true" />
+            <ShieldOff className="size-4" aria-hidden="true" />
             {t('patient.detail.withdrawCta')}
-          </button>
+          </Button>
         ) : null}
       </div>
-    </div>
+    </Card>
   );
-}
-
-function consentReference(id: string): string {
-  // Stable 11-char numeric-ish reference derived from the patient id so
-  // the card always shows the same string between renders without
-  // surfacing the raw uuid.
-  let h1 = 0;
-  let h2 = 0;
-  for (let i = 0; i < id.length; i++) {
-    const c = id.charCodeAt(i);
-    h1 = (h1 * 31 + c) | 0;
-    h2 = (h2 * 17 + c) | 0;
-  }
-  const a = Math.abs(h1).toString().padStart(3, '0').slice(0, 3);
-  const b = Math.abs(h2).toString().padStart(3, '0').slice(0, 3);
-  const c = Math.abs(h1 ^ h2).toString().padStart(3, '0').slice(0, 3);
-  const d = Math.abs(h1 * 7 + h2 * 13).toString().padStart(2, '0').slice(0, 2);
-  return `${a}-${b}-${c}-${d}`;
 }
 
 /* -------------------------------------------------------------------------- */
