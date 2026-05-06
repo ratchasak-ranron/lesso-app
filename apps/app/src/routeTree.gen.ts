@@ -16,6 +16,7 @@ import { ConsentPage } from './routes/consent';
 import { ProductsPage } from './routes/products';
 import { PromotionsPage } from './routes/promotions';
 import { DoctorsPage } from './routes/doctors';
+import { ExpensesPage } from './routes/expenses';
 
 const rootRoute = createRootRoute({ component: RootLayout });
 
@@ -97,6 +98,12 @@ const doctorsRoute = createRoute({
   component: DoctorsPage,
 });
 
+const expensesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/expenses',
+  component: ExpensesPage,
+});
+
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   patientsRoute,
@@ -111,4 +118,5 @@ export const routeTree = rootRoute.addChildren([
   productsRoute,
   promotionsRoute,
   doctorsRoute,
+  expensesRoute,
 ]);

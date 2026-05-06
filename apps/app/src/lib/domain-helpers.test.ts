@@ -2,9 +2,12 @@ import { describe, expect, it } from 'vitest';
 import {
   PromotionUpdateSchema,
   applyPromotion,
+  expensesInRange,
   isBundle,
   isCoursePackage,
   isPromotionActive,
+  summarizeExpenses,
+  type Expense,
   type Product,
   type Promotion,
 } from '@reinly/domain';
@@ -207,6 +210,75 @@ describe('PromotionUpdateSchema', () => {
     // No type means we cannot decide if the percent cap applies — leave it
     // to a follow-up validation step that knows the existing record's type.
     expect(PromotionUpdateSchema.safeParse({ value: 150 }).success).toBe(true);
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/*  summarizeExpenses + expensesInRange                                       */
+/* -------------------------------------------------------------------------- */
+
+function makeExpense(partial: Partial<Expense>): Expense {
+  return {
+    id: '00000000-0000-0000-0000-000000000001',
+    tenantId: '00000000-0000-0000-0000-0000000000aa',
+    branchId: null,
+    category: 'rent',
+    amount: 0,
+    payee: 'Test',
+    paidAt: '2026-05-01T00:00:00.000Z',
+    recurrence: 'none',
+    createdAt: '2026-05-01T00:00:00.000Z',
+    updatedAt: '2026-05-01T00:00:00.000Z',
+    ...partial,
+  } as Expense;
+}
+
+describe('summarizeExpenses', () => {
+  it('returns zeros for an empty list', () => {
+    const summary = summarizeExpenses([]);
+    expect(summary.total).toBe(0);
+    expect(summary.recurringCount).toBe(0);
+    expect(summary.byCategory.rent).toBe(0);
+    expect(summary.byCategory.other).toBe(0);
+  });
+
+  it('aggregates totals by category and counts recurring entries', () => {
+    const summary = summarizeExpenses([
+      makeExpense({ category: 'rent', amount: 45000, recurrence: 'monthly' }),
+      makeExpense({ category: 'rent', amount: 1200, recurrence: 'none' }),
+      makeExpense({ category: 'doctor_fee', amount: 28000, recurrence: 'monthly' }),
+      makeExpense({ category: 'supplies', amount: 800, recurrence: 'none' }),
+    ]);
+    expect(summary.total).toBe(75000);
+    expect(summary.byCategory.rent).toBe(46200);
+    expect(summary.byCategory.doctor_fee).toBe(28000);
+    expect(summary.byCategory.supplies).toBe(800);
+    expect(summary.byCategory.salary).toBe(0);
+    expect(summary.recurringCount).toBe(2);
+  });
+});
+
+describe('expensesInRange', () => {
+  const expenses = [
+    makeExpense({ id: 'a', paidAt: '2026-04-15T10:00:00.000Z', amount: 100 }),
+    makeExpense({ id: 'b', paidAt: '2026-05-01T00:00:00.000Z', amount: 200 }),
+    makeExpense({ id: 'c', paidAt: '2026-05-31T23:59:59.000Z', amount: 300 }),
+    makeExpense({ id: 'd', paidAt: '2026-06-01T00:00:00.000Z', amount: 400 }),
+  ];
+
+  it('includes the start tick and excludes the end tick', () => {
+    const inMay = expensesInRange(
+      expenses,
+      '2026-05-01T00:00:00.000Z',
+      '2026-06-01T00:00:00.000Z',
+    );
+    expect(inMay.map((e) => e.id)).toEqual(['b', 'c']);
+  });
+
+  it('returns an empty list when the range matches no entries', () => {
+    expect(
+      expensesInRange(expenses, '2027-01-01T00:00:00.000Z', '2027-02-01T00:00:00.000Z'),
+    ).toEqual([]);
   });
 });
 

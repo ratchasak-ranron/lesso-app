@@ -13,6 +13,7 @@
     "products": "Products",
     "promotions": "Promotions",
     "doctors": "Doctors",
+    "expenses": "Expenses",
     "branches": "Branches",
     "reports": "Reports",
     "audit": "Audit Log",
@@ -26,6 +27,7 @@
       "operations": "Operations",
       "catalog": "Catalog",
       "organization": "Organization",
+      "finance": "Finance",
       "insights": "Insights & compliance"
     }
   },
@@ -718,6 +720,59 @@
       "commission": "Commission",
       "contact": "Contact",
       "status": "Status"
+    }
+  },
+  "expense": {
+    "title": "Expenses",
+    "newExpense": "New expense",
+    "editExpense": "Edit expense",
+    "newExpenseDescription": "Log a clinic expense — rent, doctor fee, utilities, supplies, or other.",
+    "deleteTitle": "Delete this expense?",
+    "deleteDescription": "Removes the expense from the ledger. This cannot be undone.",
+    "description": "Description",
+    "notes": "Notes",
+    "kpi": {
+      "total": "This month",
+      "recurring": "Recurring",
+      "recurringValue": "{{count}} active",
+      "empty": "—"
+    },
+    "filter": {
+      "all": "All categories"
+    },
+    "empty": {
+      "list": "No expenses logged this month",
+      "filter": "No expenses match the filter"
+    },
+    "errors": {
+      "tenantRequired": "Pick a clinic first",
+      "payeeRequired": "Payee is required",
+      "amountInvalid": "Amount must be greater than 0",
+      "dateRequired": "Pick a date"
+    },
+    "col": {
+      "date": "Date",
+      "category": "Category",
+      "payee": "Payee",
+      "amount": "Amount",
+      "recurrence": "Recurrence"
+    },
+    "category": {
+      "rent": "Rent",
+      "doctor_fee": "Doctor fee",
+      "salary": "Salary",
+      "utilities": "Utilities",
+      "supplies": "Supplies",
+      "marketing": "Marketing",
+      "equipment": "Equipment",
+      "tax": "Tax",
+      "other": "Other"
+    },
+    "recurrence": {
+      "none": "One-off",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
     }
   }
 }

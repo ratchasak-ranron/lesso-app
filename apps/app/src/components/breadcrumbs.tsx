@@ -102,6 +102,7 @@ const ROUTE_LABEL_KEYS: Record<string, string> = {
   products: 'nav.products',
   promotions: 'nav.promotions',
   doctors: 'nav.doctors',
+  expenses: 'nav.expenses',
   branches: 'nav.branches',
   reports: 'nav.reports',
   audit: 'nav.audit',

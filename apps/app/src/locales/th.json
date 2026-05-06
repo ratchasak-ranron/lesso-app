@@ -13,6 +13,7 @@
     "products": "สินค้าและบริการ",
     "promotions": "โปรโมชัน",
     "doctors": "แพทย์",
+    "expenses": "ค่าใช้จ่าย",
     "branches": "สาขา",
     "reports": "รายงาน",
     "audit": "Audit Log",
@@ -26,6 +27,7 @@
       "operations": "งานประจำวัน",
       "catalog": "สินค้าและบริการ",
       "organization": "ทีมและสาขา",
+      "finance": "การเงิน",
       "insights": "รายงานและการปฏิบัติตาม"
     }
   },
@@ -718,6 +720,59 @@
       "commission": "คอมมิชชัน",
       "contact": "ติดต่อ",
       "status": "สถานะ"
+    }
+  },
+  "expense": {
+    "title": "ค่าใช้จ่าย",
+    "newExpense": "เพิ่มรายจ่าย",
+    "editExpense": "แก้ไขรายจ่าย",
+    "newExpenseDescription": "บันทึกค่าใช้จ่ายของคลินิก เช่น ค่าเช่า ค่าแพทย์ ค่าสาธารณูปโภค",
+    "deleteTitle": "ลบรายจ่ายนี้หรือไม่?",
+    "deleteDescription": "ลบรายการออกจากบัญชี ไม่สามารถย้อนกลับได้",
+    "description": "รายละเอียด",
+    "notes": "หมายเหตุ",
+    "kpi": {
+      "total": "เดือนนี้",
+      "recurring": "รายจ่ายประจำ",
+      "recurringValue": "{{count}} รายการ",
+      "empty": "—"
+    },
+    "filter": {
+      "all": "ทุกหมวด"
+    },
+    "empty": {
+      "list": "ยังไม่มีรายจ่ายในเดือนนี้",
+      "filter": "ไม่พบรายจ่ายตามตัวกรอง"
+    },
+    "errors": {
+      "tenantRequired": "เลือกคลินิกก่อน",
+      "payeeRequired": "ต้องระบุผู้รับเงิน",
+      "amountInvalid": "จำนวนเงินต้องมากกว่า 0",
+      "dateRequired": "เลือกวันที่"
+    },
+    "col": {
+      "date": "วันที่",
+      "category": "หมวด",
+      "payee": "ผู้รับเงิน",
+      "amount": "จำนวนเงิน",
+      "recurrence": "การเกิดซ้ำ"
+    },
+    "category": {
+      "rent": "ค่าเช่า",
+      "doctor_fee": "ค่าแพทย์",
+      "salary": "เงินเดือน",
+      "utilities": "ค่าสาธารณูปโภค",
+      "supplies": "วัสดุสิ้นเปลือง",
+      "marketing": "การตลาด",
+      "equipment": "อุปกรณ์",
+      "tax": "ภาษี",
+      "other": "อื่นๆ"
+    },
+    "recurrence": {
+      "none": "ครั้งเดียว",
+      "weekly": "รายสัปดาห์",
+      "monthly": "รายเดือน",
+      "yearly": "รายปี"
     }
   }
 }

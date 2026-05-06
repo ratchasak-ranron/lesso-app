@@ -11,6 +11,7 @@ import {
   Stethoscope,
   Tag,
   Users,
+  Wallet,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -32,7 +33,7 @@ export type SectionAccent =
  * rendered as a contiguous block with an optional uppercase label
  * (shown only in the expanded rail).
  */
-export type NavGroup = 'operations' | 'catalog' | 'organization' | 'insights';
+export type NavGroup = 'operations' | 'catalog' | 'organization' | 'finance' | 'insights';
 
 export interface NavItem {
   to:
@@ -45,6 +46,7 @@ export interface NavItem {
     | '/promotions'
     | '/doctors'
     | '/branches'
+    | '/expenses'
     | '/reports'
     | '/audit'
     | '/consent';
@@ -59,6 +61,7 @@ export interface NavItem {
     | 'nav.promotions'
     | 'nav.doctors'
     | 'nav.branches'
+    | 'nav.expenses'
     | 'nav.reports'
     | 'nav.audit'
     | 'nav.consent';
@@ -153,6 +156,16 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
     accent: 'emerald',
     group: 'organization',
   },
+  // Finance — money out + payroll-ish ledgers.
+  {
+    to: '/expenses',
+    icon: Wallet,
+    labelKey: 'nav.expenses',
+    exact: false,
+    primary: false,
+    accent: 'amber',
+    group: 'finance',
+  },
   // Insights — reporting + compliance.
   {
     to: '/reports',
@@ -188,6 +201,7 @@ export const NAV_GROUPS: ReadonlyArray<{ group: NavGroup; labelKey: string }> = 
   { group: 'operations', labelKey: 'nav.group.operations' },
   { group: 'catalog', labelKey: 'nav.group.catalog' },
   { group: 'organization', labelKey: 'nav.group.organization' },
+  { group: 'finance', labelKey: 'nav.group.finance' },
   { group: 'insights', labelKey: 'nav.group.insights' },
 ];
 

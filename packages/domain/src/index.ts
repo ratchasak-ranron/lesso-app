@@ -15,3 +15,4 @@ export * from './service';
 export * from './product';
 export * from './promotion';
 export * from './doctor';
+export * from './expense';
