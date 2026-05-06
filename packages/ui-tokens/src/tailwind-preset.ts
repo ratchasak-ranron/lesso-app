@@ -105,15 +105,28 @@ export const reinlyPreset = {
         hover: 'var(--shadow-hover)',
       },
       fontFamily: {
-        // Geist Sans for Latin body + headings. IBM Plex Sans Thai Looped
-        // handles Thai chars via per-glyph fallback. Multi-word names are
+        // Body copy: Google Sans Text first (restricted on Google Fonts —
+        // serves only on permitted hosts), Roboto as the dependable open
+        // fallback, IBM Plex Sans Thai to keep Thai glyphs on-brand if
+        // Roboto's Thai support is unavailable. Multi-word names are
         // quoted to survive any CSS pipeline that splits unquoted
         // whitespace identifiers.
-        sans: ['Geist', '"IBM Plex Sans Thai Looped"', 'system-ui', 'sans-serif'],
-        // No separate display font — heading and body share the family,
-        // using weight + size for hierarchy. Map `font-heading` to the
-        // same chain so existing components compile.
-        heading: ['Geist', '"IBM Plex Sans Thai Looped"', 'system-ui', 'sans-serif'],
+        sans: [
+          '"Google Sans Text"',
+          'Roboto',
+          '"IBM Plex Sans Thai"',
+          'system-ui',
+          'sans-serif',
+        ],
+        // Headings: IBM Plex Sans Thai owns the brand voice across Latin
+        // and Thai. Falls back to Google Sans Text → Roboto for parity.
+        heading: [
+          '"IBM Plex Sans Thai"',
+          '"Google Sans Text"',
+          'Roboto',
+          'system-ui',
+          'sans-serif',
+        ],
         mono: ['"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
     },

@@ -1,17 +1,19 @@
 /* Reinly typography — Soft Modern (v2 redesign).
  *
- *   Latin (heading + body): Geist Sans
- *   Thai  (heading + body): IBM Plex Sans Thai Looped
- *   Mono:                   Geist Mono
+ *   Headings: IBM Plex Sans Thai (covers Latin + Thai in one family)
+ *   Body:     Google Sans Text (with Roboto + IBM Plex Sans Thai fallbacks)
+ *   Mono:     Geist Mono — receipts, IDs, audit values
  *
- * Single-family Latin (no serif). Geist is Vercel's open-source typeface
- * tuned for product UI — close metrics to Inter but with a more
- * distinctive geometric character. IBM Plex Sans Thai Looped is the
- * pairing chosen for Thai since loop-style glyphs read naturally for
- * Thai users (where loopless system fonts feel foreign).
+ * IBM Plex Sans Thai is paired for both Latin and Thai display because
+ * the family ships matching Latin glyphs alongside Thai, giving headings
+ * a single visual voice across locales.
+ *
+ * Google Sans Text is restricted on Google Fonts; Roboto is loaded as a
+ * dependable open-source fallback that keeps body copy on-brand if the
+ * Google Sans request fails.
  *
  * Note: fonts are loaded via <link rel="stylesheet"> in apps/{app,web}/
  * index.html for reliability — this @import is a defensive fallback so
  * dev/test environments without the HTML link still get the fonts.
  */
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&family=IBM+Plex+Sans+Thai+Looped:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Text:wght@400;500;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&family=Geist+Mono:wght@400;500&display=swap');
