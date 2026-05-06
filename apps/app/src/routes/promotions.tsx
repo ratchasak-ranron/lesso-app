@@ -329,8 +329,8 @@ function PromotionForm({ initial, onCancel, onDone }: PromotionFormProps) {
       value,
       scope,
       productIds: scope === 'specific' ? productIds : [],
-      startsAt: startsAt ? new Date(startsAt).toISOString() : undefined,
-      endsAt: endsAt ? new Date(endsAt).toISOString() : undefined,
+      startsAt: startsAt ? toUtcMidnight(startsAt) : undefined,
+      endsAt: endsAt ? toUtcMidnight(endsAt) : undefined,
       active,
     };
 
@@ -480,10 +480,22 @@ function PromotionForm({ initial, onCancel, onDone }: PromotionFormProps) {
   );
 }
 
+/**
+ * Extract the YYYY-MM-DD prefix from an ISO timestamp without applying
+ * a local-timezone shift. Paired with `toUtcMidnight` on save, edit
+ * round-trips are stable in any timezone.
+ */
 function toLocalDate(iso: string | undefined): string {
   if (!iso) return '';
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return '';
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const match = /^\d{4}-\d{2}-\d{2}/.exec(iso);
+  return match ? match[0] : '';
+}
+
+/**
+ * Convert a YYYY-MM-DD date input into a UTC-midnight ISO timestamp so
+ * the date prefix survives `toLocalDate(iso)` regardless of the user's
+ * timezone.
+ */
+function toUtcMidnight(dateStr: string): string {
+  return `${dateStr}T00:00:00.000Z`;
 }

@@ -41,25 +41,33 @@ export const PromotionSchema = z
   );
 export type Promotion = z.infer<typeof PromotionSchema>;
 
-export const PromotionCreateSchema = z
-  .object({
-    code: z.string().min(2).max(40),
-    name: z.string().min(1).max(120),
-    type: PromotionTypeSchema,
-    value: z.number().nonnegative(),
-    scope: PromotionScopeSchema,
-    productIds: z.array(IdSchema).default([]),
-    startsAt: IsoDateSchema.optional(),
-    endsAt: IsoDateSchema.optional(),
-    active: z.boolean().default(true),
-  })
-  .refine((p) => p.type === 'amount' || p.value <= 100, {
-    message: 'Percent value cannot exceed 100',
-    path: ['value'],
-  });
+const PromotionCreateBaseSchema = z.object({
+  code: z.string().min(2).max(40),
+  name: z.string().min(1).max(120),
+  type: PromotionTypeSchema,
+  value: z.number().nonnegative(),
+  scope: PromotionScopeSchema,
+  productIds: z.array(IdSchema).default([]),
+  startsAt: IsoDateSchema.optional(),
+  endsAt: IsoDateSchema.optional(),
+  active: z.boolean().default(true),
+});
+
+export const PromotionCreateSchema = PromotionCreateBaseSchema.refine(
+  (p) => p.type === 'amount' || p.value <= 100,
+  { message: 'Percent value cannot exceed 100', path: ['value'] },
+);
 export type PromotionCreateInput = z.infer<typeof PromotionCreateSchema>;
 
-export const PromotionUpdateSchema = PromotionCreateSchema.innerType().partial();
+/**
+ * Partial-update schema. Re-applies the percent-cap refinement so a
+ * patch like { type: 'percent', value: 150 } is rejected — `.partial()`
+ * on a refined schema would otherwise drop the refinement silently.
+ */
+export const PromotionUpdateSchema = PromotionCreateBaseSchema.partial().refine(
+  (p) => p.type !== 'percent' || p.value === undefined || p.value <= 100,
+  { message: 'Percent value cannot exceed 100', path: ['value'] },
+);
 export type PromotionUpdateInput = z.infer<typeof PromotionUpdateSchema>;
 
 /** Compute the discount applied by a promo to a given price. */

@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from 'react';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { getUsers } from '@reinly/mock-server';
@@ -74,29 +75,39 @@ export const useDoctorStore = create<DoctorState>()(
 
 /**
  * Seed a tenant's roster from the mock-server's `getUsers()` doctors so
- * the page is never empty when first opened in mocking mode.
+ * the page is never empty when first opened in mocking mode. Seeding is
+ * deferred to useEffect so the hook never mutates state during render.
  */
 export function useDoctors(): Doctor[] {
   const tenantId = useDevToolbar((s) => s.tenantId);
   const doctors = useDoctorStore((s) => s.doctors);
-  const create = useDoctorStore((s) => s.create);
+  const createDoctor = useDoctorStore((s) => s.create);
 
-  if (tenantId && !SEEDED_TENANTS.has(tenantId) && doctors.filter((d) => d.tenantId === tenantId).length === 0) {
+  const tenantDoctors = useMemo(
+    () => doctors.filter((d) => d.tenantId === tenantId),
+    [doctors, tenantId],
+  );
+
+  useEffect(() => {
+    if (!tenantId) return;
+    if (SEEDED_TENANTS.has(tenantId)) return;
+    if (tenantDoctors.length > 0) {
+      SEEDED_TENANTS.add(tenantId);
+      return;
+    }
     SEEDED_TENANTS.add(tenantId);
     const docs = getUsers().filter((u) => u.role === 'doctor' && u.tenantId === tenantId);
-    queueMicrotask(() => {
-      docs.forEach((u) => {
-        create(
-          {
-            name: u.name,
-            commissionRate: 0.1,
-            specialty: undefined,
-          },
-          tenantId,
-        );
-      });
+    docs.forEach((u) => {
+      createDoctor(
+        {
+          name: u.name,
+          commissionRate: 0.1,
+          specialty: undefined,
+        },
+        tenantId,
+      );
     });
-  }
+  }, [tenantId, tenantDoctors.length, createDoctor]);
 
-  return doctors.filter((d) => d.tenantId === tenantId);
+  return tenantDoctors;
 }

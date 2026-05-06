@@ -63,7 +63,6 @@ const CATEGORY_KEYS: ReadonlyArray<ProductCategory> = [
 export function ProductsPage() {
   const { t } = useTranslation();
   const locale = useLocale();
-  const tenantId = useDevToolbar((s) => s.tenantId);
   const products = useProducts();
   const remove = useProductStore((s) => s.remove);
 
@@ -229,8 +228,6 @@ export function ProductsPage() {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-
-        {!tenantId ? null : null}
       </div>
     </TenantGate>
   );
@@ -485,7 +482,7 @@ function ProductForm({ products, initial, onCancel, onDone }: ProductFormProps) 
         ) : (
           <ul className="space-y-2">
             {bundleItems.map((item, idx) => (
-              <li key={idx} className="flex items-center gap-2">
+              <li key={item.productId} className="flex items-center gap-2">
                 <Select
                   options={candidates.map((p) => ({ value: p.id, label: p.name }))}
                   value={item.productId}
