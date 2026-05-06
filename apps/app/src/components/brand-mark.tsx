@@ -14,15 +14,11 @@ const SIZE_CLASS: Record<BrandMarkSize, string> = {
 };
 
 /**
- * Reinly brand mark — mirrors the favicon at apps/app/public/favicon.svg
- * exactly so the in-app emblem and the browser tab read as the same
- * mark: a dark slate rounded tile (#1F2328) with a lowercase serif `r`
- * in cream (#F5F2EC). Used by the sidebar, mobile nav, and login
- * screen.
- *
- * The favicon is the source of truth — re-export the same viewBox
- * here so a future favicon refresh propagates by tweaking the SVG
- * path rather than two separate places.
+ * Reinly brand mark — favicon-aligned shape (rounded tile + lowercase
+ * serif `r`) on the brand indigo→violet gradient. Used by the sidebar,
+ * mobile nav, and login. Keep this component and
+ * apps/app/public/favicon.svg in sync so the in-app emblem and the
+ * browser tab read as the same mark.
  */
 export function BrandMark({ size = 'md', className }: BrandMarkProps) {
   return (
@@ -37,7 +33,14 @@ export function BrandMark({ size = 'md', className }: BrandMarkProps) {
         className,
       )}
     >
-      <rect width="32" height="32" rx="6" fill="#1F2328" />
+      <defs>
+        <linearGradient id="reinly-brand-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#6366F1" />
+          <stop offset="60%" stopColor="#6366F1" />
+          <stop offset="100%" stopColor="#A855F7" />
+        </linearGradient>
+      </defs>
+      <rect width="32" height="32" rx="6" fill="url(#reinly-brand-grad)" />
       <text
         x="50%"
         y="60%"
