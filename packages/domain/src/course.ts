@@ -9,6 +9,8 @@ export const CourseSchema = z
     id: IdSchema,
     tenantId: IdSchema,
     patientId: IdSchema,
+    /** Optional product the course originated from (course-package SKU). */
+    productId: IdSchema.optional(),
     serviceName: z.string().min(1).max(120),
     sessionsTotal: z.number().int().positive().max(100),
     sessionsUsed: z.number().int().nonnegative(),
@@ -26,6 +28,7 @@ export type Course = z.infer<typeof CourseSchema>;
 
 export const CourseCreateSchema = z.object({
   patientId: IdSchema,
+  productId: IdSchema.optional(),
   serviceName: z.string().min(1).max(120),
   sessionsTotal: z.number().int().positive().max(100),
   pricePaid: z.number().nonnegative(),

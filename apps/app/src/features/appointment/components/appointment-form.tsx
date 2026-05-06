@@ -1,6 +1,7 @@
-import { useMemo, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { AppointmentCreateInput, Patient } from '@reinly/domain';
+import { sessionsRemaining } from '@reinly/domain';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +11,7 @@ import { FormError } from '@/components/ui/form-feedback';
 import { useDevToolbar } from '@/store/dev-toolbar';
 import { useDoctors } from '@/store/doctor-store';
 import { usePatients } from '@/features/patient';
+import { useActiveCoursesForPatient } from '@/features/course/hooks/use-courses';
 import { useCreateAppointment } from '../hooks/use-appointments';
 
 interface AppointmentFormProps {
@@ -77,14 +79,42 @@ export function AppointmentForm({
   const [selectedPatient, setSelectedPatient] = useState<string>(
     patientId ?? patientOptions[0]?.value ?? '',
   );
+  const effectivePatientId = patientId ?? selectedPatient;
+  const courses = useActiveCoursesForPatient(effectivePatientId || undefined);
+  const courseOptions = useMemo(
+    () => [
+      { value: '', label: t('appointment.pickCoursePlaceholder') },
+      ...(courses.data ?? []).map((c) => ({
+        value: c.id,
+        label: t('appointment.courseOption', {
+          name: c.serviceName,
+          remaining: sessionsRemaining(c),
+          total: c.sessionsTotal,
+        }),
+      })),
+    ],
+    [courses.data, t],
+  );
   const [doctorId, setDoctorId] = useState<string>('');
-  const [serviceName, setServiceName] = useState('');
+  const [courseId, setCourseId] = useState<string>('');
   const [startAt, setStartAt] = useState<string>(defaultStart(defaultDate));
   const [endAt, setEndAt] = useState<string>(
     addMinutes(defaultStart(defaultDate), DEFAULT_DURATION_MIN),
   );
   const [notes, setNotes] = useState('');
   const [error, setError] = useState<string | null>(null);
+
+  // Reset course pick whenever the patient changes — courses are
+  // patient-scoped and the new patient won't own the previously
+  // selected course.
+  useEffect(() => {
+    setCourseId('');
+  }, [effectivePatientId]);
+
+  const selectedCourse = useMemo(
+    () => (courses.data ?? []).find((c) => c.id === courseId),
+    [courses.data, courseId],
+  );
 
   function handleStartChange(value: string) {
     setStartAt(value);
@@ -107,8 +137,8 @@ export function AppointmentForm({
       setError(t('appointment.errors.branchRequired'));
       return;
     }
-    if (!serviceName.trim()) {
-      setError(t('appointment.errors.serviceRequired'));
+    if (!selectedCourse) {
+      setError(t('appointment.errors.courseRequired'));
       return;
     }
     const startDate = new Date(startAt);
@@ -126,7 +156,8 @@ export function AppointmentForm({
       branchId,
       patientId: pid,
       doctorId: doctorId || undefined,
-      serviceName: serviceName.trim(),
+      courseId: selectedCourse.id,
+      serviceName: selectedCourse.serviceName,
       startAt: startDate.toISOString(),
       endAt: endDate.toISOString(),
       notes: notes.trim() || undefined,
@@ -162,14 +193,33 @@ export function AppointmentForm({
       ) : null}
 
       <div className="space-y-1.5">
-        <Label htmlFor="appointment-service">{t('appointment.service')}</Label>
-        <Input
-          id="appointment-service"
-          value={serviceName}
-          onChange={(e) => setServiceName(e.target.value)}
+        <Label htmlFor="appointment-course">{t('appointment.course')}</Label>
+        <Select
+          id="appointment-course"
+          options={courseOptions}
+          value={courseId}
+          onValueChange={setCourseId}
+          disabled={!effectivePatientId || courses.isLoading}
           required
         />
+        {effectivePatientId && (courses.data ?? []).length === 0 && !courses.isLoading ? (
+          <p className="text-xs text-amber-ink">{t('appointment.noCoursesHint')}</p>
+        ) : (
+          <p className="text-xs text-muted-foreground">{t('appointment.courseHelp')}</p>
+        )}
       </div>
+
+      {selectedCourse ? (
+        <div className="rounded-lg border border-border bg-muted/40 p-3 text-xs">
+          <p className="font-medium text-foreground">{selectedCourse.serviceName}</p>
+          <p className="mt-0.5 text-muted-foreground tabular-nums">
+            {t('appointment.courseSummary', {
+              remaining: sessionsRemaining(selectedCourse),
+              total: selectedCourse.sessionsTotal,
+            })}
+          </p>
+        </div>
+      ) : null}
 
       <div className="space-y-1.5">
         <Label htmlFor="appointment-doctor">{t('appointment.doctor')}</Label>

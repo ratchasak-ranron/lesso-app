@@ -1,6 +1,6 @@
-import { useMemo, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, PackageSearch } from 'lucide-react';
 import type { CourseCreateInput, Patient } from '@reinly/domain';
 import { isCoursePackage } from '@reinly/domain';
 import { Button } from '@/components/ui/button';
@@ -17,8 +17,6 @@ interface CourseFormProps {
   onDone: () => void;
   onCancel: () => void;
 }
-
-const MANUAL_OPTION = '__manual__';
 
 export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
   const { t } = useTranslation();
@@ -39,7 +37,7 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
   );
   const productOptions = useMemo(
     () => [
-      { value: MANUAL_OPTION, label: t('course.manualEntry') },
+      { value: '', label: t('course.pickProductPlaceholder') },
       ...packageProducts.map((p) => ({
         value: p.id,
         label: t('course.productOption', {
@@ -51,25 +49,25 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
     [packageProducts, t],
   );
 
-  const [productId, setProductId] = useState<string>(MANUAL_OPTION);
+  const [productId, setProductId] = useState<string>('');
   const [selectedPatient, setSelectedPatient] = useState<string>(
     patientId ?? patientOptions[0]?.value ?? '',
   );
-  const [serviceName, setServiceName] = useState('');
-  const [sessionsTotal, setSessionsTotal] = useState<number>(6);
-  const [pricePaid, setPricePaid] = useState<number>(0);
   const [expiresAt, setExpiresAt] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  function handleProductChange(next: string) {
-    setProductId(next);
-    if (next === MANUAL_OPTION) return;
-    const product = packageProducts.find((p) => p.id === next);
-    if (!product) return;
-    setServiceName(product.name);
-    setSessionsTotal(product.sessionsIncluded ?? 1);
-    setPricePaid(product.price);
-  }
+  const selectedProduct = useMemo(
+    () => packageProducts.find((p) => p.id === productId),
+    [packageProducts, productId],
+  );
+
+  // Auto-pick the only available product so the form is filled in by
+  // default when there is no real choice to make.
+  useEffect(() => {
+    if (!productId && packageProducts.length === 1) {
+      setProductId(packageProducts[0]!.id);
+    }
+  }, [productId, packageProducts]);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -81,24 +79,17 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
       setError(t('course.errors.patientRequired'));
       return;
     }
-    if (!serviceName.trim()) {
-      setError(t('course.errors.serviceRequired'));
-      return;
-    }
-    if (sessionsTotal <= 0) {
-      setError(t('course.errors.sessionsInvalid'));
-      return;
-    }
-    if (pricePaid < 0) {
-      setError(t('course.errors.priceInvalid'));
+    if (!selectedProduct) {
+      setError(t('course.errors.productRequired'));
       return;
     }
 
     const input: CourseCreateInput = {
       patientId: pid,
-      serviceName: serviceName.trim(),
-      sessionsTotal,
-      pricePaid,
+      productId: selectedProduct.id,
+      serviceName: selectedProduct.name,
+      sessionsTotal: selectedProduct.sessionsIncluded ?? 1,
+      pricePaid: selectedProduct.price,
       expiresAt: expiresAt ? `${expiresAt}T00:00:00.000Z` : undefined,
     };
 
@@ -113,6 +104,27 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
         setError(err.message);
       },
     });
+  }
+
+  if (packageProducts.length === 0) {
+    return (
+      <div className="space-y-4">
+        <div className="rounded-card border border-amber/40 bg-amber-soft p-4 text-sm text-amber-ink">
+          <div className="flex items-start gap-3">
+            <PackageSearch className="size-5 shrink-0" aria-hidden="true" />
+            <div>
+              <p className="font-semibold">{t('course.errors.noPackagesTitle')}</p>
+              <p className="mt-1 text-xs">{t('course.errors.noPackagesBody')}</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            {t('common.close')}
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -131,71 +143,42 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
         </div>
       ) : null}
 
-      {packageProducts.length > 0 ? (
-        <div className="space-y-1.5">
-          <Label htmlFor="course-product">
-            <span className="inline-flex items-center gap-1.5">
-              <GraduationCap className="size-4 text-violet-ink" aria-hidden="true" />
-              {t('course.fromProduct')}
-            </span>
-          </Label>
-          <Select
-            id="course-product"
-            options={productOptions}
-            value={productId}
-            onValueChange={handleProductChange}
-          />
-          <p className="text-xs text-muted-foreground">{t('course.fromProductHelp')}</p>
-        </div>
-      ) : null}
-
       <div className="space-y-1.5">
-        <Label htmlFor="course-service">{t('course.service')}</Label>
-        <Input
-          id="course-service"
-          value={serviceName}
-          onChange={(e) => {
-            setServiceName(e.target.value);
-            setProductId(MANUAL_OPTION);
-          }}
+        <Label htmlFor="course-product">
+          <span className="inline-flex items-center gap-1.5">
+            <GraduationCap className="size-4 text-violet-ink" aria-hidden="true" />
+            {t('course.fromProduct')}
+          </span>
+        </Label>
+        <Select
+          id="course-product"
+          options={productOptions}
+          value={productId}
+          onValueChange={setProductId}
           required
         />
+        <p className="text-xs text-muted-foreground">{t('course.fromProductRequiredHelp')}</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div className="space-y-1.5">
-          <Label htmlFor="course-sessions">{t('course.sessionsTotal')}</Label>
-          <Input
-            id="course-sessions"
-            type="number"
-            inputMode="numeric"
-            min={1}
-            max={100}
-            value={sessionsTotal}
-            onChange={(e) => {
-              setSessionsTotal(Number(e.target.value) || 0);
-              setProductId(MANUAL_OPTION);
-            }}
-            required
-          />
+      {selectedProduct ? (
+        <div className="rounded-card border border-border bg-muted/40 p-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            {t('course.summary')}
+          </p>
+          <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm">
+            <span className="text-muted-foreground">{t('course.service')}</span>
+            <span className="font-medium text-foreground">{selectedProduct.name}</span>
+            <span className="text-muted-foreground">{t('course.sessionsTotal')}</span>
+            <span className="font-mono tabular-nums text-foreground">
+              {selectedProduct.sessionsIncluded ?? 1}
+            </span>
+            <span className="text-muted-foreground">{t('course.pricePaid')}</span>
+            <span className="font-mono tabular-nums text-foreground">
+              {selectedProduct.price.toLocaleString()}
+            </span>
+          </div>
         </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="course-price">{t('course.pricePaid')}</Label>
-          <Input
-            id="course-price"
-            type="number"
-            inputMode="decimal"
-            min={0}
-            step="0.01"
-            value={pricePaid}
-            onChange={(e) => {
-              setPricePaid(Number(e.target.value) || 0);
-              setProductId(MANUAL_OPTION);
-            }}
-            required
-          />
-        </div>
-      </div>
+      ) : null}
 
       <div className="space-y-1.5">
         <Label htmlFor="course-expires">{t('course.expiresAt')}</Label>
@@ -213,7 +196,7 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
         <Button type="button" variant="outline" onClick={onCancel}>
           {t('common.cancel')}
         </Button>
-        <Button type="submit" disabled={create.isPending}>
+        <Button type="submit" disabled={create.isPending || !selectedProduct}>
           {t('common.save')}
         </Button>
       </div>
