@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
+import { useMemo, useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { AppointmentCreateInput, Patient } from '@reinly/domain';
 import { sessionsRemaining } from '@reinly/domain';
@@ -104,12 +104,16 @@ export function AppointmentForm({
   const [notes, setNotes] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  // Reset course pick whenever the patient changes — courses are
-  // patient-scoped and the new patient won't own the previously
-  // selected course.
-  useEffect(() => {
+  // Reset the course pick during render whenever the patient changes —
+  // courses are patient-scoped and the prior selection no longer
+  // belongs to the new patient. Using the React-recommended "adjust
+  // state during render" pattern (with a prev-value sentinel) avoids
+  // the one-frame stale window that a useEffect-based reset produced.
+  const [prevPatient, setPrevPatient] = useState(effectivePatientId);
+  if (prevPatient !== effectivePatientId) {
+    setPrevPatient(effectivePatientId);
     setCourseId('');
-  }, [effectivePatientId]);
+  }
 
   const selectedCourse = useMemo(
     () => (courses.data ?? []).find((c) => c.id === courseId),
@@ -272,7 +276,10 @@ export function AppointmentForm({
         <Button type="button" variant="outline" onClick={onCancel}>
           {t('common.cancel')}
         </Button>
-        <Button type="submit" disabled={create.isPending}>
+        <Button
+          type="submit"
+          disabled={create.isPending || courses.isLoading || !selectedCourse}
+        >
           {t('common.save')}
         </Button>
       </div>

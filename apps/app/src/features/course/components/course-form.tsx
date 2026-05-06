@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { FormError } from '@/components/ui/form-feedback';
 import { usePatients } from '@/features/patient';
 import { useProducts } from '@/store/product-store';
@@ -69,6 +70,19 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
     }
   }, [productId, packageProducts]);
 
+  // The product store seeds via a useEffect on first sight of a tenant.
+  // On the very first render the store may still be empty even when
+  // seeding is about to fill it — without this gate the empty-catalog
+  // callout would flash before the form. Initialise the gate to true
+  // when the store is already populated so subsequent dialog opens
+  // skip the skeleton entirely.
+  const [storeSettled, setStoreSettled] = useState(() => packageProducts.length > 0);
+  useEffect(() => {
+    if (!storeSettled) {
+      setStoreSettled(true);
+    }
+  }, [storeSettled]);
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (submittingRef.current) return;
@@ -104,6 +118,16 @@ export function CourseForm({ patientId, onDone, onCancel }: CourseFormProps) {
         setError(err.message);
       },
     });
+  }
+
+  if (!storeSettled) {
+    return (
+      <div className="space-y-3">
+        <Skeleton className="h-10" />
+        <Skeleton className="h-24" />
+        <Skeleton className="h-10" />
+      </div>
+    );
   }
 
   if (packageProducts.length === 0) {
